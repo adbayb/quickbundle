@@ -1,5 +1,6 @@
 {
   "name": "ts-react",
+  "version": "0.0.0",
   "private": true,
   "source": "src/index.tsx",
 	"main": "dist/example.cjs.js",
