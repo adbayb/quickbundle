@@ -1,0 +1,26 @@
+{
+	"version": "0.0.0",
+	"npmClient": "yarn",
+	"useWorkspaces": true,
+	"packages": ["packages/*", "examples/*"],
+	"command": {
+		"init": {
+			"exact": true
+		},
+		"version": {
+			"allowBranch": "main",
+			"conventionalCommits": true,
+			"createRelease": "github",
+			"exact": true,
+			"message": "chore(release): publish %s",
+			"yes": false,
+			"ignoreChanges": [
+				"**/node_modules/**",
+				"**/*.md",
+				"**/__tests__/**",
+				"**/*.test.{ts?(x),js?(x)}",
+				"**/example?(s)/**"
+			]
+		}
+	}
+}
