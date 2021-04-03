@@ -5,7 +5,8 @@
 		"quickbundle": "bin/index.js"
 	},
 	"files": [
-		"bin"
+		"bin",
+		"public"
 	],
 	"author": {
 		"name": "Ayoub Adib",
