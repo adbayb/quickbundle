@@ -1,0 +1,36 @@
+{
+	"name": "quickbundle",
+	"version": "0.0.1",
+	"bin": {
+		"quickbundle": "bin/index.js"
+	},
+	"files": [
+		"bin"
+	],
+	"author": {
+		"name": "Ayoub Adib",
+		"email": "adbayb@gmail.com",
+		"url": "https://twitter.com/adbayb"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:adbayb/quickbundle.git",
+		"directory": "packages/quickbundle"
+	},
+	"license": "MIT",
+	"scripts": {
+		"prepare": "yarn build",
+		"prestart": "yarn build",
+		"start": "bin/index.js",
+		"build": "tsc && chmod +x bin/index.js",
+		"watch": "tsc -w"
+	},
+	"devDependencies": {
+		"@adbayb/ts-config": "0.5.0",
+		"@types/node": "14.14.37"
+	},
+	"dependencies": {
+		"esbuild": "0.11.5",
+		"progress-estimator": "0.3.0"
+	}
+}

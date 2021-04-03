@@ -1,0 +1,7 @@
+{
+	"extends": "@adbayb/ts-config",
+	"compilerOptions": {
+		"outDir": "bin"
+	},
+	"include": ["src"]
+}
