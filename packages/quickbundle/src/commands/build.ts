@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires, sonarjs/no-redundant-jump */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { resolve } from "path";
 import { BuildOptions, build } from "esbuild";
+import { run } from "@adbayb/terminal-kit";
 import { CWD } from "../constants";
-import { run } from "../helpers";
 
 // @todo: invariant/assert checks (if no source field is provided in package.json => error)
 // @todo: clean before building (share clean method with the clean command)

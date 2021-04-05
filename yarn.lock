@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@adbayb/eslint-config@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@adbayb/eslint-config/-/eslint-config-0.5.0.tgz#2c84a19b83cae0007b0a44094e21e64b4cff7afd"
-  integrity sha512-Hl1QOWYB/y4eSoAt8YxFFmv+Gtqv7TkT4B7Ri3TKsLoR579nIzMOR/9LJFHdZIwyRvqIez/jg5BRzXGXe9xngQ==
+"@adbayb/eslint-config@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@adbayb/eslint-config/-/eslint-config-0.6.0.tgz#1842a96095971be7e26a5712b4442b0f2a04b10a"
+  integrity sha512-BmJm8oUa2v2wiMeI25MLVSwlQ4MGqMDLuQ2QbVTjF6EhfKyK/XgoR3IuoJPtyk50/TP/XcEQEkYQavmQElGsJg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "4.19.0"
     "@typescript-eslint/parser" "4.19.0"
@@ -17,17 +17,25 @@
     eslint-plugin-react-hooks "4.2.0"
     eslint-plugin-sonarjs "0.6.0"
 
-"@adbayb/prettier-config@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@adbayb/prettier-config/-/prettier-config-0.5.0.tgz#b1fff9206ddd43343504093f5117de38522c547b"
-  integrity sha512-dLd2QuEKf6jCwiN79B4bcIEd8S7A/jaKpBRNP/5epcAu6fMDv/qcKWArYwR5fqpGO5MEPdnWyHDbbbfFigxTVQ==
+"@adbayb/prettier-config@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@adbayb/prettier-config/-/prettier-config-0.6.0.tgz#d349a32377c2dea93d4f102a652c62a36eea216f"
+  integrity sha512-6Mg4IzSK2Cq3PN/r823Zxr8Lroha/Ptc7ywVpM5szqqBCxyoytjkuiagfWeRQqwxJI4s9cSWbFKTvVOjGLNGGw==
   dependencies:
     prettier "2.2.1"
 
-"@adbayb/ts-config@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@adbayb/ts-config/-/ts-config-0.5.0.tgz#20f0c8ee2048986805f0dcf04fb1884413731aca"
-  integrity sha512-fqlUv+6E2sUgQna5JNfPMr0wu8eJr94DH3v94arUB/WF6HBkIvsULOaoyBt1GS2kZaoBJPphOuNzzCknTslwvA==
+"@adbayb/terminal-kit@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@adbayb/terminal-kit/-/terminal-kit-0.6.0.tgz#f174fdf8d17acfbd813be467aee57af8204ca697"
+  integrity sha512-Rwuvb6U1qoLbMyKYTgbgJkszHiXOXJnT1HvQxLljSDG1YhYP6dAe+Fp83nqcPlLltCs+vghfjNY3XLXpi3u6JQ==
+  dependencies:
+    progress-estimator "0.3.0"
+    typescript "4.2.3"
+
+"@adbayb/ts-config@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@adbayb/ts-config/-/ts-config-0.6.0.tgz#d62a402f531235e79a61357ede978691f2642273"
+  integrity sha512-d1VnsrjA/C7n9au1veCQYDJYZtLZdbH552365wXRVuDc1tb7GhfbAqAO3yGRyaqnziTor80wUZxOLApLaqvH5Q==
   dependencies:
     typescript "4.2.3"
 
