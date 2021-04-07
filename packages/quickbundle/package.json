@@ -23,6 +23,7 @@
 		"prepare": "yarn build",
 		"prestart": "yarn build",
 		"start": "bin/index.js",
+		"clean": "rm -rf bin",
 		"build": "tsc && chmod +x bin/index.js",
 		"watch": "tsc -w"
 	},
