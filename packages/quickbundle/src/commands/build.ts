@@ -29,13 +29,16 @@ const createProject = () => {
 		module,
 		source,
 	}: PackageMetadata = require(resolve(CWD, "package.json"));
+	const externalDependencies = Object.keys(peerDependencies);
 	const allDependencies = [
+		...externalDependencies,
 		...Object.keys(dependencies),
 		...Object.keys(devDependencies),
-		...Object.keys(peerDependencies),
 	];
 
 	// @todo: invariant/asserts for main/module/source
+	// @todo: if no types field is added in the package.json => do not create declaration file
+	// same if no module/main (main must be required for compatibility purposes)
 
 	return {
 		source,
@@ -43,6 +46,7 @@ const createProject = () => {
 			cjs: main,
 			esm: module,
 		},
+		externalDependencies,
 		hasModule(name: string) {
 			// @note: Reading dependencies metadata from package.json instead of using `require.resolve` mechanism
 			// is more suited to avoid side effect on monorepo where packages resolution can leak to other packages
@@ -107,11 +111,12 @@ const createBundler = async (project: Project) => {
 					: '"development"',
 			},
 			entryPoints: [project.source],
-			outfile: project.destination[format],
-			target: tsOptions?.target || "esnext",
+			external: project.externalDependencies,
 			format,
 			minify: isProduction,
+			outfile: project.destination[format],
 			sourcemap: !isProduction,
+			target: tsOptions?.target || "esnext",
 			plugins: [
 				{
 					// @note: Plugin to automatically inject React import for jsx management
