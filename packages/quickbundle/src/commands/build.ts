@@ -13,15 +13,28 @@ type PackageMetadata = {
 	main: string;
 	module: string;
 	source: string;
+	dependencies?: Record<string, string>;
+	devDependencies?: Record<string, string>;
+	peerDependencies?: Record<string, string>;
 };
 
 type Project = ReturnType<typeof createProject>;
 
 const createProject = () => {
-	const { main, module, source }: PackageMetadata = require(resolve(
-		CWD,
-		"package.json"
-	));
+	const {
+		dependencies = {},
+		devDependencies = {},
+		peerDependencies = {},
+		main,
+		module,
+		source,
+	}: PackageMetadata = require(resolve(CWD, "package.json"));
+	const allDependencies = [
+		...Object.keys(dependencies),
+		...Object.keys(devDependencies),
+		...Object.keys(peerDependencies),
+	];
+
 	// @todo: invariant/asserts for main/module/source
 
 	return {
@@ -30,12 +43,17 @@ const createProject = () => {
 			cjs: main,
 			esm: module,
 		},
+		hasModule(name: string) {
+			// @note: Reading dependencies metadata from package.json instead of using `require.resolve` mechanism
+			// is more suited to avoid side effect on monorepo where packages resolution can leak to other packages
+			return allDependencies.includes(name);
+		},
 	} as const;
 };
 
-const hasModule = (name: string) => {
+const resolveModulePath = (path: string) => {
 	try {
-		return Boolean(require.resolve(name));
+		return Boolean(require.resolve(path));
 	} catch (error) {
 		return false;
 	}
@@ -77,10 +95,7 @@ const getTypeScriptOptions = async (): Promise<TypeScriptConfiguration | null> =
 };
 
 const createBundler = async (project: Project) => {
-	const isTypeScriptProject = Boolean(require.resolve("typescript"));
-	const tsOptions = isTypeScriptProject ? await getTypeScriptOptions() : null;
-
-	console.warn(isTypeScriptProject);
+	const tsOptions = await getTypeScriptOptions();
 
 	return (format: BundleFormat, isProduction?: boolean) => {
 		return build({
@@ -112,7 +127,7 @@ const createBundler = async (project: Project) => {
 							{ filter: /\.(j|t)sx$/ },
 							async ({ path }) => {
 								const module = ["preact", "react"].find(
-									hasModule
+									project.hasModule
 								);
 
 								// @note: enable plugin only if
@@ -120,7 +135,9 @@ const createBundler = async (project: Project) => {
 								// - if ts project: jsx compilerOption === "react-jsx" or "react-jsxdev"
 								if (
 									!module ||
-									!hasModule(`${module}/jsx-runtime`) ||
+									!resolveModulePath(
+										`${module}/jsx-runtime`
+									) ||
 									tsOptions?.hasJsxRuntime === false
 								) {
 									return;
