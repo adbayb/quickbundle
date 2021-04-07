@@ -1,0 +1,19 @@
+{
+  "name": "vanilla-preact",
+  "version": "0.1.1",
+  "private": true,
+  "source": "src/index.jsx",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.mjs",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "start": "yarn build && open public/index.html",
+    "build": "quickbundle build"
+  },
+  "devDependencies": {
+    "quickbundle": "0.1.1"
+  },
+  "dependencies": {
+    "preact": "10.5.13"
+  }
+}

@@ -42,44 +42,45 @@ const hasModule = (name: string) => {
 };
 
 type TypeScriptConfiguration = {
-	target: string | undefined;
-	hasJsxRuntime: boolean;
+	target?: string;
+	hasJsxRuntime?: boolean;
 };
 
-const getTypeScriptOptions = async (): Promise<TypeScriptConfiguration> => {
-	const ts = await import("typescript"); // @note: lazy load typescript only if necessary
-	const { jsx, target } = ts.parseJsonConfigFileContent(
-		require(resolve(CWD, "tsconfig.json")),
-		ts.sys,
-		CWD
-	).options;
+const getTypeScriptOptions = async (): Promise<TypeScriptConfiguration | null> => {
+	try {
+		const ts = await import("typescript"); // @note: lazy load typescript only if necessary
+		const { jsx, target } = ts.parseJsonConfigFileContent(
+			require(resolve(CWD, "tsconfig.json")),
+			ts.sys,
+			CWD
+		).options;
 
-	// @todo: prevent issues if no typescript or tsconfig provided
-	// @note: convert ts target value to esbuild ones (latest value is not supported)
-	const esbuildTarget =
-		!target ||
-		[ts.ScriptTarget.ESNext, ts.ScriptTarget.Latest].includes(target)
-			? "esnext"
-			: ts.ScriptTarget[target]?.toLowerCase();
+		// @todo: prevent issues if no typescript or tsconfig provided
+		// @note: convert ts target value to esbuild ones (latest value is not supported)
+		const esbuildTarget =
+			!target ||
+			[ts.ScriptTarget.ESNext, ts.ScriptTarget.Latest].includes(target)
+				? "esnext"
+				: ts.ScriptTarget[target]?.toLowerCase();
 
-	return {
-		target: esbuildTarget,
-		hasJsxRuntime:
-			jsx !== undefined &&
-			[ts.JsxEmit["ReactJSX"], ts.JsxEmit["ReactJSXDev"]].includes(jsx),
-	};
+		return {
+			target: esbuildTarget,
+			hasJsxRuntime:
+				jsx !== undefined &&
+				[ts.JsxEmit["ReactJSX"], ts.JsxEmit["ReactJSXDev"]].includes(
+					jsx
+				),
+		};
+	} catch (error) {
+		return null;
+	}
 };
 
 const createBundler = async (project: Project) => {
-	let target: string | undefined;
-	const isTypeScriptProject = hasModule("typescript");
-	let tsOptions: TypeScriptConfiguration | undefined;
+	const isTypeScriptProject = Boolean(require.resolve("typescript"));
+	const tsOptions = isTypeScriptProject ? await getTypeScriptOptions() : null;
 
-	if (isTypeScriptProject) {
-		tsOptions = await getTypeScriptOptions();
-
-		target = tsOptions.target;
-	}
+	console.warn(isTypeScriptProject);
 
 	return (format: BundleFormat, isProduction?: boolean) => {
 		return build({
@@ -92,8 +93,7 @@ const createBundler = async (project: Project) => {
 			},
 			entryPoints: [project.source],
 			outfile: project.destination[format],
-			tsconfig: "tsconfig.json",
-			target: target || "esnext",
+			target: tsOptions?.target || "esnext",
 			format,
 			minify: isProduction,
 			sourcemap: !isProduction,
@@ -121,8 +121,7 @@ const createBundler = async (project: Project) => {
 								if (
 									!module ||
 									!hasModule(`${module}/jsx-runtime`) ||
-									(isTypeScriptProject &&
-										!tsOptions?.hasJsxRuntime)
+									tsOptions?.hasJsxRuntime === false
 								) {
 									return;
 								}
