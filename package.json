@@ -1,6 +1,6 @@
 {
 	"name": "quickbundle",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"bin": {
 		"quickbundle": "bin/index.js"
 	},
@@ -26,7 +26,7 @@
 		"watch": "tsc -w",
 		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write",
 		"lint": "eslint . --ignore-path .gitignore --fix",
-		"release": "semantic-release"
+		"release": "semantic-release --dry-run"
 	},
 	"dependencies": {
 		"@adbayb/terminal-kit": "0.6.0",
@@ -38,6 +38,7 @@
 		"@adbayb/ts-config": "0.6.0",
 		"@commitlint/cli": "12.1.1",
 		"@commitlint/config-conventional": "12.1.1",
+		"@semantic-release/git": "9.0.0",
 		"@types/node": "14.14.37",
 		"husky": "4.3.8",
 		"lint-staged": "10.5.4",
@@ -47,7 +48,19 @@
 		"branches": [
 			"main"
 		],
-		"ci": false
+		"ci": false,
+		"plugins": [
+			"@semantic-release/commit-analyzer",
+			"@semantic-release/release-notes-generator",
+			"@semantic-release/npm",
+			[
+				"@semantic-release/git",
+				{
+					"message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+				}
+			],
+			"@semantic-release/github"
+		]
 	},
 	"commitlint": {
 		"extends": [
