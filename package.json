@@ -26,7 +26,7 @@
 		"watch": "tsc -w",
 		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write",
 		"lint": "eslint . --ignore-path .gitignore --fix",
-		"release": "semantic-release --dry-run"
+		"release": "semantic-release"
 	},
 	"dependencies": {
 		"@adbayb/terminal-kit": "0.6.0",
@@ -36,6 +36,8 @@
 		"@adbayb/eslint-config": "0.6.0",
 		"@adbayb/prettier-config": "0.6.0",
 		"@adbayb/ts-config": "0.6.0",
+		"@commitlint/cli": "12.1.1",
+		"@commitlint/config-conventional": "12.1.1",
 		"@types/node": "14.14.37",
 		"husky": "4.3.8",
 		"lint-staged": "10.5.4",
@@ -44,6 +46,12 @@
 	"release": {
 		"branches": [
 			"main"
+		],
+		"ci": false
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
 		]
 	},
 	"prettier": "@adbayb/prettier-config",
@@ -52,7 +60,8 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "lint-staged"
+			"pre-commit": "lint-staged",
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
 		}
 	},
 	"lint-staged": {
