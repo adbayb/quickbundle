@@ -1,7 +1,7 @@
 {
-    "compilerOptions": {
-        "jsx": "react-jsx",
-        "moduleResolution": "Node",
-        "target": "ES2015"
-    }
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"moduleResolution": "Node",
+		"target": "ES2015"
+	}
 }

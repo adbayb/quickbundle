@@ -1,20 +1,20 @@
 {
-  "name": "vanilla-module",
-  "version": "0.1.1",
-  "private": true,
-  "source": "src/index.ts",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.mjs",
-  "scripts": {
-    "clean": "rm -rf dist",
-    "start": "yarn build && open public/index.html",
-    "build": "quickbundle build"
-  },
-  "devDependencies": {
-    "preact": "10.5.13",
-    "quickbundle": "0.1.1"
-  },
-  "peerDependencies": {
-    "preact": ">=10"
-  }
+	"name": "vanilla-module",
+	"version": "0.1.1",
+	"private": true,
+	"source": "src/index.ts",
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.mjs",
+	"scripts": {
+		"postinstall": "../../scripts/postinstall-example.sh",
+		"clean": "rm -rf dist",
+		"start": "yarn build && open public/index.html",
+		"build": "quickbundle build"
+	},
+	"devDependencies": {
+		"preact": "10.5.13"
+	},
+	"peerDependencies": {
+		"preact": ">=10"
+	}
 }

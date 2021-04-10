@@ -1,46 +1,59 @@
 {
-  "private": true,
-  "workspaces": [
-    "packages/*",
-    "examples/*"
-  ],
-  "author": {
-    "name": "Ayoub Adib",
-    "email": "adbayb@gmail.com",
-    "url": "https://twitter.com/adbayb"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:adbayb/quickbundle.git"
-  },
-  "license": "MIT",
-  "scripts": {
-    "check:format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore",
-    "check:lint": "eslint . --ignore-path .gitignore",
-    "format": "yarn check:format --write",
-    "lint": "yarn check:lint --fix",
-    "release": "lerna publish"
-  },
-  "prettier": "@adbayb/prettier-config",
-  "eslintConfig": {
-    "extends": "@adbayb"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "yarn lint"
-    ],
-    "**/*.{json,md,mdx,html,css}": [
-      "yarn format"
-    ]
-  },
-  "devDependencies": {
-    "@adbayb/eslint-config": "0.6.0",
-    "@adbayb/prettier-config": "0.6.0",
-    "lerna": "4.0.0"
-  }
+	"name": "quickbundle",
+	"version": "0.1.1",
+	"bin": {
+		"quickbundle": "bin/index.js"
+	},
+	"files": [
+		"bin"
+	],
+	"author": {
+		"name": "Ayoub Adib",
+		"email": "adbayb@gmail.com",
+		"url": "https://twitter.com/adbayb"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:adbayb/quickbundle.git"
+	},
+	"license": "MIT",
+	"scripts": {
+		"prepare": "yarn build",
+		"prestart": "yarn build",
+		"start": "bin/index.js",
+		"clean": "rm -rf bin",
+		"build": "tsc && chmod +x bin/index.js",
+		"watch": "tsc -w",
+		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write",
+		"lint": "eslint . --ignore-path .gitignore --fix"
+	},
+	"dependencies": {
+		"@adbayb/terminal-kit": "0.6.0",
+		"esbuild": "0.11.7"
+	},
+	"devDependencies": {
+		"@adbayb/eslint-config": "0.6.0",
+		"@adbayb/prettier-config": "0.6.0",
+		"@adbayb/ts-config": "0.6.0",
+		"@types/node": "14.14.37",
+		"husky": "4.3.8",
+		"lint-staged": "10.5.4"
+	},
+	"prettier": "@adbayb/prettier-config",
+	"eslintConfig": {
+		"extends": "@adbayb"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"**/*.{js,jsx,ts,tsx}": [
+			"yarn lint"
+		],
+		"**/*.{json,md,mdx,html,css}": [
+			"yarn format"
+		]
+	}
 }
