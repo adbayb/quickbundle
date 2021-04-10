@@ -38,36 +38,11 @@
 		"@adbayb/ts-config": "0.6.0",
 		"@commitlint/cli": "12.1.1",
 		"@commitlint/config-conventional": "12.1.1",
-		"@semantic-release/changelog": "5.0.1",
 		"@semantic-release/git": "9.0.0",
 		"@types/node": "14.14.37",
 		"husky": "4.3.8",
 		"lint-staged": "10.5.4",
 		"semantic-release": "17.4.2"
-	},
-	"release": {
-		"branches": [
-			"main"
-		],
-		"ci": false,
-		"plugins": [
-			"@semantic-release/commit-analyzer",
-			"@semantic-release/release-notes-generator",
-			"@semantic-release/changelog",
-			"@semantic-release/npm",
-			[
-				"@semantic-release/git",
-				{
-					"message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
-					"assets": [
-						"package.json",
-						"yarn.lock",
-						"CHANGELOG.md"
-					]
-				}
-			],
-			"@semantic-release/github"
-		]
 	},
 	"commitlint": {
 		"extends": [
@@ -90,6 +65,60 @@
 		],
 		"**/*.{json,md,mdx,html,css}": [
 			"yarn format"
+		]
+	},
+	"release": {
+		"branches": [
+			"main"
+		],
+		"ci": false,
+		"plugins": [
+			[
+				"@semantic-release/commit-analyzer",
+				{
+					"releaseRules": [
+						{
+							"breaking": true,
+							"release": "major"
+						},
+						{
+							"revert": true,
+							"release": "patch"
+						},
+						{
+							"type": "feat",
+							"release": "minor"
+						},
+						{
+							"type": "fix",
+							"release": "patch"
+						},
+						{
+							"type": "perf",
+							"release": "patch"
+						},
+						{
+							"type": "refactor",
+							"release": "patch"
+						},
+						{
+							"type": "chore",
+							"scope": "deps",
+							"release": "patch"
+						}
+					]
+				}
+			],
+			"@semantic-release/release-notes-generator",
+			"@semantic-release/npm",
+			[
+				"@semantic-release/git",
+				{
+					"message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
+					"assets": false
+				}
+			],
+			"@semantic-release/github"
 		]
 	}
 }
