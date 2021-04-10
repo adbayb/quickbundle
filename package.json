@@ -26,7 +26,7 @@
 		"watch": "tsc -w",
 		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write",
 		"lint": "eslint . --ignore-path .gitignore --fix",
-		"release": "semantic-release --dry-run"
+		"release": "semantic-release"
 	},
 	"dependencies": {
 		"@adbayb/terminal-kit": "0.6.0",
