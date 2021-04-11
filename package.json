@@ -18,6 +18,7 @@
 	},
 	"license": "MIT",
 	"scripts": {
+		"prepublishOnly": "yarn lint",
 		"prepare": "yarn build",
 		"prestart": "yarn build",
 		"start": "bin/index.js",
@@ -30,7 +31,8 @@
 	},
 	"dependencies": {
 		"@adbayb/terminal-kit": "0.6.0",
-		"esbuild": "0.11.7"
+		"esbuild": "0.11.8",
+		"gzip-size": "6.0.0"
 	},
 	"devDependencies": {
 		"@adbayb/eslint-config": "0.6.0",

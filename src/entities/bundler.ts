@@ -53,11 +53,16 @@ const getTypeScriptOptions = async (): Promise<TypeScriptConfiguration | null> =
 	}
 };
 
-export const createBundler = async (project: Project) => {
+export const createBundler = async (
+	project: Project,
+	isProduction?: boolean
+) => {
 	const tsOptions = await getTypeScriptOptions();
 
-	return (format: BundleFormat, isProduction?: boolean) => {
-		return build({
+	return async (format: BundleFormat) => {
+		const outfile = project.destination[format];
+
+		await build({
 			absWorkingDir: CWD,
 			bundle: true,
 			define: {
@@ -68,8 +73,9 @@ export const createBundler = async (project: Project) => {
 			entryPoints: [project.source],
 			external: project.externalDependencies,
 			format,
+			metafile: true,
 			minify: isProduction,
-			outfile: project.destination[format],
+			outfile,
 			sourcemap: !isProduction,
 			target: tsOptions?.target || "esnext",
 			plugins: [
@@ -115,5 +121,7 @@ export const createBundler = async (project: Project) => {
 				},
 			],
 		});
+
+		return outfile;
 	};
 };
