@@ -9,7 +9,8 @@
 		"postinstall": "../../scripts/postinstall-example.sh",
 		"clean": "rm -rf dist",
 		"start": "yarn build && open public/index.html",
-		"build": "quickbundle build"
+		"build": "quickbundle build",
+		"watch": "quickbundle watch"
 	},
 	"devDependencies": {
 		"@types/react": "17.0.3",

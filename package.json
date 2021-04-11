@@ -17,6 +17,7 @@
 		"url": "git@github.com:adbayb/quickbundle.git"
 	},
 	"license": "MIT",
+	"main": "bin/index.js",
 	"scripts": {
 		"prepublishOnly": "yarn lint",
 		"prepare": "yarn build",
