@@ -56,11 +56,12 @@ const getTypeScriptOptions = async (): Promise<TypeScriptConfiguration | null> =
 type BundlerOptions = {
 	isProduction: boolean;
 	isWatchMode: boolean;
+	onWatch?: (error: Error | null) => void;
 };
 
 export const createBundler = async (
 	project: Project,
-	{ isProduction, isWatchMode }: BundlerOptions
+	{ isProduction, isWatchMode, onWatch }: BundlerOptions
 ) => {
 	const tsOptions = await getTypeScriptOptions();
 
@@ -83,7 +84,9 @@ export const createBundler = async (
 			outfile,
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
-			watch: isWatchMode,
+			watch: isWatchMode && {
+				onRebuild: onWatch,
+			},
 			plugins: [
 				{
 					// @note: Plugin to automatically inject React import for jsx management
