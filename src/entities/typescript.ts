@@ -2,7 +2,7 @@
 import { resolve } from "path";
 import { CWD } from "../constants";
 
-type TypeScriptConfiguration = {
+export type TypeScriptConfiguration = {
 	target?: string;
 	hasJsxRuntime?: boolean;
 };
