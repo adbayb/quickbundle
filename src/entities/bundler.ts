@@ -2,6 +2,7 @@
 import { resolve } from "path";
 import { build } from "esbuild";
 import { CWD } from "../constants";
+import { readFile } from "../helpers";
 import { Project } from "./project";
 
 // @todo: invariant/assert checks (if no source field is provided in package.json => error)
@@ -11,7 +12,7 @@ export type BundleFormat = "esm" | "cjs";
 
 const resolveModulePath = (path: string) => {
 	try {
-		return Boolean(require.resolve(path));
+		return Boolean(require.resolve(path, { paths: [CWD] }));
 	} catch (error) {
 		return false;
 	}
@@ -77,11 +78,8 @@ export const createBundler = async (project: Project) => {
 					// ESBuild doesn't support `jsx` tsconfig field: this plugin aims to add a tiny wrapper to support it
 					// We could use the `inject` ESBuild feature but it will break the tree shaking behavior since the React import will
 					// be imported on each file (even in .ts file) leading React being included in the bundle even if not needed
-					name: "jsx-runtime",
+					name: "jsx",
 					setup(build) {
-						const fs = require("fs");
-						// @todo answer https://github.com/evanw/esbuild/issues/334
-
 						build.onLoad(
 							{ filter: /\.(j|t)sx$/ },
 							async ({ path }) => {
@@ -102,7 +100,7 @@ export const createBundler = async (project: Project) => {
 									return;
 								}
 
-								const content: string = await fs.promises.readFile(
+								const content: string = await readFile(
 									path,
 									"utf8"
 								);
