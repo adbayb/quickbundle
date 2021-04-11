@@ -1,14 +1,16 @@
 import { run } from "@adbayb/terminal-kit";
 import gzipSize from "gzip-size";
-import { BundleFormat, createBundler } from "../entities/bundler";
+import { BundlerFormat, createBundler } from "../entities/bundler";
 import { createProject } from "../entities/project";
 import { coloredText, readFile } from "../helpers";
 
 const main = async () => {
 	const project = createProject();
-	// @todo: isProduction true for build command and false for watch command:
-	const bundle = await createBundler(project, false);
-	const formats: BundleFormat[] = ["cjs", "esm"];
+	const bundle = await createBundler(project, {
+		isProduction: true,
+		isWatchMode: false,
+	});
+	const formats: BundlerFormat[] = ["cjs", "esm"];
 	let output = "";
 
 	for (const format of formats) {
@@ -16,16 +18,16 @@ const main = async () => {
 		const content = await readFile(outfile);
 		const gzSize = await gzipSize(content);
 
-		output += `📦 ${outfile}\n\traw (B): ${coloredText(
-			content.byteLength.toString().padStart(6),
+		output += `📦 ${outfile}\n${coloredText(
+			content.byteLength.toString().padStart(11) + " B",
 			"green"
-		)}\n\tgz  (B): ${coloredText(
-			gzSize.toString().padStart(6),
+		)} raw\n${coloredText(
+			gzSize.toString().padStart(11) + " B",
 			"green"
-		)}\n`;
+		)}  gz\n`;
 	}
 
-	console.log(`\n${output}`);
+	console.info(`\n${output}`);
 };
 
 main();

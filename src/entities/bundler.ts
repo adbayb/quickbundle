@@ -8,7 +8,7 @@ import { Project } from "./project";
 // @todo: invariant/assert checks (if no source field is provided in package.json => error)
 // @todo: support externals
 
-export type BundleFormat = "esm" | "cjs";
+export type BundlerFormat = "esm" | "cjs";
 
 const resolveModulePath = (path: string) => {
 	try {
@@ -53,13 +53,18 @@ const getTypeScriptOptions = async (): Promise<TypeScriptConfiguration | null> =
 	}
 };
 
+type BundlerOptions = {
+	isProduction: boolean;
+	isWatchMode: boolean;
+};
+
 export const createBundler = async (
 	project: Project,
-	isProduction?: boolean
+	{ isProduction }: BundlerOptions
 ) => {
 	const tsOptions = await getTypeScriptOptions();
 
-	return async (format: BundleFormat) => {
+	return async (format: BundlerFormat) => {
 		const outfile = project.destination[format];
 
 		await build({
