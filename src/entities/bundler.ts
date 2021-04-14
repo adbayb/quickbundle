@@ -4,22 +4,30 @@ import { readFile, resolveModulePath } from "../helpers";
 import { Project } from "./project";
 import { TypeScriptConfiguration, getTypeScriptOptions } from "./typescript";
 
-export type BundlerFormat = "esm" | "cjs";
-
 type BundlerOptions = {
 	isProduction: boolean;
 	isWatchMode: boolean;
-	onWatch?: (error: Error | null) => void;
+	onWatch: (error: Error | null) => void;
 };
 
 export const createBundler = async (
 	project: Project,
-	{ isProduction, isWatchMode, onWatch }: BundlerOptions
+	{
+		isProduction = false,
+		isWatchMode = false,
+		onWatch,
+	}: Partial<BundlerOptions>
 ) => {
 	const tsOptions = await getTypeScriptOptions();
 
-	return async (format: BundlerFormat) => {
+	return async (format: "esm" | "cjs") => {
 		const outfile = project.destination[format];
+
+		if (!outfile) {
+			return Promise.reject(
+				"Unknown `destination` for the given `format`"
+			);
+		}
 
 		await build({
 			absWorkingDir: CWD,

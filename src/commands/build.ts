@@ -1,8 +1,8 @@
 import { run } from "@adbayb/terminal-kit";
 import gzipSize from "gzip-size";
-import { BundlerFormat, createBundler } from "../entities/bundler";
+import { createBundler } from "../entities/bundler";
 import { createProject } from "../entities/project";
-import { coloredText, readFile } from "../helpers";
+import { readFile, text } from "../helpers";
 
 const calculateBundleSize = async (filename: string) => {
 	const content = await readFile(filename);
@@ -20,13 +20,12 @@ const formatAllBundleSizes = async (filenames: string[]) => {
 	for (const filename of filenames) {
 		const size = await calculateBundleSize(filename);
 
-		output += `📦 ${filename}\n${coloredText(
+		output += `📦 ${filename}\n${text(
 			size.raw.toString().padStart(11) + " B",
-			"green"
-		)} raw\n${coloredText(
-			size.gzip.toString().padStart(11) + " B",
-			"green"
-		)}  gz\n`;
+			{ color: "green" }
+		)} raw\n${text(size.gzip.toString().padStart(11) + " B", {
+			color: "green",
+		})}  gz\n`;
 	}
 
 	return output;
@@ -36,13 +35,13 @@ const main = async () => {
 	const project = createProject();
 	const bundle = await createBundler(project, {
 		isProduction: true,
-		isWatchMode: false,
 	});
-	const formats: BundlerFormat[] = ["cjs", "esm"];
 	const outfiles: string[] = [];
 
-	for (const format of formats) {
-		outfiles.push(await run(`Building ${format} 👷‍♂️`, bundle(format)));
+	for (const target of Object.keys(project.destination) as Array<
+		"cjs" | "esm"
+	>) {
+		outfiles.push(await run(`Building ${target} 👷‍♂️`, bundle(target)));
 	}
 
 	const sizeOutput = await run<string>(

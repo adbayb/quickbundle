@@ -1,7 +1,7 @@
 import { run } from "@adbayb/terminal-kit";
 import { createBundler } from "../entities/bundler";
 import { createProject } from "../entities/project";
-import { coloredText } from "../helpers";
+import { text } from "../helpers";
 
 const watchableRun = <ReturnValue>(
 	promise: Promise<ReturnValue>
@@ -9,10 +9,9 @@ const watchableRun = <ReturnValue>(
 	console.clear();
 
 	return run(
-		`Watching 🔎 ${coloredText(
-			`last at ${new Date().toLocaleTimeString()}`,
-			"grey"
-		)}`,
+		`Watching 🔎 ${text(`last at ${new Date().toLocaleTimeString()}`, {
+			color: "grey",
+		})}`,
 		promise
 	);
 };
@@ -31,6 +30,7 @@ const main = async () => {
 		},
 	});
 
+	// @todo: By default, pick module target for watch mode and if not available main field (ie. cjs build)
 	watchableRun(bundle("esm"));
 };
 
