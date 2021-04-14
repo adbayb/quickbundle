@@ -43,12 +43,13 @@ export const createBundler = async (
 			metafile: true,
 			minify: isProduction,
 			outfile,
+			plugins: [jsxPlugin(project, tsOptions)],
+			platform: project.platform,
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
 			watch: isWatchMode && {
 				onRebuild: onWatch,
 			},
-			plugins: [jsxPlugin(project, tsOptions)],
 		});
 
 		return outfile;

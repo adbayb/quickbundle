@@ -1,0 +1,7 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "Node",
+		"target": "ES2015"
+	}
+}

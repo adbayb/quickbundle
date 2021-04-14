@@ -6,5 +6,3 @@
 TODO:
 
 -   [] TypeScript typing (build + watch onRebuild)
--   [] Bundler invariants (check for main/module/typing/source fields)
--   [] Allow bundle for nodejs project (see esbuild API platform)

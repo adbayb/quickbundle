@@ -36,6 +36,11 @@ export const createProject = () => {
 		"A `source` field is required in `package.json`. Did you forget to add it?"
 	);
 
+	assert(
+		["browser", "node"].includes(platform),
+		"The `platform` package field can only accept `browser` or `node` value."
+	);
+
 	const externalDependencies = Object.keys(peerDependencies);
 	const allDependencies = [
 		...externalDependencies,
