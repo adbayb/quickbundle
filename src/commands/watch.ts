@@ -1,37 +1,51 @@
-import { run } from "@adbayb/terminal-kit";
 import { createBundler } from "../entities/bundler";
 import { createProject } from "../entities/project";
-import { text } from "../helpers";
+import { program } from ".";
 
-const watchableRun = <ReturnValue>(
-	promise: Promise<ReturnValue>
-): Promise<ReturnValue> => {
-	console.clear();
+program
+	.command({
+		name: "watch",
+		description: "Watch and rebuild on any code change",
+	})
+	.task({
+		key: "callbacks",
+		label: "Setup watcher",
+		async handler() {
+			const project = createProject();
+			const callbacks = { onError() {}, onSuccess() {} };
+			const bundle = await createBundler(project, {
+				isProduction: false,
+				isWatchMode: true,
+				onWatch(error) {
+					if (error) {
+						callbacks.onError();
 
-	return run(
-		`Watching 🔎 ${text(`last at ${new Date().toLocaleTimeString()}`, {
-			color: "grey",
-		})}`,
-		promise
-	);
-};
+						throw error;
+					} else {
+						callbacks.onSuccess();
+					}
+				},
+			});
 
-const main = async () => {
-	const project = createProject();
-	const bundle = await createBundler(project, {
-		isProduction: false,
-		isWatchMode: true,
-		onWatch(error) {
-			if (error) {
-				watchableRun(Promise.reject(error));
-			} else {
-				watchableRun(Promise.resolve());
-			}
+			// @todo: By default, pick module target for watch mode and if not available main field (ie. cjs build)
+			bundle("esm");
+
+			return callbacks;
+		},
+	})
+	.message({
+		handler(values, helpers) {
+			const onNotify = (type: "error" | "success") => {
+				console.clear();
+				helpers.print(
+					`Last update at ${new Date().toLocaleTimeString()} 🔎\n`,
+					{ type }
+				);
+			};
+
+			values.callbacks.onSuccess = () => onNotify("success");
+			values.callbacks.onError = () => onNotify("error");
+
+			values.callbacks.onSuccess();
 		},
 	});
-
-	// @todo: By default, pick module target for watch mode and if not available main field (ie. cjs build)
-	watchableRun(bundle("esm"));
-};
-
-main();

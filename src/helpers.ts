@@ -19,27 +19,3 @@ export function assert(condition: unknown, message: string): asserts condition {
 		throw new Error(message);
 	}
 }
-
-// @todo: move to @adbayb/terminal-kit
-type TextStyleOptions = {
-	color: "green" | "grey";
-	modifier?: "bold";
-};
-
-export const text = (text: string, { color, modifier }: TextStyleOptions) => {
-	const mappingColor: Record<TextStyleOptions["color"], number> = {
-		green: 32,
-		grey: 90,
-	};
-
-	const mappingModifier: Record<
-		NonNullable<TextStyleOptions["modifier"]>,
-		number
-	> = {
-		bold: 1,
-	};
-
-	return `\x1b[${modifier ? mappingModifier[modifier] + ";" : ""}${
-		mappingColor[color]
-	}m${text}\x1b[0m`;
-};
