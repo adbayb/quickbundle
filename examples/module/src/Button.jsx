@@ -1,3 +1,7 @@
 export const Button = () => {
-	return <button>Click!</button>;
+	return (
+		<>
+			<button>Click me!</button>Plop
+		</>
+	);
 };
