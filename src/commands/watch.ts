@@ -1,6 +1,6 @@
 import { createBundler } from "../entities/bundler";
 import { createProject } from "../entities/project";
-import { program } from ".";
+import { program } from "./program";
 
 program
 	.command({
@@ -34,7 +34,7 @@ program
 		},
 	})
 	.message({
-		handler(values, helpers) {
+		handler({ values }, helpers) {
 			const onNotify = (type: "error" | "success") => {
 				console.clear();
 				helpers.print(

@@ -25,14 +25,14 @@
 		"clean": "rm -rf bin",
 		"build": "tsc && chmod +x bin/index.js",
 		"watch": "tsc -w",
-		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write",
+		"format": "prettier . --ignore-path .gitignore --write",
 		"lint": "eslint . --ignore-path .gitignore --fix",
 		"release": "semantic-release"
 	},
 	"dependencies": {
 		"esbuild": "0.12.20",
 		"gzip-size": "6.0.0",
-		"termost": "0.1.1"
+		"termost": "0.2.1"
 	},
 	"devDependencies": {
 		"@adbayb/eslint-config": "0.7.0",
@@ -46,7 +46,7 @@
 		"husky": "4.3.8",
 		"lint-staged": "11.1.2",
 		"prettier": "2.3.2",
-		"semantic-release": "17.4.4",
+		"semantic-release": "17.4.5",
 		"typescript": "4.3.5"
 	},
 	"commitlint": {

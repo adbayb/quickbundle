@@ -2,7 +2,8 @@ import gzipSize from "gzip-size";
 import { createBundler } from "../entities/bundler";
 import { createProject } from "../entities/project";
 import { readFile } from "../helpers";
-import { program } from ".";
+import { program } from "./program";
+import { BuildContext } from "./types";
 
 program
 	.command({
@@ -14,44 +15,44 @@ program
 		label: "Retrieve information ⚙️",
 		async handler() {
 			const project = createProject();
-			const targets = Object.keys(project.destination) as Array<
-				"esm" | "cjs"
-			>;
+			const targets = Object.keys(
+				project.destination
+			) as BuildContext["setup"]["targets"];
 
 			return { project, targets };
 		},
 	})
 	.task({
 		key: "outfiles",
-		label: "Transpile and bundle 👷‍♂️ (todo dynamic label?)",
-		async handler({ setup }) {
-			const bundle = await createBundler(setup.project, {
+		label: ({ values }) =>
+			`Transpile to ${values.setup.targets.join(", ")} bundles 👷‍♂️`,
+		async handler({ values }) {
+			const bundle = await createBundler(values.setup.project, {
 				isProduction: true,
 			});
 
 			return await Promise.all(
-				setup.targets.map((target: "esm" | "cjs") => bundle(target))
+				values.setup.targets.map((target) => bundle(target))
 			);
 		},
 	})
 	.task({
 		key: "sizes",
 		label: "Compute size 📐",
-		async handler(values) {
+		async handler({ values }) {
 			return await calculateBundleSize(values.outfiles);
 		},
 	})
 	.message({
-		handler({ sizes }, helpers) {
-			// @todo: review typing
+		handler({ values }, helpers) {
 			const padding =
-				sizes
-					.map((item: any) => item.raw)
+				values.sizes
+					.map((item) => item.raw)
 					.reduce((pad: number, currentRawSize: number) => {
 						return Math.max(pad, String(currentRawSize).length);
 					}, 0) + 2;
 
-			sizes.forEach((item: any) => {
+			values.sizes.forEach((item) => {
 				helpers.print(
 					[
 						`${item.raw.toString().padStart(padding)} B raw`,
