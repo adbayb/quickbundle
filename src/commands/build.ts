@@ -1,6 +1,6 @@
 import gzipSize from "gzip-size";
-import { createBundler } from "../entities/bundler";
-import { createProject } from "../entities/project";
+import { createBundler } from "../bundler";
+import { createProject } from "../bundler/metadata";
 import { readFile } from "../helpers";
 import { program } from "./program";
 import { BuildContext } from "./types";

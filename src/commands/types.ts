@@ -1,4 +1,4 @@
-import { Project } from "../entities/project";
+import { Project } from "../bundler/metadata";
 
 export type BuildContext = {
 	setup: {

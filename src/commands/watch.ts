@@ -1,5 +1,5 @@
-import { createBundler } from "../entities/bundler";
-import { createProject } from "../entities/project";
+import { createBundler } from "../bundler";
+import { createProject } from "../bundler/metadata";
 import { program } from "./program";
 
 program
