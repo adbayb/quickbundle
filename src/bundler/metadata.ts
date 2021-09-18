@@ -3,19 +3,9 @@ import { resolve } from "path";
 import { CWD } from "../constants";
 import { assert } from "../helpers";
 
-type PackageMetadata = {
-	main: string;
-	module?: string;
-	platform?: "node" | "browser";
-	source: string;
-	dependencies?: Record<string, string>;
-	devDependencies?: Record<string, string>;
-	peerDependencies?: Record<string, string>;
-};
+export type Metadata = ReturnType<typeof getMetadata>;
 
-export type Project = ReturnType<typeof createProject>;
-
-export const createProject = () => {
+export const getMetadata = () => {
 	const {
 		dependencies = {},
 		devDependencies = {},
@@ -24,7 +14,15 @@ export const createProject = () => {
 		module,
 		platform = "browser",
 		source,
-	}: PackageMetadata = require(resolve(CWD, "package.json"));
+	}: {
+		main: string;
+		module?: string;
+		platform?: "node" | "browser";
+		source: string;
+		dependencies?: Record<string, string>;
+		devDependencies?: Record<string, string>;
+		peerDependencies?: Record<string, string>;
+	} = require(resolve(CWD, "package.json"));
 
 	assert(
 		main,
@@ -58,12 +56,8 @@ export const createProject = () => {
 			cjs: main,
 			...(module && { esm: module as string }),
 		},
+		allDependencies,
 		externalDependencies,
 		platform,
-		hasModule(name: string) {
-			// @note: Reading dependencies metadata from package.json instead of using `require.resolve` mechanism
-			// is more suited to avoid side effect on monorepo where packages resolution can leak to other packages
-			return allDependencies.includes(name);
-		},
 	} as const;
 };

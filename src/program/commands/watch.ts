@@ -1,6 +1,5 @@
 import { Termost } from "termost";
-import { createBundler } from "../../bundler";
-import { createProject } from "../../bundler/metadata";
+import { createBundler, getMetadata } from "../../bundler";
 
 interface WatchContext {
 	callbacks: {
@@ -19,9 +18,8 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 			key: "callbacks",
 			label: "Setup watcher",
 			async handler() {
-				const project = createProject();
 				const callbacks = { onError() {}, onSuccess() {} };
-				const bundle = await createBundler(project, {
+				const bundle = await createBundler(getMetadata(), {
 					isProduction: false,
 					isWatchMode: true,
 					onWatch(error) {

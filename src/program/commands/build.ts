@@ -1,14 +1,11 @@
 import gzipSize from "gzip-size";
 import { Termost } from "termost";
-import { createBundler } from "../../bundler";
-import { Project, createProject } from "../../bundler/metadata";
+import { Metadata, createBundler, getMetadata } from "../../bundler";
 import { readFile } from "../../helpers";
+import { ModuleFormat } from "../../types";
 
 interface BuildContext {
-	setup: {
-		project: Project;
-		targets: Array<"esm" | "cjs">;
-	};
+	metadata: Metadata;
 	sizes: Array<{ filename: string; raw: number; gzip: number }>;
 	outfiles: Array<string>;
 }
@@ -20,28 +17,28 @@ export const createBuildCommand = (program: Termost<BuildContext>) => {
 			description: "Build the source code in production mode",
 		})
 		.task({
-			key: "setup",
+			key: "metadata",
 			label: "Retrieve information ⚙️",
 			async handler() {
-				const project = createProject();
-				const targets = Object.keys(
-					project.destination
-				) as BuildContext["setup"]["targets"];
-
-				return { project, targets };
+				return getMetadata();
 			},
 		})
 		.task({
 			key: "outfiles",
 			label: ({ values }) =>
-				`Transpile to ${values.setup.targets.join(", ")} bundles 👷‍♂️`,
+				`Transpile to ${Object.keys(values.metadata.destination).join(
+					", "
+				)} bundles 👷‍♂️`,
 			async handler({ values }) {
-				const bundle = await createBundler(values.setup.project, {
+				const targets = Object.keys(
+					values.metadata.destination
+				) as Array<ModuleFormat>;
+				const bundle = await createBundler(values.metadata, {
 					isProduction: true,
 				});
 
 				return await Promise.all(
-					values.setup.targets.map((target) => bundle(target))
+					targets.map((target) => bundle(target))
 				);
 			},
 		})

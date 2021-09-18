@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { resolve } from "path";
 import { CWD } from "../constants";
 
@@ -12,6 +11,7 @@ export const getTypeScriptOptions =
 		try {
 			const ts = await import("typescript"); // @note: lazy load typescript only if necessary
 			const { jsx, target } = ts.parseJsonConfigFileContent(
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				require(resolve(CWD, "tsconfig.json")),
 				ts.sys,
 				CWD

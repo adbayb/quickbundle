@@ -1,6 +1,7 @@
 import { build } from "esbuild";
 import { CWD } from "../constants";
-import { Project } from "./metadata";
+import { ModuleFormat } from "../types";
+import { Metadata } from "./metadata";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptOptions } from "./typescript";
 
@@ -11,7 +12,7 @@ type BundlerOptions = {
 };
 
 export const createBundler = async (
-	project: Project,
+	metadata: Metadata,
 	{
 		isProduction = false,
 		isWatchMode = false,
@@ -20,8 +21,8 @@ export const createBundler = async (
 ) => {
 	const tsOptions = await getTypeScriptOptions();
 
-	return async (format: "esm" | "cjs") => {
-		const outfile = project.destination[format];
+	return async (format: ModuleFormat) => {
+		const outfile = metadata.destination[format];
 
 		if (!outfile) {
 			return Promise.reject(
@@ -37,14 +38,14 @@ export const createBundler = async (
 					? '"production"'
 					: '"development"',
 			},
-			entryPoints: [project.source],
-			external: project.externalDependencies,
+			entryPoints: [metadata.source],
+			external: metadata.externalDependencies,
 			format,
 			metafile: true,
 			minify: isProduction,
 			outfile,
-			plugins: [jsxPlugin(project, tsOptions)],
-			platform: project.platform,
+			plugins: [jsxPlugin(metadata.allDependencies, tsOptions)],
+			platform: metadata.platform,
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
 			watch: isWatchMode && {

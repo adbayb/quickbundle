@@ -1,10 +1,9 @@
 import type { Plugin } from "esbuild";
 import { readFile, resolveModulePath } from "../helpers";
-import { Project } from "./metadata";
 import type { TypeScriptConfiguration } from "./typescript";
 
 export const jsxPlugin = (
-	project: Project,
+	dependencies: Array<string>,
 	tsOptions: TypeScriptConfiguration | null
 ): Plugin => ({
 	// @note: Plugin to automatically inject React import for jsx management
@@ -14,7 +13,9 @@ export const jsxPlugin = (
 	name: "jsx",
 	setup(build) {
 		build.onLoad({ filter: /\.(j|t)sx$/ }, async ({ path }) => {
-			const module = ["preact", "react"].find(project.hasModule);
+			const module = ["preact", "react"].find((module) =>
+				dependencies.includes(module)
+			);
 
 			// @note: enable plugin only if
 			// - `${module}/jsx-runtime` package is available (for js project, it's the only condition to check!)
