@@ -3,5 +3,6 @@
 		"jsx": "react-jsx",
 		"moduleResolution": "Node",
 		"target": "ES2015"
-	}
+	},
+	"include": ["src"]
 }

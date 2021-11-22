@@ -11,7 +11,7 @@ export const App = (props: AppProps) => {
 		<>
 			<button onClick={() => setCounter(counter + 1)}>Increment</button>
 			<div>
-				${props.label} {counter}
+				${props.label} {counter} Hello
 			</div>
 		</>
 	);

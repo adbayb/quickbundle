@@ -1,3 +1,4 @@
+import path from "path";
 import { build } from "esbuild";
 import { helpers } from "termost";
 import { CWD } from "../constants";
@@ -22,12 +23,23 @@ export const createBundler = async (
 ) => {
 	const tsOptions = await getTypeScriptOptions();
 
-	const bundleTyping = () => {
-		const { types: typingOutput } = metadata;
+	const generateTyping = async () => {
+		const { types: typingFile } = metadata;
 
-		if (!tsOptions || !typingOutput) return;
+		if (!tsOptions || !typingFile) return;
 
-		console.log("PASSE", typingOutput);
+		try {
+			const typingDir = path.dirname(typingFile);
+
+			await helpers.exec(
+				`tsc --declaration --emitDeclarationOnly --incremental --outDir ${typingDir}`,
+				{ cwd: CWD }
+			);
+		} catch (error) {
+			throw new Error(
+				`An error occurred while generating typings: ${error}`
+			);
+		}
 	};
 
 	return async (format: ModuleFormat) => {
@@ -64,13 +76,13 @@ export const createBundler = async (
 					}
 
 					if (!error) {
-						bundleTyping();
+						generateTyping();
 					}
 				},
 			},
 		});
 
-		bundleTyping();
+		generateTyping();
 
 		return outfile;
 	};
