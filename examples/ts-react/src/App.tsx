@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface AppProps {
-	label: string;
+	label?: string;
 }
 
 export const App = (props: AppProps) => {

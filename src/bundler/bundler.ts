@@ -32,7 +32,7 @@ export const createBundler = async (
 
 		await build({
 			absWorkingDir: CWD,
-			// bundle: true, // @todo: fix (not working with typescript like syntax (type/interface))
+			bundle: Boolean(metadata.externalDependencies),
 			define: {
 				"process.env.NODE_ENV": isProduction
 					? '"production"'

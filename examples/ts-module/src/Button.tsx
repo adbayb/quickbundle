@@ -1,7 +1,11 @@
-export const Button = () => {
+interface ButtonProps {
+	label: string;
+}
+
+export const Button = (props: ButtonProps) => {
 	return (
 		<>
-			<button>Click me!</button>Plop
+			<button>{props.label}</button> Plop
 		</>
 	);
 };

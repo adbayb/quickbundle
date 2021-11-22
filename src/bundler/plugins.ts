@@ -32,7 +32,7 @@ export const jsxPlugin = (
 
 			return {
 				contents: `import * as React from "${module}";${content}`,
-				loader: "jsx",
+				loader: "tsx",
 			};
 		});
 	},
