@@ -30,7 +30,7 @@
 		"release": "semantic-release"
 	},
 	"dependencies": {
-		"esbuild": "0.12.20",
+		"esbuild": "0.13.15",
 		"gzip-size": "6.0.0",
 		"termost": "0.2.1"
 	},
@@ -38,16 +38,16 @@
 		"@adbayb/eslint-config": "0.7.0",
 		"@adbayb/prettier-config": "0.7.0",
 		"@adbayb/ts-config": "0.7.0",
-		"@commitlint/cli": "13.1.0",
-		"@commitlint/config-conventional": "13.1.0",
-		"@semantic-release/git": "9.0.0",
-		"@types/node": "16.6.1",
+		"@commitlint/cli": "15.0.0",
+		"@commitlint/config-conventional": "15.0.0",
+		"@semantic-release/git": "10.0.1",
+		"@types/node": "16.11.9",
 		"eslint": "7.32.0",
 		"husky": "4.3.8",
-		"lint-staged": "11.1.2",
-		"prettier": "2.3.2",
-		"semantic-release": "17.4.5",
-		"typescript": "4.3.5"
+		"lint-staged": "12.1.2",
+		"prettier": "2.4.1",
+		"semantic-release": "18.0.0",
+		"typescript": "4.5.2"
 	},
 	"commitlint": {
 		"extends": [
