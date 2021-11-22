@@ -14,10 +14,12 @@ export const getMetadata = () => {
 		module,
 		platform = "browser",
 		source,
+		types,
 	}: {
 		main: string;
 		module?: string;
 		platform?: "node" | "browser";
+		types?: string;
 		source: string;
 		dependencies?: Record<string, string>;
 		devDependencies?: Record<string, string>;
@@ -52,6 +54,7 @@ export const getMetadata = () => {
 
 	return {
 		source,
+		types,
 		destination: {
 			cjs: main,
 			...(module && { esm: module as string }),

@@ -1,4 +1,5 @@
 import { build } from "esbuild";
+import { helpers } from "termost";
 import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
 import { Metadata } from "./metadata";
@@ -20,6 +21,14 @@ export const createBundler = async (
 	}: Partial<BundlerOptions>
 ) => {
 	const tsOptions = await getTypeScriptOptions();
+
+	const bundleTyping = () => {
+		const { types: typingOutput } = metadata;
+
+		if (!tsOptions || !typingOutput) return;
+
+		console.log("PASSE", typingOutput);
+	};
 
 	return async (format: ModuleFormat) => {
 		const outfile = metadata.destination[format];
@@ -49,9 +58,19 @@ export const createBundler = async (
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
 			watch: isWatchMode && {
-				onRebuild: onWatch,
+				onRebuild(error) {
+					if (typeof onWatch === "function") {
+						onWatch(error);
+					}
+
+					if (!error) {
+						bundleTyping();
+					}
+				},
 			},
 		});
+
+		bundleTyping();
 
 		return outfile;
 	};
