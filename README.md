@@ -28,9 +28,9 @@ Quickbundle allows you to bundle a library with ease:
 
 ```bash
 # NPM
-npm install quickbundles
+npm install quickbundle
 # Yarn
-yarn add quickbundles
+yarn add quickbundle
 ```
 
 2️⃣ Set up your package configuration (`package.json`):
@@ -45,7 +45,7 @@ yarn add quickbundles
 	"platform": "node", // Platform target (optional, by default "browser")
 	"scripts": {
 		"prod": "quickbundle build", // Production mode (optimized bundles)
-		"dev": "microbundle watch" // Development mode (watch mode on each file change)
+		"dev": "quickbundle watch" // Development mode (watch mode on each file change)
 	}
 }
 ```
