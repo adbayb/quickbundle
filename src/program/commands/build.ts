@@ -1,4 +1,4 @@
-import { gzipSize } from "gzip-size";
+import gzipSize from "gzip-size";
 import { Termost } from "termost";
 import { Metadata, createBundler, getMetadata } from "../../bundler";
 import { readFile } from "../../helpers";

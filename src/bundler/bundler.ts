@@ -51,7 +51,8 @@ export const createBundler = async (
 			);
 		}
 
-		await build({
+		const pTyping = generateTyping();
+		const pBuild = build({
 			absWorkingDir: CWD,
 			bundle: Boolean(metadata.externalDependencies),
 			define: {
@@ -82,7 +83,7 @@ export const createBundler = async (
 			},
 		});
 
-		generateTyping();
+		await Promise.all([pBuild, pTyping]);
 
 		return outfile;
 	};
