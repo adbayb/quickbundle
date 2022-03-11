@@ -1,5 +1,4 @@
 -   [x] Fix typing generation on watch & build time
--   [ ] Use only one instance of tsc while generating typing on multiple short notice save command
--   [ ] Enable typing generation only if typing key is available in package.json
--   [ ] Add flag --fast to disable tsc typing generation and make the build blazing fast (should be managed userland side)
 -   [x] Do not exit on watch mode even if error
+-   [x] Enable typing generation only if typing key is available in package.json
+-   [ ] Add flag --fast to disable tsc typing generation and make the build blazing fast (should be managed userland side)

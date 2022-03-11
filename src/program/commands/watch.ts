@@ -1,5 +1,5 @@
 import { Termost } from "termost";
-import { createBundler, getMetadata } from "../../bundler";
+import { bundle } from "../../bundler";
 
 interface WatchContext {
 	callbacks: {
@@ -22,7 +22,8 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 					onError() {},
 					onSuccess() {},
 				};
-				const bundle = await createBundler(getMetadata(), {
+
+				bundle({
 					isProduction: false,
 					onWatch(error) {
 						if (error) {
@@ -31,10 +32,7 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 							callbacks.onSuccess();
 						}
 					},
-				});
-
-				// @todo: By default, pick module target for watch mode and if not available main field (ie. cjs build)
-				bundle("esm")
+				})
 					.then(() => callbacks.onSuccess())
 					.catch((error) => {
 						callbacks.onError(String(error));
@@ -53,7 +51,7 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 				) => {
 					console.clear();
 					helpers.print(
-						`Last update at ${new Date().toLocaleTimeString()} 🔎\n${
+						`Last update at ${new Date().toLocaleTimeString()}\n${
 							message ? `\n${message}\n` : ""
 						}`,
 						{ type }

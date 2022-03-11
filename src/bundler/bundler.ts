@@ -1,13 +1,14 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import path from "path";
 import { build } from "esbuild";
 import { spawn } from "child_process";
 import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
-import { Metadata } from "./metadata";
+import { getMetadata } from "./metadata";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptOptions } from "./typescript";
 
-export const exec = async (
+const exec = async (
 	command: string,
 	options: {
 		cwd?: string;
@@ -55,33 +56,40 @@ type BundlerOptions = {
 	onWatch: (error: Error | null) => void;
 };
 
-export const createBundler = async (
-	metadata: Metadata,
-	{ isProduction = false, onWatch }: Partial<BundlerOptions>
-) => {
+export const bundle = async ({
+	isProduction = false,
+	onWatch,
+}: Partial<BundlerOptions>) => {
+	const {
+		allDependencies,
+		destination,
+		externalDependencies,
+		platform,
+		source,
+		types,
+	} = getMetadata();
 	const isWatchMode = typeof onWatch === "function";
-	const isTypingMode = true;
+	const isTypingMode = typeof types === "string";
 	const tsOptions = await getTypeScriptOptions();
 
-	const typing = async () => {
-		const { types: typingFile } = metadata;
-
-		if (!tsOptions || !typingFile) return;
-
+	const getType = async () => {
 		try {
-			const typingDir = path.dirname(typingFile);
+			const outfile = types as string;
+			const typingDir = path.dirname(outfile);
 
 			await exec(
 				`tsc --declaration --emitDeclarationOnly --incremental --outDir ${typingDir}`,
 				{ cwd: CWD }
 			);
+
+			return outfile;
 		} catch (error) {
 			throw new Error(`Typing generation failed:\n${error}`);
 		}
 	};
 
-	return async (format: ModuleFormat) => {
-		const outfile = metadata.destination[format];
+	const getJavaScript = async (format: ModuleFormat) => {
+		const outfile = destination[format];
 
 		if (!outfile) {
 			return Promise.reject(
@@ -89,24 +97,23 @@ export const createBundler = async (
 			);
 		}
 
-		const pTyping = isTypingMode ? typing() : Promise.resolve();
-		const pBuild = build({
+		await build({
 			absWorkingDir: CWD,
-			bundle: Boolean(metadata.externalDependencies),
+			bundle: Boolean(externalDependencies),
 			define: {
 				"process.env.NODE_ENV": isProduction
 					? '"production"'
 					: '"development"',
 			},
-			entryPoints: [metadata.source],
-			external: metadata.externalDependencies,
+			entryPoints: [source],
+			external: externalDependencies,
 			format,
 			logLevel: "silent",
 			metafile: true,
 			minify: isProduction,
 			outfile,
-			plugins: [jsxPlugin(metadata.allDependencies, tsOptions)],
-			platform: metadata.platform,
+			plugins: [jsxPlugin(allDependencies, tsOptions)],
+			platform,
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
 			watch: isWatchMode && {
@@ -123,7 +130,7 @@ export const createBundler = async (
 
 					if (isTypingMode) {
 						try {
-							await typing();
+							await getType();
 						} catch (typingError) {
 							error = typingError as Error;
 						}
@@ -134,8 +141,14 @@ export const createBundler = async (
 			},
 		});
 
-		await Promise.all([pBuild, pTyping]);
-
 		return outfile;
 	};
+
+	const promises = [
+		getJavaScript("esm"),
+		...(!isWatchMode ? [getJavaScript("cjs")] : []),
+		...(isTypingMode ? [getType()] : []),
+	];
+
+	return Promise.all(promises);
 };

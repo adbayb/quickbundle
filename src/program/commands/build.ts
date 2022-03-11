@@ -1,11 +1,9 @@
 import gzipSize from "gzip-size";
 import { Termost } from "termost";
-import { Metadata, createBundler, getMetadata } from "../../bundler";
+import { bundle } from "../../bundler";
 import { readFile } from "../../helpers";
-import { ModuleFormat } from "../../types";
 
 interface BuildContext {
-	metadata: Metadata;
 	sizes: Array<{ filename: string; raw: number; gzip: number }>;
 	outfiles: Array<string>;
 }
@@ -17,34 +15,17 @@ export const createBuildCommand = (program: Termost<BuildContext>) => {
 			description: "Build the source code in production mode",
 		})
 		.task({
-			key: "metadata",
-			label: "Retrieve information ⚙️",
-			async handler() {
-				return getMetadata();
-			},
-		})
-		.task({
 			key: "outfiles",
-			label: ({ values }) =>
-				`Transpile to ${Object.keys(values.metadata.destination).join(
-					", "
-				)} bundles 👷‍♂️`,
-			async handler({ values }) {
-				const targets = Object.keys(
-					values.metadata.destination
-				) as Array<ModuleFormat>;
-				const bundle = await createBundler(values.metadata, {
+			label: "Bundle assets 📦",
+			async handler() {
+				return await bundle({
 					isProduction: true,
 				});
-
-				return await Promise.all(
-					targets.map((target) => bundle(target))
-				);
 			},
 		})
 		.task({
 			key: "sizes",
-			label: "Compute size 📐",
+			label: "Compute sizes 🔢",
 			async handler({ values }) {
 				return await calculateBundleSize(values.outfiles);
 			},

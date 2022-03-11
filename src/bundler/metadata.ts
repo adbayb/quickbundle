@@ -3,8 +3,6 @@ import { resolve } from "path";
 import { CWD } from "../constants";
 import { assert } from "../helpers";
 
-export type Metadata = ReturnType<typeof getMetadata>;
-
 export const getMetadata = () => {
 	const {
 		dependencies = {},
@@ -47,10 +45,6 @@ export const getMetadata = () => {
 		...Object.keys(dependencies),
 		...Object.keys(devDependencies),
 	];
-
-	// @todo: invariant/asserts for main/module/source
-	// @todo: if no types field is added in the package.json => do not create declaration file
-	// same if no module/main (main must be required for compatibility purposes)
 
 	return {
 		source,
