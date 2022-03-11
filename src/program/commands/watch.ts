@@ -36,7 +36,11 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 				// @todo: By default, pick module target for watch mode and if not available main field (ie. cjs build)
 				bundle("esm")
 					.then(() => callbacks.onSuccess())
-					.catch((error) => callbacks.onError(String(error)));
+					.catch((error) => {
+						callbacks.onError(String(error));
+
+						throw error;
+					});
 
 				return callbacks;
 			},

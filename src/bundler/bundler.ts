@@ -7,7 +7,12 @@ import { Metadata } from "./metadata";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptOptions } from "./typescript";
 
-export const exec = async (command: string, options: ExecOptions = {}) => {
+export const exec = async (
+	command: string,
+	options: {
+		cwd?: string;
+	} = {}
+) => {
 	return new Promise<string>((resolve, reject) => {
 		let stdout = "";
 		let stderr = "";
@@ -34,6 +39,7 @@ export const exec = async (command: string, options: ExecOptions = {}) => {
 
 		childProcess.on("close", (exitCode) => {
 			if (exitCode !== 0) {
+				// @todo: fix on termost and remove code
 				const errorStream = stderr || stdout;
 
 				reject(errorStream.trim());
@@ -42,10 +48,6 @@ export const exec = async (command: string, options: ExecOptions = {}) => {
 			}
 		});
 	});
-};
-
-type ExecOptions = {
-	cwd?: string;
 };
 
 type BundlerOptions = {
@@ -61,7 +63,7 @@ export const createBundler = async (
 	const isTypingMode = true;
 	const tsOptions = await getTypeScriptOptions();
 
-	const generateTyping = async () => {
+	const typing = async () => {
 		const { types: typingFile } = metadata;
 
 		if (!tsOptions || !typingFile) return;
@@ -87,7 +89,7 @@ export const createBundler = async (
 			);
 		}
 
-		const pTyping = isTypingMode ? generateTyping() : Promise.resolve();
+		const pTyping = isTypingMode ? typing() : Promise.resolve();
 		const pBuild = build({
 			absWorkingDir: CWD,
 			bundle: Boolean(metadata.externalDependencies),
@@ -121,7 +123,7 @@ export const createBundler = async (
 
 					if (isTypingMode) {
 						try {
-							await generateTyping();
+							await typing();
 						} catch (typingError) {
 							error = typingError as Error;
 						}
