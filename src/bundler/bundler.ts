@@ -1,26 +1,64 @@
 import path from "path";
 import { build } from "esbuild";
-import { helpers } from "termost";
+import { spawn } from "child_process";
 import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
 import { Metadata } from "./metadata";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptOptions } from "./typescript";
 
+export const exec = async (command: string, options: ExecOptions = {}) => {
+	return new Promise<string>((resolve, reject) => {
+		let stdout = "";
+		let stderr = "";
+		const [bin, ...args] = command.split(" ") as [string, ...string[]];
+
+		const childProcess = spawn(bin, args, {
+			cwd: options.cwd,
+			shell: true,
+			stdio: "pipe",
+			env: {
+				...process.env,
+				// @note: make sure to force color display for spawned processes
+				FORCE_COLOR: "1",
+			},
+		});
+
+		childProcess.stdout.on("data", (chunk) => {
+			stdout += chunk;
+		});
+
+		childProcess.stderr.on("data", (chunk) => {
+			stderr += chunk;
+		});
+
+		childProcess.on("close", (exitCode) => {
+			if (exitCode !== 0) {
+				const errorStream = stderr || stdout;
+
+				reject(errorStream.trim());
+			} else {
+				resolve(stdout.trim());
+			}
+		});
+	});
+};
+
+type ExecOptions = {
+	cwd?: string;
+};
+
 type BundlerOptions = {
 	isProduction: boolean;
-	isWatchMode: boolean;
 	onWatch: (error: Error | null) => void;
 };
 
 export const createBundler = async (
 	metadata: Metadata,
-	{
-		isProduction = false,
-		isWatchMode = false,
-		onWatch,
-	}: Partial<BundlerOptions>
+	{ isProduction = false, onWatch }: Partial<BundlerOptions>
 ) => {
+	const isWatchMode = typeof onWatch === "function";
+	const isTypingMode = true;
 	const tsOptions = await getTypeScriptOptions();
 
 	const generateTyping = async () => {
@@ -31,14 +69,12 @@ export const createBundler = async (
 		try {
 			const typingDir = path.dirname(typingFile);
 
-			await helpers.exec(
+			await exec(
 				`tsc --declaration --emitDeclarationOnly --incremental --outDir ${typingDir}`,
 				{ cwd: CWD }
 			);
 		} catch (error) {
-			throw new Error(
-				`An error occurred while generating typings: ${error}`
-			);
+			throw new Error(`Typing generation failed:\n${error}`);
 		}
 	};
 
@@ -51,7 +87,7 @@ export const createBundler = async (
 			);
 		}
 
-		const pTyping = generateTyping();
+		const pTyping = isTypingMode ? generateTyping() : Promise.resolve();
 		const pBuild = build({
 			absWorkingDir: CWD,
 			bundle: Boolean(metadata.externalDependencies),
@@ -63,6 +99,7 @@ export const createBundler = async (
 			entryPoints: [metadata.source],
 			external: metadata.externalDependencies,
 			format,
+			logLevel: "silent",
 			metafile: true,
 			minify: isProduction,
 			outfile,
@@ -71,14 +108,26 @@ export const createBundler = async (
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
 			watch: isWatchMode && {
-				onRebuild(error) {
-					if (typeof onWatch === "function") {
+				async onRebuild(bundleError) {
+					let error: Error | null = bundleError as Error;
+
+					// @note: early return => if there's already a build error,
+					// no need to run a heavy typing generation process until the error is fixed
+					if (error) {
 						onWatch(error);
+
+						return;
 					}
 
-					if (!error) {
-						generateTyping();
+					if (isTypingMode) {
+						try {
+							await generateTyping();
+						} catch (typingError) {
+							error = typingError as Error;
+						}
 					}
+
+					onWatch(error);
 				},
 			},
 		});
