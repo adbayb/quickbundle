@@ -37,16 +37,18 @@ yarn add quickbundle
 
 ```jsonc
 {
-	"name": "lib", // Package name
-	"source": "src/index.ts", // Source code entrypoint
-	"main": "./dist/lib.cjs", // CommonJS bundle output
-	"module": "./dist/lib.cjs.js", // ESM bundle output
-	"types": "./dist/lib.d.ts", // Typing output (not yet supported: coming soon...)
-	"platform": "node", // Platform target (optional, by default "browser")
-	"scripts": {
-		"prod": "quickbundle build", // Production mode (optimized bundles)
-		"dev": "quickbundle watch" // Development mode (watch mode on each file change)
-	}
+  "name": "lib", // Package name
+  "source": "src/index.ts", // Source code entrypoint
+  "main": "./dist/lib.cjs", // CommonJS output file
+  "module": "./dist/lib.cjs.js", // ESM output file
+  "types": "./dist/lib.d.ts", // Typing output file
+  "platform": "node", // Platform target (optional, by default "browser")
+  "scripts": {
+    "prod": "quickbundle build", // Production mode (optimizes bundle)
+    "dev": "quickbundle watch", // Development mode (watches each file change)
+    "prod:fast": "quickbundle build --no-check", // Production mode with fast transpilation time. This mode disables TypeScript type checking (ie. not using `tsc`) and, consequently, the `types` asset is no more managed by the tool
+    "dev:fast": "quickbundle watch --no-check" // Development mode with fast transpilation time
+  }
 }
 ```
 

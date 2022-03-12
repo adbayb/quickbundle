@@ -151,6 +151,7 @@ export const bundle = async ({
 	};
 
 	const promises = [
+		// @todo: check if module is set. If not, do not call it and use only cjs one.
 		getJavaScript("esm"),
 		...(!isWatchMode ? [getJavaScript("cjs")] : []),
 		...(isTypingMode ? [getType()] : []),
