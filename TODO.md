@@ -1,4 +1,4 @@
 -   [x] Fix typing generation on watch & build time
 -   [x] Do not exit on watch mode even if error
 -   [x] Enable typing generation only if typing key is available in package.json
--   [ ] Add flag --fast to disable tsc typing generation and make the build blazing fast (should be managed userland side)
+-   [ ] Add flag --no-check ala Deno (https://deno.land/manual/typescript/runtime#skip-type-checkingtranspiling-only) to disable tsc typing generation and make the build blazing fast (should be managed userland side)

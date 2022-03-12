@@ -46,10 +46,19 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 		.message({
 			handler({ values }, helpers) {
 				const onNotify = (
-					type: "error" | "success",
+					type: "error" | "success" | "loading",
 					message?: string
 				) => {
 					console.clear();
+
+					if (type === "loading") {
+						helpers.print(`Waiting for first build to be done...`, {
+							type: "information",
+						});
+
+						return;
+					}
+
 					helpers.print(
 						`Last update at ${new Date().toLocaleTimeString()}\n${
 							message ? `\n${message}\n` : ""
@@ -61,7 +70,7 @@ export const createWatchCommand = (program: Termost<WatchContext>) => {
 				values.callbacks.onSuccess = () => onNotify("success");
 				values.callbacks.onError = (error) => onNotify("error", error);
 
-				values.callbacks.onSuccess();
+				onNotify("loading");
 			},
 		});
 };

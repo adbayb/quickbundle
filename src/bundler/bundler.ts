@@ -73,27 +73,32 @@ export const bundle = async ({
 	const tsOptions = await getTypeScriptOptions();
 
 	const getType = async () => {
+		const outfile = types;
+
+		if (!outfile) {
+			throw new Error("No typing output file has been set");
+		}
+
 		try {
-			const outfile = types as string;
 			const typingDir = path.dirname(outfile);
 
 			await exec(
 				`tsc --declaration --emitDeclarationOnly --incremental --outDir ${typingDir}`,
 				{ cwd: CWD }
 			);
-
-			return outfile;
 		} catch (error) {
 			throw new Error(`Typing generation failed:\n${error}`);
 		}
+
+		return outfile;
 	};
 
 	const getJavaScript = async (format: ModuleFormat) => {
 		const outfile = destination[format];
 
 		if (!outfile) {
-			return Promise.reject(
-				"Unknown `destination` for the given `format`"
+			throw new Error(
+				`No output file has been set for \`${format}\` format`
 			);
 		}
 
@@ -116,6 +121,7 @@ export const bundle = async ({
 			platform,
 			sourcemap: true,
 			target: tsOptions?.target || "esnext",
+			treeShaking: true,
 			watch: isWatchMode && {
 				async onRebuild(bundleError) {
 					let error: Error | null = bundleError as Error;
