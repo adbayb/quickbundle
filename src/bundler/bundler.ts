@@ -1,55 +1,12 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import path from "path";
 import { build } from "esbuild";
-import { spawn } from "child_process";
+import { helpers } from "termost";
 import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
 import { getMetadata } from "./metadata";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptOptions } from "./typescript";
-
-const exec = async (
-	command: string,
-	options: {
-		cwd?: string;
-	} = {}
-) => {
-	return new Promise<string>((resolve, reject) => {
-		let stdout = "";
-		let stderr = "";
-		const [bin, ...args] = command.split(" ") as [string, ...string[]];
-
-		const childProcess = spawn(bin, args, {
-			cwd: options.cwd,
-			shell: true,
-			stdio: "pipe",
-			env: {
-				...process.env,
-				// @note: make sure to force color display for spawned processes
-				FORCE_COLOR: "1",
-			},
-		});
-
-		childProcess.stdout.on("data", (chunk) => {
-			stdout += chunk;
-		});
-
-		childProcess.stderr.on("data", (chunk) => {
-			stderr += chunk;
-		});
-
-		childProcess.on("close", (exitCode) => {
-			if (exitCode !== 0) {
-				// @todo: fix on termost and remove code
-				const errorStream = stderr || stdout;
-
-				reject(errorStream.trim());
-			} else {
-				resolve(stdout.trim());
-			}
-		});
-	});
-};
 
 type BundlerOptions = {
 	isProduction: boolean;
@@ -82,7 +39,7 @@ export const bundle = async ({
 		try {
 			const typingDir = path.dirname(outfile);
 
-			await exec(
+			await helpers.exec(
 				`tsc --declaration --emitDeclarationOnly --incremental --outDir ${typingDir}`,
 				{ cwd: CWD }
 			);

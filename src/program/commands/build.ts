@@ -3,12 +3,12 @@ import { Termost } from "termost";
 import { bundle } from "../../bundler";
 import { readFile } from "../../helpers";
 
-interface BuildContext {
+interface BuildCommandContext {
 	sizes: Array<{ filename: string; raw: number; gzip: number }>;
 	outfiles: Array<string>;
 }
 
-export const createBuildCommand = (program: Termost<BuildContext>) => {
+export const createBuildCommand = (program: Termost<BuildCommandContext>) => {
 	program
 		.command({
 			name: "build",
