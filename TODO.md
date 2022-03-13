@@ -2,3 +2,6 @@
 -   [x] Do not exit on watch mode even if error
 -   [x] Enable typing generation only if typing key is available in package.json
 -   [ ] Add flag --no-check ala Deno (https://deno.land/manual/typescript/runtime#skip-type-checkingtranspiling-only) to disable tsc typing generation and make the build blazing fast (should be managed userland side)
+-   [ ] Solve all codebase todo
+-   [ ] Update jsx plugin to rely on jsxImportSource data to retrieve jsx runtime package name
+-   [ ] FAQ/Troubleshooting Readme (no-check flag + jsxImportSource)
