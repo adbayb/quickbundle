@@ -5,8 +5,6 @@ import { assert } from "../helpers";
 
 export const getMetadata = () => {
 	const {
-		dependencies = {},
-		devDependencies = {},
 		peerDependencies = {},
 		main,
 		module,
@@ -19,8 +17,6 @@ export const getMetadata = () => {
 		platform?: "node" | "browser";
 		types?: string;
 		source: string;
-		dependencies?: Record<string, string>;
-		devDependencies?: Record<string, string>;
 		peerDependencies?: Record<string, string>;
 	} = require(resolve(CWD, "package.json"));
 
@@ -40,11 +36,6 @@ export const getMetadata = () => {
 	);
 
 	const externalDependencies = Object.keys(peerDependencies);
-	const allDependencies = [
-		...externalDependencies,
-		...Object.keys(dependencies),
-		...Object.keys(devDependencies),
-	];
 
 	return {
 		source,
@@ -53,7 +44,6 @@ export const getMetadata = () => {
 			cjs: main,
 			...(module && { esm: module as string }),
 		},
-		allDependencies,
 		externalDependencies,
 		platform,
 	} as const;

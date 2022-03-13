@@ -6,7 +6,7 @@ import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
 import { getMetadata } from "./metadata";
 import { jsxPlugin } from "./plugins";
-import { getTypeScriptOptions } from "./typescript";
+import { getTypeScriptConfiguration } from "./typescript";
 
 type BundlerOptions = {
 	isProduction: boolean;
@@ -17,17 +17,11 @@ export const bundle = async ({
 	isProduction = false,
 	onWatch,
 }: Partial<BundlerOptions>) => {
-	const {
-		allDependencies,
-		destination,
-		externalDependencies,
-		platform,
-		source,
-		types,
-	} = getMetadata();
+	const { destination, externalDependencies, platform, source, types } =
+		getMetadata();
 	const isWatchMode = typeof onWatch === "function";
-	const isTypingMode = typeof types === "string";
-	const tsOptions = await getTypeScriptOptions();
+	const isTypingRequested = typeof types === "string";
+	const tsConfig = await getTypeScriptConfiguration();
 
 	const getType = async () => {
 		const outfile = types;
@@ -74,10 +68,10 @@ export const bundle = async ({
 			metafile: true,
 			minify: isProduction,
 			outfile,
-			plugins: [jsxPlugin(allDependencies, tsOptions)],
+			plugins: [jsxPlugin(tsConfig)],
 			platform,
 			sourcemap: true,
-			target: tsOptions?.target || "esnext",
+			target: tsConfig?.target || "esnext",
 			treeShaking: true,
 			watch: isWatchMode && {
 				async onRebuild(bundleError) {
@@ -91,7 +85,7 @@ export const bundle = async ({
 						return;
 					}
 
-					if (isTypingMode) {
+					if (isTypingRequested) {
 						try {
 							await getType();
 						} catch (typingError) {
@@ -111,7 +105,7 @@ export const bundle = async ({
 		// @todo: check if module is set. If not, do not call it and use only cjs one.
 		getJavaScript("esm"),
 		...(!isWatchMode ? [getJavaScript("cjs")] : []),
-		...(isTypingMode ? [getType()] : []),
+		...(isTypingRequested ? [getType()] : []),
 	];
 
 	return Promise.all(promises);
