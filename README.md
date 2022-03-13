@@ -8,17 +8,14 @@
 
 ## ✨ Features
 
-Quickbundle allows you to bundle a library with ease:
+Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy** way:
 
--   Fast build thanks to [ESBuild bundler](https://github.com/evanw/esbuild)
--   `package.json` as a first-class citizen to define your project build configurations
--   `CJS` & `ESM` output format support
--   Browser & Node.JS platform target support
--   Peer dependencies support (excluded automatically from the build output)
--   Quick development build support with a watch mode
--   Production build support with optimized output
--   TypeScript support
--   JSX support
+-   Fast build and watch mode thanks to [ESBuild bundler](https://github.com/evanw/esbuild)
+-   Zero configuration: define the build artifacts in your `package.json` and you're all set!
+-   JavaScript, TypeScript, JSX, CSS, JSON and Text support following [ESBuild support](https://esbuild.github.io/content-types/)
+-   Support of multiple module formats including `cjs` & `esm`
+-   Bundling can be done for several platform targets including `browser` or `node`
+-   Optimized build such as `peerDependencies` not bundled in the final output
 
 <br>
 
