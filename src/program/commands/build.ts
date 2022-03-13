@@ -18,9 +18,13 @@ export const createBuildCommand = (program: Termost<BuildCommandContext>) => {
 			key: "outfiles",
 			label: "Bundle assets 📦",
 			async handler() {
-				return await bundle({
+				const outfiles = await bundle({
 					isProduction: true,
 				});
+
+				return outfiles.filter(
+					(outfile): outfile is string => outfile !== null
+				);
 			},
 		})
 		.task({

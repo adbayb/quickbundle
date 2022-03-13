@@ -3,7 +3,16 @@ import { resolve } from "path";
 import { CWD } from "../constants";
 import { assert } from "../helpers";
 
-export const getMetadata = () => {
+type PackageOriginalMetadata = {
+	main: string;
+	module?: string;
+	platform?: "node" | "browser";
+	types?: string;
+	source: string;
+	peerDependencies?: Record<string, string>;
+};
+
+export const getPackageMetadata = () => {
 	const {
 		peerDependencies = {},
 		main,
@@ -11,14 +20,8 @@ export const getMetadata = () => {
 		platform = "browser",
 		source,
 		types,
-	}: {
-		main: string;
-		module?: string;
-		platform?: "node" | "browser";
-		types?: string;
-		source: string;
-		peerDependencies?: Record<string, string>;
-	} = require(resolve(CWD, "package.json"));
+	}: PackageOriginalMetadata = require(resolve(CWD, "package.json"));
+	const externalDependencies = Object.keys(peerDependencies);
 
 	assert(
 		main,
@@ -35,16 +38,15 @@ export const getMetadata = () => {
 		"The `platform` package field can only accept `browser` or `node` value."
 	);
 
-	const externalDependencies = Object.keys(peerDependencies);
-
 	return {
-		source,
-		types,
 		destination: {
 			cjs: main,
-			...(module && { esm: module as string }),
+			...(module && { esm: module }),
 		},
 		externalDependencies,
+		hasModule: Boolean(module),
 		platform,
+		source,
+		types,
 	} as const;
 };

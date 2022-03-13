@@ -43,3 +43,9 @@ export const getTypeScriptConfiguration =
 			return null;
 		}
 	};
+
+export const hasTypeScript = (
+	tsConfig: TypeScriptConfiguration | null
+): tsConfig is TypeScriptConfiguration => {
+	return Boolean(tsConfig);
+};

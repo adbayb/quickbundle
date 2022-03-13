@@ -4,7 +4,7 @@ import { build } from "esbuild";
 import { helpers } from "termost";
 import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
-import { getMetadata } from "./metadata";
+import { getPackageMetadata } from "./package";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptConfiguration } from "./typescript";
 
@@ -17,8 +17,14 @@ export const bundle = async ({
 	isProduction = false,
 	onWatch,
 }: Partial<BundlerOptions>) => {
-	const { destination, externalDependencies, platform, source, types } =
-		getMetadata();
+	const {
+		destination,
+		externalDependencies,
+		hasModule,
+		platform,
+		source,
+		types,
+	} = getPackageMetadata();
 	const isWatchMode = typeof onWatch === "function";
 	const isTypingRequested = typeof types === "string";
 	const tsConfig = await getTypeScriptConfiguration();
@@ -26,9 +32,7 @@ export const bundle = async ({
 	const getType = async () => {
 		const outfile = types;
 
-		if (!outfile) {
-			throw new Error("No typing output file has been set");
-		}
+		if (!outfile) return null;
 
 		try {
 			const typingDir = path.dirname(outfile);
@@ -47,11 +51,7 @@ export const bundle = async ({
 	const getJavaScript = async (format: ModuleFormat) => {
 		const outfile = destination[format];
 
-		if (!outfile) {
-			throw new Error(
-				`No output file has been set for \`${format}\` format`
-			);
-		}
+		if (!outfile) return null;
 
 		await build({
 			absWorkingDir: CWD,
@@ -102,9 +102,9 @@ export const bundle = async ({
 	};
 
 	const promises = [
-		// @todo: check if module is set. If not, do not call it and use only cjs one.
-		getJavaScript("esm"),
-		...(!isWatchMode ? [getJavaScript("cjs")] : []),
+		...(isWatchMode
+			? [getJavaScript(hasModule ? "esm" : "cjs")]
+			: [getJavaScript("cjs"), getJavaScript("esm")]),
 		...(isTypingRequested ? [getType()] : []),
 	];
 
