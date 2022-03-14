@@ -1,7 +1,8 @@
 import { Termost } from "termost";
 import { bundle } from "../../bundler";
+import { ProgramContext } from "../types";
 
-interface WatchCommandContext {
+interface WatchCommandContext extends ProgramContext {
 	callbacks: {
 		onError: (message: string) => void;
 		onSuccess: () => void;
@@ -17,13 +18,14 @@ export const createWatchCommand = (program: Termost<WatchCommandContext>) => {
 		.task({
 			key: "callbacks",
 			label: "Setup watcher",
-			async handler() {
+			async handler({ values }) {
 				const callbacks: WatchCommandContext["callbacks"] = {
 					onError() {},
 					onSuccess() {},
 				};
 
 				bundle({
+					isFast: values.noCheck,
 					isProduction: false,
 					onWatch(error) {
 						if (error) {

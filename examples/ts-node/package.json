@@ -10,7 +10,9 @@
 		"clean": "rm -rf dist",
 		"start": "yarn build && open public/index.html",
 		"build": "quickbundle build",
-		"watch": "quickbundle watch"
+		"watch": "quickbundle watch",
+		"build:fast": "quickbundle build --no-check",
+		"watch:fast": "quickbundle watch --no-check"
 	},
 	"dependencies": {
 		"ora": "5.4.0"

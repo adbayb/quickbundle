@@ -8,15 +8,17 @@ import { getPackageMetadata } from "./package";
 import { jsxPlugin } from "./plugins";
 import { getTypeScriptConfiguration } from "./typescript";
 
-type BundlerOptions = {
+type BundleParameters = {
 	isProduction: boolean;
-	onWatch: (error: Error | null) => void;
+	isFast: boolean;
+	onWatch?: (error: Error | null) => void;
 };
 
 export const bundle = async ({
-	isProduction = false,
+	isProduction,
+	isFast,
 	onWatch,
-}: Partial<BundlerOptions>) => {
+}: BundleParameters) => {
 	const {
 		destination,
 		externalDependencies,
@@ -25,8 +27,8 @@ export const bundle = async ({
 		source,
 		types,
 	} = getPackageMetadata();
-	const isWatchMode = typeof onWatch === "function";
-	const isTypingRequested = typeof types === "string";
+	const isWatching = typeof onWatch === "function";
+	const isTypingRequested = typeof types === "string" && !isFast;
 	const tsConfig = await getTypeScriptConfiguration();
 
 	const getType = async () => {
@@ -73,7 +75,7 @@ export const bundle = async ({
 			sourcemap: true,
 			target: tsConfig?.target || "esnext",
 			treeShaking: true,
-			watch: isWatchMode && {
+			watch: isWatching && {
 				async onRebuild(bundleError) {
 					let error: Error | null = bundleError as Error;
 
@@ -102,7 +104,7 @@ export const bundle = async ({
 	};
 
 	const promises = [
-		...(isWatchMode
+		...(isWatching
 			? [getJavaScript(hasModule ? "esm" : "cjs")]
 			: [getJavaScript("cjs"), getJavaScript("esm")]),
 		...(isTypingRequested ? [getType()] : []),

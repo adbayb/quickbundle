@@ -10,9 +10,9 @@
 
 Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy** way:
 
--   Fast build and watch mode thanks to [ESBuild bundler](https://github.com/evanw/esbuild)
+-   Fast build and watch mode thanks to [esbuild](https://esbuild.github.io/)
 -   Zero configuration: define the build artifacts in your `package.json` and you're all set!
--   JavaScript, TypeScript, JSX, CSS, JSON and Text support following [ESBuild support](https://esbuild.github.io/content-types/)
+-   JavaScript, TypeScript, JSX, CSS, JSON and Text support following [esbuild support](https://esbuild.github.io/content-types/)
 -   Support of multiple module formats including `cjs` & `esm`
 -   Bundling can be done for several platform targets including `browser` or `node`
 -   Optimized build such as `peerDependencies` not bundled in the final output
@@ -41,10 +41,10 @@ yarn add quickbundle
 	"types": "./dist/lib.d.ts", // Typing output file
 	"platform": "node", // Platform target (optional, by default "browser")
 	"scripts": {
-		"prod": "quickbundle build", // Production mode (optimizes bundle)
-		"dev": "quickbundle watch", // Development mode (watches each file change)
-		"prod:fast": "quickbundle build --no-check", // Production mode with fast transpilation time. This mode disables TypeScript type checking (ie. not using `tsc`) and, consequently, the `types` asset is no more managed by the tool
-		"dev:fast": "quickbundle watch --no-check" // Development mode with fast transpilation time
+		"build": "quickbundle build", // Production mode (optimizes bundle)
+		"watch": "quickbundle watch", // Development mode (watches each file change)
+		"build:fast": "quickbundle build --no-check", // Production mode with fast transpilation time. This mode disables TypeScript type checking (ie. not using `tsc`) and, consequently, the `types` asset is no more managed by the tool
+		"watch:fast": "quickbundle watch --no-check" // Development mode with fast transpilation time
 	}
 }
 ```

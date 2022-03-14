@@ -2,8 +2,9 @@ import gzipSize from "gzip-size";
 import { Termost } from "termost";
 import { bundle } from "../../bundler";
 import { readFile } from "../../helpers";
+import { ProgramContext } from "../types";
 
-interface BuildCommandContext {
+interface BuildCommandContext extends ProgramContext {
 	sizes: Array<{ filename: string; raw: number; gzip: number }>;
 	outfiles: Array<string>;
 }
@@ -17,8 +18,9 @@ export const createBuildCommand = (program: Termost<BuildCommandContext>) => {
 		.task({
 			key: "outfiles",
 			label: "Bundle assets 📦",
-			async handler() {
+			async handler({ values }) {
 				const outfiles = await bundle({
+					isFast: values.noCheck,
 					isProduction: true,
 				});
 
