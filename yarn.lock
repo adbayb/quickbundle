@@ -4586,10 +4586,10 @@ tempy@^1.0.0:
     type-fest "^0.16.0"
     unique-string "^2.0.0"
 
-termost@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/termost/-/termost-0.4.0.tgz#d651065a2f18456c6d5958dcc9a63a13b1f4a333"
-  integrity sha512-G0m5+QWUsiVINfaoI7cCJEkNYvw793qENpIjDO/baVYlZK3W3VTPj0Foak4eHkw6SYpne0/f4XqZhzlsp1MZXg==
+termost@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/termost/-/termost-0.4.1.tgz#420e3cacc44894b5eb117ce3b2e2ae2abe63a793"
+  integrity sha512-3hAocGS8q6RHYeIXYfxe+0gpkRle4y2JLoy7LRhloLdyz46i5tfxXF/bmYBFOwjqg30seX7VtQLrkfX4dVQblg==
   dependencies:
     chalk "4.1.2"
     listr2 "4.0.5"

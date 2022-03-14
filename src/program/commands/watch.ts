@@ -13,7 +13,8 @@ export const createWatchCommand = (program: Termost<WatchCommandContext>) => {
 	program
 		.command({
 			name: "watch",
-			description: "Watch and rebuild on any code change",
+			description:
+				"Watch and rebuild on any code change (development mode)",
 		})
 		.task({
 			key: "callbacks",

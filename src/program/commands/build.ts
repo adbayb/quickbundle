@@ -13,7 +13,7 @@ export const createBuildCommand = (program: Termost<BuildCommandContext>) => {
 	program
 		.command({
 			name: "build",
-			description: "Build the source code in production mode",
+			description: "Build the source code (production mode)",
 		})
 		.task({
 			key: "outfiles",

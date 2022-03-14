@@ -15,7 +15,7 @@ const createProgram = (
 		key: "noCheck",
 		name: "no-check",
 		description:
-			"Enable fast mode by forcing the deactivation of `tsc` checking and types generation",
+			"Enable fast mode by forcing the deactivation of `tsc` types checking and generation",
 		defaultValue: false,
 	});
 
