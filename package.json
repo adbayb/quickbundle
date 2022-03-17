@@ -1,6 +1,6 @@
 {
 	"name": "quickbundle",
-	"version": "0.9.0",
+	"version": "0.10.0",
 	"bin": {
 		"quickbundle": "bin/index.js"
 	},
