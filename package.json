@@ -36,6 +36,14 @@
 		"gzip-size": "6.0.0",
 		"termost": "0.4.1"
 	},
+	"peerDependencies": {
+		"typescript": ">=4.1"
+	},
+	"peerDependenciesMeta": {
+		"typescript": {
+			"optional": true
+		}
+	},
 	"devDependencies": {
 		"@adbayb/eslint-config": "0.10.0",
 		"@adbayb/prettier-config": "0.10.0",
