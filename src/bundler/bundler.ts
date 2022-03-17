@@ -1,12 +1,13 @@
 /* eslint-disable sonarjs/cognitive-complexity */
-import path from "path";
 import { build } from "esbuild";
-import { helpers } from "termost";
 import { CWD } from "../constants";
 import { ModuleFormat } from "../types";
 import { getPackageMetadata } from "./package";
 import { jsxPlugin } from "./plugins";
-import { getTypeScriptConfiguration } from "./typescript";
+import {
+	generateTypeScriptDeclaration,
+	getTypeScriptConfiguration,
+} from "./typescript";
 
 type BundleParameters = {
 	isProduction: boolean;
@@ -36,16 +37,7 @@ export const bundle = async ({
 
 		if (!outfile) return null;
 
-		try {
-			const typingDir = path.dirname(outfile);
-
-			await helpers.exec(
-				`tsc --declaration --emitDeclarationOnly --incremental --outDir ${typingDir}`,
-				{ cwd: CWD }
-			);
-		} catch (error) {
-			throw new Error(`Typing generation failed:\n${error}`);
-		}
+		await generateTypeScriptDeclaration(outfile);
 
 		return outfile;
 	};

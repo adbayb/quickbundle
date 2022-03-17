@@ -1,4 +1,5 @@
-import { resolve } from "path";
+import { dirname, resolve } from "path";
+import { helpers } from "termost";
 import { CWD } from "../constants";
 
 export type TypeScriptConfiguration = {
@@ -43,6 +44,21 @@ export const getTypeScriptConfiguration =
 			return null;
 		}
 	};
+
+export const generateTypeScriptDeclaration = async (outfile: string) => {
+	const outdir = dirname(outfile);
+
+	try {
+		await helpers.exec(
+			`tsc --declaration --emitDeclarationOnly --incremental --removeComments false --outDir ${outdir}`,
+			{ cwd: CWD }
+		);
+
+		return outdir;
+	} catch (error) {
+		throw new Error(`Type generation failed:\n${error}`);
+	}
+};
 
 export const hasTypeScript = (
 	tsConfig: TypeScriptConfiguration | null
