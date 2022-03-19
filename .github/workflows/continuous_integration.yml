@@ -1,0 +1,62 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+    install:
+        timeout-minutes: 5
+        name: Install
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v2
+            - name: Use Node.js latest
+              uses: actions/setup-node@v2
+              with:
+                  node-version: lts/*
+                  cache: yarn
+            - name: Install
+              run: yarn install --frozen-lockfile --prefer-offline
+    verify:
+        timeout-minutes: 5
+        needs: install
+        name: Verify
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v2
+            - name: Use Node.js latest
+              uses: actions/setup-node@v2
+              with:
+                  node-version: lts/*
+                  cache: yarn
+            - name: Restore dependency cache
+              run: yarn
+            - name: Verify (lint, test, types)
+              run: yarn verify
+    build:
+        timeout-minutes: 5
+        needs: install
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Use Node.js latest
+              uses: actions/setup-node@v2
+              with:
+                  node-version: lts/*
+                  cache: yarn
+            - name: Restore dependency cache
+              run: yarn
+            - name: Build library
+              run: yarn build
+            - name: Build examples
+              run: |
+                yarn link && cd examples
+                for directory in */ ; do
+                  echo "🏗 Building $directory example..."
+                  cd "$directory"
+                  yarn && yarn link quickbundle && yarn build
+                  cd ../
+                done
