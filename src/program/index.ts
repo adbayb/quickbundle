@@ -1,10 +1,10 @@
-import { Program, termost } from "termost";
+import { Termost, termost } from "termost";
 import { createBuildCommand } from "./commands/build";
 import { ProgramContext } from "./types";
 import { createWatchCommand } from "./commands/watch";
 
 const createProgram = (
-	...commandBuilders: Array<(program: Program<ProgramContext>) => void>
+	...commandBuilders: Array<(program: Termost<ProgramContext>) => void>
 ) => {
 	const program = termost<ProgramContext>(
 		"The zero-configuration bundler powered by ESBuild"

@@ -1,5 +1,5 @@
 import gzipSize from "gzip-size";
-import { Program } from "termost";
+import { Termost, helpers } from "termost";
 import { bundle } from "../../bundler";
 import { readFile } from "../../helpers";
 import { ProgramContext } from "../types";
@@ -9,7 +9,7 @@ type BuildCommandContext = {
 	outfiles: Array<string>;
 };
 
-export const createBuildCommand = (program: Program<ProgramContext>) => {
+export const createBuildCommand = (program: Termost<ProgramContext>) => {
 	program
 		.command<BuildCommandContext>({
 			name: "build",
@@ -18,9 +18,9 @@ export const createBuildCommand = (program: Program<ProgramContext>) => {
 		.task({
 			key: "outfiles",
 			label: "Bundle assets 📦",
-			async handler({ values }) {
+			async handler(context) {
 				const outfiles = await bundle({
-					isFast: values.noCheck,
+					isFast: context.noCheck,
 					isProduction: true,
 				});
 
@@ -32,20 +32,20 @@ export const createBuildCommand = (program: Program<ProgramContext>) => {
 		.task({
 			key: "sizes",
 			label: "Compute sizes 🔢",
-			async handler({ values }) {
-				return await calculateBundleSize(values.outfiles);
+			async handler(context) {
+				return await calculateBundleSize(context.outfiles);
 			},
 		})
 		.message({
-			handler({ values }, helpers) {
+			handler(context) {
 				const padding =
-					values.sizes
+					context.sizes
 						.map((item) => item.raw)
 						.reduce((pad: number, currentRawSize: number) => {
 							return Math.max(pad, String(currentRawSize).length);
 						}, 0) + 2;
 
-				values.sizes.forEach((item) => {
+				context.sizes.forEach((item) => {
 					helpers.print(
 						[
 							`${item.raw.toString().padStart(padding)} B raw`,

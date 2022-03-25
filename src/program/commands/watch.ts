@@ -1,4 +1,4 @@
-import { Program } from "termost";
+import { Termost, helpers } from "termost";
 import { bundle } from "../../bundler";
 import { ProgramContext } from "../types";
 
@@ -9,7 +9,7 @@ type WatchCommandContext = {
 	};
 };
 
-export const createWatchCommand = (program: Program<ProgramContext>) => {
+export const createWatchCommand = (program: Termost<ProgramContext>) => {
 	program
 		.command<WatchCommandContext>({
 			name: "watch",
@@ -19,14 +19,14 @@ export const createWatchCommand = (program: Program<ProgramContext>) => {
 		.task({
 			key: "callbacks",
 			label: "Setup watcher",
-			async handler({ values }) {
+			async handler(context) {
 				const callbacks: WatchCommandContext["callbacks"] = {
 					onError() {},
 					onSuccess() {},
 				};
 
 				bundle({
-					isFast: values.noCheck,
+					isFast: context.noCheck,
 					isProduction: false,
 					onWatch(error) {
 						if (error) {
@@ -47,7 +47,7 @@ export const createWatchCommand = (program: Program<ProgramContext>) => {
 			},
 		})
 		.message({
-			handler({ values }, helpers) {
+			handler(context) {
 				const onNotify = (
 					type: "error" | "success" | "loading",
 					message?: string
@@ -70,8 +70,8 @@ export const createWatchCommand = (program: Program<ProgramContext>) => {
 					);
 				};
 
-				values.callbacks.onSuccess = () => onNotify("success");
-				values.callbacks.onError = (error) => onNotify("error", error);
+				context.callbacks.onSuccess = () => onNotify("success");
+				context.callbacks.onError = (error) => onNotify("error", error);
 
 				onNotify("loading");
 			},
