@@ -1,17 +1,17 @@
-import { Termost } from "termost";
+import { Program } from "termost";
 import { bundle } from "../../bundler";
 import { ProgramContext } from "../types";
 
-interface WatchCommandContext extends ProgramContext {
+type WatchCommandContext = {
 	callbacks: {
 		onError: (message: string) => void;
 		onSuccess: () => void;
 	};
-}
+};
 
-export const createWatchCommand = (program: Termost<WatchCommandContext>) => {
+export const createWatchCommand = (program: Program<ProgramContext>) => {
 	program
-		.command({
+		.command<WatchCommandContext>({
 			name: "watch",
 			description:
 				"Watch and rebuild on any code change (development mode)",

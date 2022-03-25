@@ -53,10 +53,10 @@ jobs:
               run: yarn build
             - name: Build examples
               run: |
-                yarn link && cd examples
-                for directory in */ ; do
-                  echo "🏗 Building $directory example..."
-                  cd "$directory"
-                  yarn && yarn link quickbundle && yarn build
-                  cd ../
-                done
+                  yarn link && cd examples
+                  for directory in */ ; do
+                    echo "🏗 Building $directory example..."
+                    cd "$directory"
+                    yarn && yarn link quickbundle && yarn build
+                    cd ../
+                  done

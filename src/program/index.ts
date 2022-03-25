@@ -1,11 +1,10 @@
-import { Termost, termost } from "termost";
+import { Program, termost } from "termost";
 import { createBuildCommand } from "./commands/build";
 import { ProgramContext } from "./types";
 import { createWatchCommand } from "./commands/watch";
 
 const createProgram = (
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	...commandBuilders: Array<(program: Termost<any>) => void>
+	...commandBuilders: Array<(program: Program<ProgramContext>) => void>
 ) => {
 	const program = termost<ProgramContext>(
 		"The zero-configuration bundler powered by ESBuild"

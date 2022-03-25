@@ -1,17 +1,17 @@
 import gzipSize from "gzip-size";
-import { Termost } from "termost";
+import { Program } from "termost";
 import { bundle } from "../../bundler";
 import { readFile } from "../../helpers";
 import { ProgramContext } from "../types";
 
-interface BuildCommandContext extends ProgramContext {
+type BuildCommandContext = {
 	sizes: Array<{ filename: string; raw: number; gzip: number }>;
 	outfiles: Array<string>;
-}
+};
 
-export const createBuildCommand = (program: Termost<BuildCommandContext>) => {
+export const createBuildCommand = (program: Program<ProgramContext>) => {
 	program
-		.command({
+		.command<BuildCommandContext>({
 			name: "build",
 			description: "Build the source code (production mode)",
 		})
