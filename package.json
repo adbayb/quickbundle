@@ -32,9 +32,9 @@
 		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write"
 	},
 	"dependencies": {
-		"esbuild": "0.14.27",
+		"esbuild": "0.14.29",
 		"gzip-size": "6.0.0",
-		"termost": "0.6.0"
+		"termost": "0.9.0"
 	},
 	"peerDependencies": {
 		"typescript": ">=4.1"

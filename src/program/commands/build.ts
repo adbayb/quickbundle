@@ -36,7 +36,7 @@ export const createBuildCommand = (program: Termost<ProgramContext>) => {
 				return await calculateBundleSize(context.outfiles);
 			},
 		})
-		.message({
+		.task({
 			handler(context) {
 				const padding =
 					context.sizes
@@ -46,7 +46,7 @@ export const createBuildCommand = (program: Termost<ProgramContext>) => {
 						}, 0) + 2;
 
 				context.sizes.forEach((item) => {
-					helpers.print(
+					helpers.message(
 						[
 							`${item.raw.toString().padStart(padding)} B raw`,
 							`${item.gzip.toString().padStart(padding)} B gz`,

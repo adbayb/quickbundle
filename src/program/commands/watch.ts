@@ -46,7 +46,7 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 				return callbacks;
 			},
 		})
-		.message({
+		.task({
 			handler(context) {
 				const onNotify = (
 					type: "error" | "success" | "loading",
@@ -55,14 +55,17 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 					console.clear();
 
 					if (type === "loading") {
-						helpers.print(`Waiting for first build to be done...`, {
-							type: "information",
-						});
+						helpers.message(
+							`Waiting for first build to be done...`,
+							{
+								type: "information",
+							}
+						);
 
 						return;
 					}
 
-					helpers.print(
+					helpers.message(
 						`Last update at ${new Date().toLocaleTimeString()}\n${
 							message ? `\n${message}\n` : ""
 						}`,
