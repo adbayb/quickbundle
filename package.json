@@ -17,6 +17,15 @@
 		"url": "git@github.com:adbayb/quickbundle.git"
 	},
 	"license": "MIT",
+	"keywords": [
+		"library",
+		"bundle",
+		"build",
+		"compiler",
+		"transpiler",
+		"module",
+		"fast"
+	],
 	"main": "bin/index.js",
 	"scripts": {
 		"prepublishOnly": "yarn verify && yarn build",
