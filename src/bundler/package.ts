@@ -9,19 +9,22 @@ type PackageOriginalMetadata = {
 	platform?: "node" | "browser";
 	types?: string;
 	source: string;
+	devDependencies?: Record<string, string>;
 	peerDependencies?: Record<string, string>;
+	dependencies?: Record<string, string>;
 };
 
 export const getPackageMetadata = () => {
 	const {
+		devDependencies = {},
 		peerDependencies = {},
+		dependencies = {},
 		main,
 		module,
 		platform = "browser",
 		source,
 		types,
 	}: PackageOriginalMetadata = require(resolve(CWD, "package.json"));
-	const externalDependencies = Object.keys(peerDependencies);
 
 	assert(
 		main,
@@ -37,6 +40,16 @@ export const getPackageMetadata = () => {
 		["browser", "node"].includes(platform),
 		"The `platform` package field can only accept `browser` or `node` value."
 	);
+
+	const peerDependencyNames = Object.keys(peerDependencies);
+	const externalDependencies =
+		platform === "browser"
+			? peerDependencyNames
+			: [
+					...peerDependencyNames,
+					...Object.keys(dependencies),
+					...Object.keys(devDependencies),
+			  ];
 
 	return {
 		destination: {

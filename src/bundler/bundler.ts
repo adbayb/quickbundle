@@ -49,7 +49,7 @@ export const bundle = async ({
 
 		await build({
 			absWorkingDir: CWD,
-			bundle: Boolean(externalDependencies),
+			bundle: true,
 			define: {
 				"process.env.NODE_ENV": isProduction
 					? '"production"'
