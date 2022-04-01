@@ -62,4 +62,17 @@ yarn prod
 
 ## 🤩 Used by
 
-Contribution welcomed! 🤗
+-   [@adbayb/scripts](https://github.com/adbayb/stack) My opinionated toolbox for JavaScript/TypeScript projects
+
+<br>
+
+## 💙 Acknowledgements
+
+-   The backend powered by [ESBuild](https://github.com/evanw/esbuild) to make blazing fast builds. A special shoutout to its author [Evan Wallace](https://github.com/evanw) and [all contributors](https://github.com/evanw/esbuild/graphs/contributors).
+-   The zero-configuration approach was inspired by [microbundle](https://github.com/developit/microbundle). A special shoutout to its author [Jason Miller](https://github.com/developit) and [all contributors](https://github.com/developit/microbundle/graphs/contributors).
+
+<br>
+
+## 📖 License
+
+[MIT](./LICENSE "License MIT")
