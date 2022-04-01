@@ -12,7 +12,7 @@ Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy**
 
 -   Fast build and watch mode thanks to [esbuild](https://esbuild.github.io/)
 -   Zero configuration: define the build artifacts in your `package.json` and you're all set!
--   JavaScript, TypeScript, JSX, CSS, JSON and Text support following [esbuild support](https://esbuild.github.io/content-types/)
+-   JavaScript, TypeScript, JSX, CSS, JSON, Image and Text support following [esbuild support](https://esbuild.github.io/content-types/)
 -   Support of multiple module formats including `cjs` & `esm`
 -   Bundling can be done for several platform targets including `browser` or `node`
 -   Optimized build such as `peerDependencies` not bundled in the final output
@@ -63,6 +63,8 @@ yarn prod
 ## 🤩 Used by
 
 -   [@adbayb/scripts](https://github.com/adbayb/stack) My opinionated toolbox for JavaScript/TypeScript projects
+
+Contribution welcomed! 🤗
 
 <br>
 
