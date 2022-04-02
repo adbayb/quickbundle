@@ -6,7 +6,6 @@
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"postinstall": "../../scripts/postinstall-example.sh",
 		"clean": "rm -rf dist",
 		"start": "yarn build && open public/index.html",
 		"build": "quickbundle build",
@@ -15,8 +14,9 @@
 		"watch:fast": "quickbundle watch --no-check"
 	},
 	"devDependencies": {
-		"preact": "10.6.6",
-		"typescript": "4.6.2"
+		"quickbundle": "link:../../",
+		"preact": "10.7.0",
+		"typescript": "4.6.3"
 	},
 	"peerDependencies": {
 		"preact": ">=10"

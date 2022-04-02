@@ -1,0 +1,69 @@
+lockfileVersion: 5.3
+
+specifiers:
+    quickbundle: link:../../
+    react: 17.0.2
+    react-dom: 17.0.2
+
+devDependencies:
+    quickbundle: link:../..
+    react: 17.0.2
+    react-dom: 17.0.2_react@17.0.2
+
+packages:
+    /js-tokens/4.0.0:
+        resolution:
+            {
+                integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==,
+            }
+        dev: true
+
+    /loose-envify/1.4.0:
+        resolution:
+            {
+                integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==,
+            }
+        hasBin: true
+        dependencies:
+            js-tokens: 4.0.0
+        dev: true
+
+    /object-assign/4.1.1:
+        resolution: { integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM= }
+        engines: { node: ">=0.10.0" }
+        dev: true
+
+    /react-dom/17.0.2_react@17.0.2:
+        resolution:
+            {
+                integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==,
+            }
+        peerDependencies:
+            react: 17.0.2
+        dependencies:
+            loose-envify: 1.4.0
+            object-assign: 4.1.1
+            react: 17.0.2
+            scheduler: 0.20.2
+        dev: true
+
+    /react/17.0.2:
+        resolution:
+            {
+                integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==,
+            }
+        engines: { node: ">=0.10.0" }
+        dependencies:
+            loose-envify: 1.4.0
+            object-assign: 4.1.1
+        dev: true
+
+    /scheduler/0.20.2:
+        resolution:
+            {
+                integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==,
+            }
+        dependencies:
+            loose-envify: 1.4.0
+            object-assign: 4.1.1
+        dev: true

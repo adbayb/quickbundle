@@ -10,13 +10,16 @@ jobs:
         steps:
             - name: Checkout the code
               uses: actions/checkout@v2
+            - uses: pnpm/action-setup@v2.0.1
+              with:
+                version: latest
             - name: Use Node.js latest
               uses: actions/setup-node@v2
               with:
-                  node-version: lts/*
-                  cache: yarn
-            - name: Install
-              run: yarn install --frozen-lockfile --prefer-offline
+                node-version: lts/*
+                cache: pnpm
+            - name: Install dependencies
+              run: pnpm install
     verify:
         timeout-minutes: 5
         needs: install
@@ -25,15 +28,18 @@ jobs:
         steps:
             - name: Checkout the code
               uses: actions/checkout@v2
+            - uses: pnpm/action-setup@v2.0.1
+              with:
+                version: latest
             - name: Use Node.js latest
               uses: actions/setup-node@v2
               with:
-                  node-version: lts/*
-                  cache: yarn
-            - name: Restore dependency cache
-              run: yarn
+                node-version: lts/*
+                cache: pnpm
+            - name: Install dependencies
+              run: pnpm install
             - name: Verify (lint, test, types)
-              run: yarn verify
+              run: pnpm verify
     build:
         timeout-minutes: 5
         needs: install
@@ -42,21 +48,24 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+            - uses: pnpm/action-setup@v2.0.1
+              with:
+                version: latest
             - name: Use Node.js latest
               uses: actions/setup-node@v2
               with:
-                  node-version: lts/*
-                  cache: yarn
-            - name: Restore dependency cache
-              run: yarn
+                node-version: lts/*
+                cache: pnpm
+            - name: Install dependencies
+              run: pnpm install
             - name: Build library
-              run: yarn build
+              run: pnpm build
             - name: Build examples
               run: |
-                  yarn link && cd examples
+                  cd examples
                   for directory in */ ; do
                     echo "🏗 Building $directory example..."
                     cd "$directory"
-                    yarn && yarn link quickbundle && yarn build
+                    pnpm install && pnpm build
                     cd ../
                   done

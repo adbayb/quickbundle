@@ -5,14 +5,14 @@
 	"main": "dist/index.cjs.js",
 	"module": "dist/index.mjs",
 	"scripts": {
-		"postinstall": "../../scripts/postinstall-example.sh",
 		"clean": "rm -rf dist",
 		"start": "yarn build && open public/index.html",
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},
 	"devDependencies": {
-		"preact": "10.6.6"
+		"quickbundle": "link:../../",
+		"preact": "10.7.0"
 	},
 	"peerDependencies": {
 		"preact": ">=10"

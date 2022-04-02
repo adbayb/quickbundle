@@ -1,0 +1,30 @@
+lockfileVersion: 5.3
+
+specifiers:
+    preact: 10.7.0
+    quickbundle: link:../../
+    typescript: 4.6.3
+
+dependencies:
+    preact: 10.7.0
+    quickbundle: link:../..
+
+devDependencies:
+    typescript: 4.6.3
+
+packages:
+    /preact/10.7.0:
+        resolution:
+            {
+                integrity: sha512-9MEURwzNMKpAil/t6+wabDIJI6oG6GnwypYxiJDvQnW+fHDTt51PYuLZ1QUM31hFr7sDaj9qTaShAF9VIxuxGQ==,
+            }
+        dev: false
+
+    /typescript/4.6.3:
+        resolution:
+            {
+                integrity: sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==,
+            }
+        engines: { node: ">=4.2.0" }
+        hasBin: true
+        dev: true

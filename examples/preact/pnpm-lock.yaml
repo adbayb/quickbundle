@@ -1,0 +1,17 @@
+lockfileVersion: 5.3
+
+specifiers:
+    preact: 10.7.0
+    quickbundle: link:../../
+
+devDependencies:
+    preact: 10.7.0
+    quickbundle: link:../..
+
+packages:
+    /preact/10.7.0:
+        resolution:
+            {
+                integrity: sha512-9MEURwzNMKpAil/t6+wabDIJI6oG6GnwypYxiJDvQnW+fHDTt51PYuLZ1QUM31hFr7sDaj9qTaShAF9VIxuxGQ==,
+            }
+        dev: true

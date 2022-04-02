@@ -28,20 +28,20 @@
 	],
 	"main": "bin/index.js",
 	"scripts": {
-		"prepublishOnly": "yarn verify && yarn build",
-		"prestart": "yarn build",
+		"prepublishOnly": "pnpm verify && pnpm build",
+		"prestart": "pnpm build",
 		"start": "bin/index.js",
 		"clean": "rm -rf bin",
 		"build": "tsc && chmod +x bin/index.js",
 		"watch": "tsc -w",
 		"release": "semantic-release",
-		"verify": "yarn lint & tsc --noEmit",
-		"fix": "yarn lint --fix",
+		"verify": "pnpm lint & tsc --noEmit",
+		"fix": "pnpm lint --fix",
 		"lint": "eslint . --ignore-path .gitignore",
 		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write"
 	},
 	"dependencies": {
-		"esbuild": "0.14.29",
+		"esbuild": "0.14.30",
 		"gzip-size": "6.0.0",
 		"termost": "0.9.0"
 	},
@@ -85,10 +85,10 @@
 	},
 	"lint-staged": {
 		"**/*.{js,jsx,ts,tsx}": [
-			"yarn lint"
+			"pnpm lint"
 		],
 		"**/*.{json,md,mdx,html,css}": [
-			"yarn format"
+			"pnpm format"
 		]
 	},
 	"release": {

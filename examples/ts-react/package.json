@@ -6,7 +6,6 @@
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"postinstall": "../../scripts/postinstall-example.sh",
 		"clean": "rm -rf dist",
 		"start": "yarn build && open public/index.html",
 		"build": "quickbundle build",
@@ -15,11 +14,12 @@
 		"watch:fast": "quickbundle watch --no-check"
 	},
 	"devDependencies": {
-		"@types/react": "17.0.40",
-		"@types/react-dom": "17.0.13",
-		"typescript": "4.6.2"
+		"@types/react": "17.0.43",
+		"@types/react-dom": "17.0.14",
+		"typescript": "4.6.3"
 	},
 	"dependencies": {
+		"quickbundle": "link:../../",
 		"react": "17.0.2",
 		"react-dom": "17.0.2"
 	}

@@ -6,7 +6,6 @@
 	"main": "dist/index.cjs.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"postinstall": "../../scripts/postinstall-example.sh",
 		"clean": "rm -rf dist",
 		"start": "yarn build && open public/index.html",
 		"build": "quickbundle build",
@@ -18,6 +17,7 @@
 		"ora": "5.4.0"
 	},
 	"devDependencies": {
-		"typescript": "4.6.2"
+		"quickbundle": "link:../../",
+		"typescript": "4.6.3"
 	}
 }
