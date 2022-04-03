@@ -16,6 +16,7 @@ Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy**
 -   Support of multiple module formats including `cjs` & `esm`
 -   Bundling can be done for several platform targets including `browser` or `node`
 -   Optimized build such as `peerDependencies` not bundled in the final output
+-   Serve and live reload support for `html` entrypoint
 
 <br>
 
@@ -43,6 +44,7 @@ yarn add quickbundle
 	"scripts": {
 		"build": "quickbundle build", // Production mode (optimizes bundle)
 		"watch": "quickbundle watch", // Development mode (watches each file change)
+		"serve": "quickbundle watch --serve public/index.html", // Serve an html entrypoint with live reload capabilities (for more details, check examples folder)
 		"build:fast": "quickbundle build --no-check", // Production mode with fast transpilation time. This mode disables TypeScript type checking (ie. not using `tsc`) and, consequently, the `types` asset is no more managed by the tool
 		"watch:fast": "quickbundle watch --no-check" // Development mode with fast transpilation time
 	}

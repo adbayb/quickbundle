@@ -6,7 +6,6 @@
 	"main": "dist/index.cjs.js",
 	"scripts": {
 		"clean": "rm -rf dist",
-		"start": "yarn build && open public/index.html",
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},

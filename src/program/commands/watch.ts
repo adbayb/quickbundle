@@ -3,6 +3,8 @@ import { bundle } from "../../bundler";
 import { ProgramContext } from "../types";
 
 type WatchCommandContext = {
+	port: number;
+	serve: string | undefined;
 	callbacks: {
 		onError: (message: string) => void;
 		onSuccess: () => void;
@@ -15,6 +17,13 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 			name: "watch",
 			description:
 				"Watch and rebuild on any code change (development mode)",
+		})
+		.option({
+			key: "serve",
+			description:
+				"Set the HTML entrypoint to enable and open a live reloadable client",
+			name: "serve",
+			defaultValue: undefined,
 		})
 		.task({
 			key: "callbacks",
@@ -35,6 +44,7 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 							callbacks.onSuccess();
 						}
 					},
+					serveEntryPoint: context.serve,
 				})
 					.then(() => callbacks.onSuccess())
 					.catch((error) => {
@@ -63,6 +73,10 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 						);
 
 						return;
+					}
+
+					if (context.serve) {
+						helpers.message("Live reload enabled");
 					}
 
 					helpers.message(
