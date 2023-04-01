@@ -41,13 +41,16 @@ export const getPackageMetadata = () => {
 		"The `platform` package field can only accept `browser` or `node` value."
 	);
 
-	const peerDependencyNames = Object.keys(peerDependencies);
+	const isomorphicExternalDependencies = [
+		...Object.keys(peerDependencies),
+		...Object.keys(dependencies),
+	];
+
 	const externalDependencies =
 		platform === "browser"
-			? peerDependencyNames
+			? isomorphicExternalDependencies
 			: [
-					...peerDependencyNames,
-					...Object.keys(dependencies),
+					...isomorphicExternalDependencies,
 					...Object.keys(devDependencies),
 			  ];
 
