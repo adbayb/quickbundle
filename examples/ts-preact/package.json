@@ -14,10 +14,10 @@
 		"watch:fast": "quickbundle watch --no-check"
 	},
 	"devDependencies": {
-		"typescript": "4.6.3"
+		"typescript": "5.0.3"
 	},
 	"dependencies": {
 		"quickbundle": "link:../../",
-		"preact": "10.7.0"
+		"preact": "10.13.2"
 	}
 }

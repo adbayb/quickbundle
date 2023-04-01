@@ -11,9 +11,9 @@
 	},
 	"devDependencies": {
 		"quickbundle": "link:../../",
-		"preact": "10.7.0"
+		"preact": "10.13.2"
 	},
 	"peerDependencies": {
-		"preact": ">=10"
+		"preact": ">=10.0.0"
 	}
 }

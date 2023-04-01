@@ -37,9 +37,9 @@ yarn add quickbundle
 {
 	"name": "lib", // Package name
 	"source": "src/index.ts", // Source code entrypoint
-	"main": "./dist/lib.cjs", // CommonJS output file
-	"module": "./dist/lib.cjs.js", // ESM output file
-	"types": "./dist/lib.d.ts", // Typing output file
+	"main": "./dist/index.cjs", // CommonJS output file
+	"module": "./dist/index.mjs", // ESM output file
+	"types": "./dist/index.d.ts", // Typing output file
 	"platform": "node", // Platform target (optional, by default "browser")
 	"scripts": {
 		"build": "quickbundle build", // Production mode (optimizes bundle)

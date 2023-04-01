@@ -12,6 +12,6 @@
 	},
 	"devDependencies": {
 		"quickbundle": "link:../../",
-		"preact": "10.7.0"
+		"preact": "10.13.2"
 	}
 }

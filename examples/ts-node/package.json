@@ -17,6 +17,6 @@
 	},
 	"devDependencies": {
 		"quickbundle": "link:../../",
-		"typescript": "4.6.3"
+		"typescript": "5.0.3"
 	}
 }
