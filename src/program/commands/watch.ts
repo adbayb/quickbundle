@@ -1,5 +1,5 @@
 import { Termost, helpers } from "termost";
-import { build } from "../../bundler";
+import { watch } from "../../bundler";
 import { ProgramContext } from "../types";
 
 type WatchCommandContext = {
@@ -18,13 +18,6 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 			description:
 				"Watch and rebuild on any code change (development mode)",
 		})
-		.option({
-			key: "serve",
-			description:
-				"Set the HTML entrypoint to enable and open a live reloadable client",
-			name: "serve",
-			defaultValue: undefined,
-		})
 		.task({
 			key: "callbacks",
 			label: "Setup watcher",
@@ -34,7 +27,7 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 					onSuccess() {},
 				};
 
-				build({
+				watch({
 					isFast: context.noCheck,
 					isProduction: false,
 					/*onWatch(error) {

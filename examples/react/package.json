@@ -6,7 +6,7 @@
 	"module": "dist/index.mjs",
 	"scripts": {
 		"clean": "rm -rf dist",
-		"start": "quickbundle watch --serve public/index.html",
+		"start": "pnpm watch",
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},

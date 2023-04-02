@@ -7,7 +7,7 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"clean": "rm -rf dist",
-		"start": "quickbundle watch --serve public/index.html",
+		"start": "pnpm watch",
 		"build": "quickbundle build",
 		"watch": "quickbundle watch",
 		"build:fast": "quickbundle build --no-check",
