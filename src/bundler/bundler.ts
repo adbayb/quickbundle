@@ -32,7 +32,14 @@ export const build = async ({ isFast, isProduction }: Options) => {
 	const promises = [
 		buildJavaScript("cjs"),
 		...(pkg.hasModule ? [buildJavaScript("esm")] : []),
-		...(typescript.isEnabled ? [buildTypes(pkg.types)] : []),
+		...(typescript.isEnabled
+			? [
+					generateTypeScriptDeclaration({
+						source: pkg.source,
+						destination: pkg.types as string,
+					}),
+			  ]
+			: []),
 	];
 
 	return Promise.all(promises);
@@ -60,7 +67,10 @@ export const watch = async ({ isFast, isProduction }: Options) => {
 						// @note: if there's already a build error, no need to run
 						// a heavy typing generation process until the error is fixed
 						if (!error && typescript.isEnabled) {
-							buildTypes(pkg.types).catch((err) => {
+							generateTypeScriptDeclaration({
+								source: pkg.source,
+								destination: pkg.types as string,
+							}).catch((err) => {
 								error = String(err);
 							});
 						}
@@ -75,14 +85,6 @@ export const watch = async ({ isFast, isProduction }: Options) => {
 	});
 
 	await ctx.watch();
-};
-
-const buildTypes = async (outfile: string | undefined) => {
-	if (!outfile) return null;
-
-	await generateTypeScriptDeclaration(outfile);
-
-	return outfile;
 };
 
 const getConfiguration = async ({ isFast, isProduction }: Options) => {
@@ -133,8 +135,9 @@ const getConfiguration = async ({ isFast, isProduction }: Options) => {
 	return {
 		esbuild,
 		pkg: {
-			hasModule,
 			destination,
+			hasModule,
+			source,
 			types,
 		},
 		typescript: {

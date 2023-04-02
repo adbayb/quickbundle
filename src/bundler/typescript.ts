@@ -1,5 +1,6 @@
-import { dirname, resolve } from "path";
-import { helpers } from "termost";
+import { resolve } from "path";
+import ts from "typescript";
+import { generateDtsBundle } from "dts-bundle-generator";
 import { CWD } from "../constants";
 
 export type TypeScriptConfiguration = {
@@ -11,7 +12,6 @@ export type TypeScriptConfiguration = {
 export const getTypeScriptConfiguration =
 	async (): Promise<TypeScriptConfiguration | null> => {
 		try {
-			const ts = await import("typescript"); // @note: lazy load typescript only if necessary
 			const { jsx, jsxImportSource, target } =
 				ts.parseJsonConfigFileContent(
 					// eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -45,16 +45,28 @@ export const getTypeScriptConfiguration =
 		}
 	};
 
-export const generateTypeScriptDeclaration = async (outfile: string) => {
-	const outdir = dirname(outfile);
-
+export const generateTypeScriptDeclaration = async ({
+	source,
+	destination,
+}: {
+	source: string;
+	destination: string;
+}) => {
 	try {
-		await helpers.exec(
-			`tsc --declaration --emitDeclarationOnly --incremental --removeComments false --outDir ${outdir}`,
-			{ cwd: CWD }
-		);
+		const content = generateDtsBundle([
+			{
+				filePath: source,
+				output: {
+					noBanner: true,
+				},
+			},
+		])[0] as string;
 
-		return outdir;
+		ts.sys.writeFile(destination, content);
+
+		// @todo: see https://github.com/timocov/dts-bundle-generator/blob/5bafb9a0ed97588a2885ce235e2b1b59c7d3bb7b/src/bin/dts-bundle-generator.ts#L264
+
+		return destination;
 	} catch (error) {
 		throw new Error(`Type generation failed:\n${error}`);
 	}

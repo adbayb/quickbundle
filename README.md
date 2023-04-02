@@ -24,8 +24,10 @@ Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy**
 1️⃣ Install by running:
 
 ```bash
-# NPM
+# Npm
 npm install quickbundle
+# Pnpm
+pnpm add quickbundle
 # Yarn
 yarn add quickbundle
 ```
@@ -52,10 +54,12 @@ yarn add quickbundle
 3️⃣ Try it by running:
 
 ```bash
-# NPM
-npm run prod
+# Npm
+npm run build
+# Pnpm
+pnpm build
 # Yarn
-yarn prod
+yarn build
 ```
 
 <br>
@@ -70,7 +74,7 @@ Contribution welcomed! 🤗
 
 ## 💙 Acknowledgements
 
--   The backend powered by [ESBuild](https://github.com/evanw/esbuild) to make blazing fast builds. A special shoutout to its author [Evan Wallace](https://github.com/evanw) and [all contributors](https://github.com/evanw/esbuild/graphs/contributors).
+-   The backend is powered by [ESBuild](https://github.com/evanw/esbuild) to make blazing-fast builds. A special shoutout to its author [Evan Wallace](https://github.com/evanw) and [all contributors](https://github.com/evanw/esbuild/graphs/contributors).
 -   The zero-configuration approach was inspired by [microbundle](https://github.com/developit/microbundle). A special shoutout to its author [Jason Miller](https://github.com/developit) and [all contributors](https://github.com/developit/microbundle/graphs/contributors).
 
 <br>

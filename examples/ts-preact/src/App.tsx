@@ -28,5 +28,10 @@ type ImageProps = {
 };
 
 const Image = (props: ImageProps) => {
-	return <img src={props.src} width="100" />;
+	return (
+		<img
+			src={props.src}
+			width="100"
+		/>
+	);
 };
