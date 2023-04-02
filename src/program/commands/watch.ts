@@ -1,5 +1,5 @@
 import { Termost, helpers } from "termost";
-import { bundle } from "../../bundler";
+import { build } from "../../bundler";
 import { ProgramContext } from "../types";
 
 type WatchCommandContext = {
@@ -34,17 +34,17 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 					onSuccess() {},
 				};
 
-				bundle({
+				build({
 					isFast: context.noCheck,
 					isProduction: false,
-					onWatch(error) {
+					/*onWatch(error) {
 						if (error) {
 							callbacks.onError(String(error));
 						} else {
 							callbacks.onSuccess();
 						}
 					},
-					serveEntryPoint: context.serve,
+					serveEntryPoint: context.serve,*/
 				})
 					.then(() => callbacks.onSuccess())
 					.catch((error) => {

@@ -3,9 +3,9 @@ import { helpers } from "termost";
 import { CWD } from "../constants";
 
 export type TypeScriptConfiguration = {
-	target?: string;
-	jsxImportSource?: string;
-	hasJsxRuntime?: boolean;
+	target: string;
+	jsxImportSource: string | undefined;
+	hasJsxRuntime: boolean;
 };
 
 export const getTypeScriptConfiguration =

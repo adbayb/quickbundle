@@ -1,6 +1,6 @@
-import { gzipSize } from "gzip-size";
+import gzipSize from "gzip-size";
 import { Termost, helpers } from "termost";
-import { bundle } from "../../bundler";
+import { build } from "../../bundler";
 import { readFile } from "../../helpers";
 import { ProgramContext } from "../types";
 
@@ -19,7 +19,7 @@ export const createBuildCommand = (program: Termost<ProgramContext>) => {
 			key: "outfiles",
 			label: "Bundle assets 📦",
 			async handler(context) {
-				const outfiles = await bundle({
+				const outfiles = await build({
 					isFast: context.noCheck,
 					isProduction: true,
 				});

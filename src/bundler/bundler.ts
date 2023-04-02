@@ -1,8 +1,6 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-import { build } from "esbuild";
-import { ServerResponse, createServer } from "http";
+import { BuildOptions, build as buildFromEsbuild } from "esbuild";
+// import { ServerResponse } from "http";
 import { CWD } from "../constants";
-import { getAvailablePortFrom, openBrowser } from "../helpers";
 import { ModuleFormat } from "../types";
 import { getPackageMetadata } from "./package";
 import { jsxPlugin } from "./plugins";
@@ -11,34 +9,23 @@ import {
 	getTypeScriptConfiguration,
 } from "./typescript";
 
-type BundleParameters = {
-	isProduction: boolean;
+type Options = Pick<InternalOptions, "isFast" | "isProduction">;
+
+type InternalOptions = {
 	isFast: boolean;
-	onWatch?: (error: Error | null) => void;
-	serveEntryPoint?: string;
+	isLiveReload: boolean;
+	isProduction: boolean;
 };
 
-export const bundle = async ({
-	isProduction,
-	isFast,
-	onWatch,
-	serveEntryPoint,
-}: BundleParameters) => {
-	const {
-		destination,
-		externalDependencies,
-		hasModule,
-		platform,
-		source,
-		types,
-	} = getPackageMetadata();
-	const isWatching = typeof onWatch === "function";
-	const isLiveReloadable = serveEntryPoint && isWatching;
-	const isTypingRequested = typeof types === "string" && !isFast;
-	const tsConfig = await getTypeScriptConfiguration();
+export const build = async ({ isFast, isProduction }: Options) => {
+	const { esbuild, pkg, typescript } = await getConfiguration({
+		isFast,
+		isProduction,
+		isLiveReload: false,
+	});
 
 	const getType = async () => {
-		const outfile = types;
+		const outfile = pkg.types;
 
 		if (!outfile) return null;
 
@@ -48,45 +35,34 @@ export const bundle = async ({
 	};
 
 	const getJavaScript = async (format: ModuleFormat) => {
-		const outfile = destination[format];
+		const outfile = pkg.destination[format];
 
 		if (!outfile) return null;
 
-		await build({
-			...(isLiveReloadable && {
-				banner: {
-					// @note: insert a custom script to add live reloading capability through server event setup:
-					js: `;new EventSource("http://0.0.0.0:${servePort}").onmessage = function() { location.reload(); }; console.log("Live reload ✅ (port: ${servePort})");`,
-				},
-			}),
-			absWorkingDir: CWD,
-			bundle: true,
-			define: {
-				"process.env.NODE_ENV": isProduction
-					? '"production"'
-					: '"development"',
-			},
-			entryPoints: [source],
-			external: externalDependencies,
-			format,
-			loader: {
-				".jpg": "file",
-				".jpeg": "file",
-				".png": "file",
-				".gif": "file",
-				".svg": "file",
-				".webp": "file",
-			},
-			logLevel: "silent",
-			metafile: true,
-			minify: isProduction,
-			outfile,
-			plugins: [jsxPlugin(tsConfig)],
-			platform,
-			sourcemap: true,
-			target: tsConfig?.target || "esnext",
-			treeShaking: true,
-			watch: isWatching && {
+		await buildFromEsbuild(esbuild({ format, outfile }));
+
+		return outfile;
+	};
+
+	/*
+	if (isLiveReloadable) {
+		servePort = await getAvailablePortFrom(servePort);
+		createServer((_, res) => {
+			clients.push(
+				res.writeHead(200, {
+					"Content-Type": "text/event-stream",
+					"Cache-Control": "no-cache",
+					"Access-Control-Allow-Origin": "*",
+				})
+			);
+		}).listen(servePort);
+
+		openBrowser(serveEntryPoint);
+	}
+
+	isWatching && getJavaScript(hasModule ? "esm" : "cjs")
+
+	watch: isWatching && {
 				async onRebuild(bundleError) {
 					let error: Error | null = bundleError as Error;
 
@@ -112,36 +88,86 @@ export const bundle = async ({
 					onWatch(error);
 				},
 			},
-		});
-
-		return outfile;
-	};
-
-	if (isLiveReloadable) {
-		servePort = await getAvailablePortFrom(servePort);
-		createServer((_, res) => {
-			clients.push(
-				res.writeHead(200, {
-					"Content-Type": "text/event-stream",
-					"Cache-Control": "no-cache",
-					"Access-Control-Allow-Origin": "*",
-				})
-			);
-		}).listen(servePort);
-
-		openBrowser(serveEntryPoint);
-	}
+	*/
 
 	const promises = [
-		...(isWatching
-			? [getJavaScript(hasModule ? "esm" : "cjs")]
-			: [getJavaScript("cjs"), getJavaScript("esm")]),
-		...(isTypingRequested ? [getType()] : []),
+		getJavaScript("cjs"),
+		...(pkg.hasModule ? [getJavaScript("esm")] : []),
+		...(typescript.isEnabled ? [getType()] : []),
 	];
 
 	return Promise.all(promises);
 };
 
+const getConfiguration = async ({
+	isFast,
+	isLiveReload,
+	isProduction,
+}: InternalOptions) => {
+	const {
+		destination,
+		externalDependencies,
+		hasModule,
+		platform,
+		source,
+		types,
+	} = getPackageMetadata();
+	const hasTyping = typeof types === "string" && !isFast;
+	const tsConfig = await getTypeScriptConfiguration();
+
+	const esbuild = ({
+		format,
+		outfile,
+	}: Required<Pick<BuildOptions, "format" | "outfile">>): BuildOptions => ({
+		...(isLiveReload && {
+			banner: {
+				// @note: insert a custom script to add live reloading capability through server event setup:
+				js: `;new EventSource("http://0.0.0.0:${servePort}").onmessage = function() { location.reload(); }; console.log("Live reload ✅ (port: ${servePort})");`,
+			},
+		}),
+		absWorkingDir: CWD,
+		bundle: true,
+		define: {
+			"process.env.NODE_ENV": isProduction
+				? '"production"'
+				: '"development"',
+		},
+		entryPoints: [source],
+		external: externalDependencies,
+		format,
+		loader: {
+			".jpg": "file",
+			".jpeg": "file",
+			".png": "file",
+			".gif": "file",
+			".svg": "file",
+			".webp": "file",
+		},
+		logLevel: "silent",
+		metafile: true,
+		minify: isProduction,
+		outfile,
+		plugins: [jsxPlugin(tsConfig)],
+		platform,
+		sourcemap: true,
+		target: tsConfig?.target || "esnext",
+		treeShaking: true,
+	});
+
+	return {
+		esbuild,
+		pkg: {
+			hasModule,
+			destination,
+			types,
+		},
+		typescript: {
+			configuration: tsConfig,
+			isEnabled: hasTyping,
+		},
+	};
+};
+
 // @note: array of clients to support live reload on mutiple tabs/windows
-let clients: Array<ServerResponse> = [];
-let servePort = 9000;
+// const clients: Array<ServerResponse> = [];
+const servePort = 9000;
