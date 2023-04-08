@@ -1,6 +1,5 @@
 import { Termost, helpers } from "termost";
 import { watch } from "../../bundler";
-import { ProgramContext } from "../types";
 
 type WatchCommandContext = {
 	port: number;
@@ -11,7 +10,7 @@ type WatchCommandContext = {
 	};
 };
 
-export const createWatchCommand = (program: Termost<ProgramContext>) => {
+export const createWatchCommand = (program: Termost) => {
 	program
 		.command<WatchCommandContext>({
 			name: "watch",
@@ -21,24 +20,20 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 		.task({
 			key: "callbacks",
 			label: "Setup watcher",
-			async handler(context) {
+			async handler() {
 				const callbacks: WatchCommandContext["callbacks"] = {
 					onError() {},
 					onSuccess() {},
 				};
 
-				watch({
-					isFast: context.noCheck,
-					isProduction: false,
+				watch()
 					/*onWatch(error) {
 						if (error) {
 							callbacks.onError(String(error));
 						} else {
 							callbacks.onSuccess();
 						}
-					},
-					serveEntryPoint: context.serve,*/
-				})
+					},*/
 					.then(() => callbacks.onSuccess())
 					.catch((error) => {
 						callbacks.onError(String(error));

@@ -8,15 +8,9 @@ import {
 	getTypeScriptConfiguration,
 } from "./typescript";
 
-type Options = {
-	isFast: boolean;
-	isProduction: boolean;
-};
-
-export const build = async ({ isFast, isProduction }: Options) => {
+export const build = async () => {
 	const { esbuild, pkg, typescript } = await getConfiguration({
-		isFast,
-		isProduction,
+		isProduction: true,
 	});
 
 	const buildJavaScript = async (format: ModuleFormat) => {
@@ -45,10 +39,9 @@ export const build = async ({ isFast, isProduction }: Options) => {
 	return Promise.all(promises);
 };
 
-export const watch = async ({ isFast, isProduction }: Options) => {
+export const watch = async () => {
 	const { esbuild, pkg, typescript } = await getConfiguration({
-		isFast,
-		isProduction,
+		isProduction: false,
 	});
 
 	const ctx = await context({
@@ -87,7 +80,11 @@ export const watch = async ({ isFast, isProduction }: Options) => {
 	await ctx.watch();
 };
 
-const getConfiguration = async ({ isFast, isProduction }: Options) => {
+type ConfigurationOptions = {
+	isProduction: boolean;
+};
+
+const getConfiguration = async ({ isProduction }: ConfigurationOptions) => {
 	const {
 		destination,
 		externalDependencies,
@@ -96,7 +93,7 @@ const getConfiguration = async ({ isFast, isProduction }: Options) => {
 		source,
 		types,
 	} = getPackageMetadata();
-	const hasTyping = typeof types === "string" && !isFast;
+	const hasTyping = typeof types === "string";
 	const tsConfig = await getTypeScriptConfiguration();
 
 	const esbuild = ({

@@ -1,9 +1,0 @@
-{
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"jsxImportSource": "preact",
-		"moduleResolution": "Node",
-		"target": "ES2015"
-	},
-	"include": ["src"]
-}

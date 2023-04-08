@@ -10,9 +10,11 @@
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},
-	"devDependencies": {
-		"quickbundle": "link:../../",
+	"dependencies": {
 		"react": "18.2.0",
 		"react-dom": "18.2.0"
+	},
+	"devDependencies": {
+		"quickbundle": "link:../../"
 	}
 }

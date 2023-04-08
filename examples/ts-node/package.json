@@ -8,9 +8,7 @@
 	"scripts": {
 		"clean": "rm -rf dist",
 		"build": "quickbundle build",
-		"watch": "quickbundle watch",
-		"build:fast": "quickbundle build --no-check",
-		"watch:fast": "quickbundle watch --no-check"
+		"watch": "quickbundle watch"
 	},
 	"dependencies": {
 		"ora": "5.4.0"
