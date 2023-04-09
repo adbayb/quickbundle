@@ -1,1 +1,1 @@
-export { bundle } from "./bundler";
+export { build, watch } from "./bundler";

@@ -1,57 +1,40 @@
 import { Termost, helpers } from "termost";
-import { bundle } from "../../bundler";
-import { ProgramContext } from "../types";
+import { watch } from "../../bundler";
 
 type WatchCommandContext = {
-	port: number;
-	serve: string | undefined;
 	callbacks: {
 		onError: (message: string) => void;
+		onLoading: () => void;
 		onSuccess: () => void;
 	};
 };
 
-export const createWatchCommand = (program: Termost<ProgramContext>) => {
+export const createWatchCommand = (program: Termost) => {
 	program
 		.command<WatchCommandContext>({
 			name: "watch",
 			description:
 				"Watch and rebuild on any code change (development mode)",
 		})
-		.option({
-			key: "serve",
-			description:
-				"Set the HTML entrypoint to enable and open a live reloadable client",
-			name: "serve",
-			defaultValue: undefined,
-		})
 		.task({
 			key: "callbacks",
 			label: "Setup watcher",
-			async handler(context) {
+			async handler() {
 				const callbacks: WatchCommandContext["callbacks"] = {
 					onError() {},
+					onLoading() {},
 					onSuccess() {},
 				};
 
-				bundle({
-					isFast: context.noCheck,
-					isProduction: false,
-					onWatch(error) {
-						if (error) {
-							callbacks.onError(String(error));
-						} else {
-							callbacks.onSuccess();
-						}
-					},
-					serveEntryPoint: context.serve,
-				})
-					.then(() => callbacks.onSuccess())
-					.catch((error) => {
-						callbacks.onError(String(error));
+				watch((type, error) => {
+					if (type === "loading") return callbacks.onLoading();
 
-						throw error;
-					});
+					if (error) {
+						callbacks.onError(String(error));
+					} else {
+						callbacks.onSuccess();
+					}
+				});
 
 				return callbacks;
 			},
@@ -65,18 +48,11 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 					console.clear();
 
 					if (type === "loading") {
-						helpers.message(
-							`Waiting for first build to be done...`,
-							{
-								type: "information",
-							}
-						);
+						helpers.message(`Waiting for the build to be done...`, {
+							type: "information",
+						});
 
 						return;
-					}
-
-					if (context.serve) {
-						helpers.message("Live reload enabled");
 					}
 
 					helpers.message(
@@ -89,8 +65,7 @@ export const createWatchCommand = (program: Termost<ProgramContext>) => {
 
 				context.callbacks.onSuccess = () => onNotify("success");
 				context.callbacks.onError = (error) => onNotify("error", error);
-
-				onNotify("loading");
+				context.callbacks.onLoading = () => onNotify("loading");
 			},
 		});
 };

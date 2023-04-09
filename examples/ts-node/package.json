@@ -3,20 +3,19 @@
 	"private": true,
 	"platform": "node",
 	"source": "src/index.ts",
-	"main": "dist/index.cjs.js",
+	"main": "dist/index.cjs",
+	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"clean": "rm -rf dist",
 		"build": "quickbundle build",
-		"watch": "quickbundle watch",
-		"build:fast": "quickbundle build --no-check",
-		"watch:fast": "quickbundle watch --no-check"
+		"watch": "quickbundle watch"
 	},
 	"dependencies": {
 		"ora": "5.4.0"
 	},
 	"devDependencies": {
 		"quickbundle": "link:../../",
-		"typescript": "4.6.3"
+		"typescript": "5.0.3"
 	}
 }

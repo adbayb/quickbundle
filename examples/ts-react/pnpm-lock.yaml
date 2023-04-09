@@ -1,127 +1,91 @@
-lockfileVersion: 5.3
-
-specifiers:
-    "@types/react": 17.0.43
-    "@types/react-dom": 17.0.14
-    quickbundle: link:../../
-    react: 17.0.2
-    react-dom: 17.0.2
-    typescript: 4.6.3
+lockfileVersion: '6.0'
 
 dependencies:
-    quickbundle: link:../..
-    react: 17.0.2
-    react-dom: 17.0.2_react@17.0.2
+  quickbundle:
+    specifier: link:../../
+    version: link:../..
+  react:
+    specifier: 18.2.0
+    version: 18.2.0
+  react-dom:
+    specifier: 18.2.0
+    version: 18.2.0(react@18.2.0)
 
 devDependencies:
-    "@types/react": 17.0.43
-    "@types/react-dom": 17.0.14
-    typescript: 4.6.3
+  '@types/react':
+    specifier: 18.0.31
+    version: 18.0.31
+  '@types/react-dom':
+    specifier: 18.0.11
+    version: 18.0.11
+  typescript:
+    specifier: 5.0.3
+    version: 5.0.3
 
 packages:
-    /@types/prop-types/15.7.4:
-        resolution:
-            {
-                integrity: sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==,
-            }
-        dev: true
 
-    /@types/react-dom/17.0.14:
-        resolution:
-            {
-                integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==,
-            }
-        dependencies:
-            "@types/react": 17.0.43
-        dev: true
+  /@types/prop-types@15.7.4:
+    resolution: {integrity: sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==}
+    dev: true
 
-    /@types/react/17.0.43:
-        resolution:
-            {
-                integrity: sha512-8Q+LNpdxf057brvPu1lMtC5Vn7J119xrP1aq4qiaefNioQUYANF/CYeK4NsKorSZyUGJ66g0IM+4bbjwx45o2A==,
-            }
-        dependencies:
-            "@types/prop-types": 15.7.4
-            "@types/scheduler": 0.16.2
-            csstype: 3.0.11
-        dev: true
+  /@types/react-dom@18.0.11:
+    resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
+    dependencies:
+      '@types/react': 18.0.31
+    dev: true
 
-    /@types/scheduler/0.16.2:
-        resolution:
-            {
-                integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==,
-            }
-        dev: true
+  /@types/react@18.0.31:
+    resolution: {integrity: sha512-EEG67of7DsvRDU6BLLI0p+k1GojDLz9+lZsnCpCRTa/lOokvyPBvp8S5x+A24hME3yyQuIipcP70KJ6H7Qupww==}
+    dependencies:
+      '@types/prop-types': 15.7.4
+      '@types/scheduler': 0.16.2
+      csstype: 3.0.11
+    dev: true
 
-    /csstype/3.0.11:
-        resolution:
-            {
-                integrity: sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==,
-            }
-        dev: true
+  /@types/scheduler@0.16.2:
+    resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+    dev: true
 
-    /js-tokens/4.0.0:
-        resolution:
-            {
-                integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==,
-            }
-        dev: false
+  /csstype@3.0.11:
+    resolution: {integrity: sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==}
+    dev: true
 
-    /loose-envify/1.4.0:
-        resolution:
-            {
-                integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==,
-            }
-        hasBin: true
-        dependencies:
-            js-tokens: 4.0.0
-        dev: false
+  /js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+    dev: false
 
-    /object-assign/4.1.1:
-        resolution: { integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM= }
-        engines: { node: ">=0.10.0" }
-        dev: false
+  /loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
+    dependencies:
+      js-tokens: 4.0.0
+    dev: false
 
-    /react-dom/17.0.2_react@17.0.2:
-        resolution:
-            {
-                integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==,
-            }
-        peerDependencies:
-            react: 17.0.2
-        dependencies:
-            loose-envify: 1.4.0
-            object-assign: 4.1.1
-            react: 17.0.2
-            scheduler: 0.20.2
-        dev: false
+  /react-dom@18.2.0(react@18.2.0):
+    resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.2.0
+      scheduler: 0.23.0
+    dev: false
 
-    /react/17.0.2:
-        resolution:
-            {
-                integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==,
-            }
-        engines: { node: ">=0.10.0" }
-        dependencies:
-            loose-envify: 1.4.0
-            object-assign: 4.1.1
-        dev: false
+  /react@18.2.0:
+    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
 
-    /scheduler/0.20.2:
-        resolution:
-            {
-                integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==,
-            }
-        dependencies:
-            loose-envify: 1.4.0
-            object-assign: 4.1.1
-        dev: false
+  /scheduler@0.23.0:
+    resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
 
-    /typescript/4.6.3:
-        resolution:
-            {
-                integrity: sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==,
-            }
-        engines: { node: ">=4.2.0" }
-        hasBin: true
-        dev: true
+  /typescript@5.0.3:
+    resolution: {integrity: sha512-xv8mOEDnigb/tN9PSMTwSEqAnUvkoXMQlicOb0IUVDBSQCgBSaAAROUZYy2IcUy5qU6XajK5jjjO7TMWqBTKZA==}
+    engines: {node: '>=12.20'}
+    hasBin: true
+    dev: true
