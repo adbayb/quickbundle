@@ -1,9 +1,8 @@
 import { resolve } from "path";
 import ts from "typescript";
-import { Thread, Worker, spawn } from "threads";
-import { CWD } from "../constants";
+import { CWD } from "../../constants";
 
-export type TypeScriptConfiguration = {
+export type TSConfig = {
 	target: string;
 	jsxImportSource: string | undefined;
 	hasJsxRuntime: boolean;
@@ -11,8 +10,8 @@ export type TypeScriptConfiguration = {
 
 const TSCONFIG_PATH = resolve(CWD, "tsconfig.json");
 
-export const getTypeScriptConfiguration =
-	async (): Promise<TypeScriptConfiguration | null> => {
+export const getTSConfig =
+	async (): Promise<TSConfig | null> => {
 		try {
 			const { jsx, jsxImportSource, target } =
 				ts.parseJsonConfigFileContent(
@@ -47,29 +46,3 @@ export const getTypeScriptConfiguration =
 		}
 	};
 
-export const generateTypeScriptDeclaration = async ({
-	source,
-	destination,
-}: {
-	source: string;
-	destination: string;
-}) => {
-	try {
-		const worker = await spawn(new Worker("./workers/dts"));
-		const dtsContent = await worker(source);
-
-		ts.sys.writeFile(destination, dtsContent);
-
-		await Thread.terminate(worker);
-
-		return destination;
-	} catch (error) {
-		throw new Error(`Type generation failed:\n${error}`);
-	}
-};
-
-export const hasTypeScript = (
-	tsConfig: TypeScriptConfiguration | null
-): tsConfig is TypeScriptConfiguration => {
-	return Boolean(tsConfig);
-};

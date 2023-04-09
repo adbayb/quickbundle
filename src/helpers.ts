@@ -1,8 +1,17 @@
-import { promisify } from "util";
-import { readFile as fsReadFile } from "fs";
+import { dirname } from "node:path";
+import fs from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { CWD } from "./constants";
 
-export const readFile = promisify(fsReadFile);
+// TS assertion not working properly with arrow function
+// @see: https://github.com/microsoft/TypeScript/issues/34523
+export function assert(condition: unknown, message: string): asserts condition {
+	if (!condition) {
+		throw new Error(message);
+	}
+}
+
+export const readFile = fs.readFile;
 
 export const resolveModulePath = (path: string) => {
 	try {
@@ -12,10 +21,12 @@ export const resolveModulePath = (path: string) => {
 	}
 };
 
-// TS assertion not working properly with arrow function
-// @see: https://github.com/microsoft/TypeScript/issues/34523
-export function assert(condition: unknown, message: string): asserts condition {
-	if (!condition) {
-		throw new Error(message);
+export const writeFile = async (filePath: string, content: string) => {
+	const dir = dirname(filePath);
+
+	if (!existsSync(dir)) {
+		await fs.mkdir(dir, { recursive: true });
 	}
-}
+
+	await fs.writeFile(filePath, content, "utf8");
+};

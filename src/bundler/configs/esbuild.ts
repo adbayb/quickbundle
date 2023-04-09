@@ -1,6 +1,52 @@
-import type { Plugin } from "esbuild";
-import { readFile, resolveModulePath } from "../helpers";
-import type { TypeScriptConfiguration } from "./typescript";
+import type { BuildOptions, Plugin } from "esbuild";
+import { readFile, resolveModulePath } from "../../helpers";
+import { CWD } from "../../constants";
+import type { TSConfig } from "./typescript";
+
+export interface EsbuildConfig
+	extends Required<
+		Pick<BuildOptions, "format" | "outfile" | "external" | "platform">
+	> {
+	isProduction: boolean;
+	source: string;
+	tsConfig: TSConfig | null;
+}
+
+export const getEsbuildConfig = ({
+	external,
+	format,
+	isProduction,
+	outfile,
+	platform,
+	source,
+	tsConfig,
+}: EsbuildConfig): BuildOptions => ({
+	absWorkingDir: CWD,
+	bundle: true,
+	define: {
+		"process.env.NODE_ENV": isProduction ? '"production"' : '"development"',
+	},
+	entryPoints: [source],
+	external,
+	format,
+	loader: {
+		".jpg": "file",
+		".jpeg": "file",
+		".png": "file",
+		".gif": "file",
+		".svg": "file",
+		".webp": "file",
+	},
+	logLevel: "silent",
+	metafile: true,
+	minify: isProduction,
+	outfile,
+	plugins: [jsxPlugin(tsConfig)],
+	platform,
+	sourcemap: true,
+	target: tsConfig?.target || "esnext",
+	treeShaking: true,
+});
 
 /**
  * Plugin to automatically inject React import for jsx management
@@ -11,9 +57,7 @@ import type { TypeScriptConfiguration } from "./typescript";
  * @param tsConfig
  * @returns Plugin
  */
-export const jsxPlugin = (
-	tsConfig: TypeScriptConfiguration | null
-): Plugin => ({
+const jsxPlugin = (tsConfig: TSConfig | null): Plugin => ({
 	name: "jsx-runtime",
 	setup(build) {
 		build.onLoad({ filter: /\.(j|t)sx$/ }, async ({ path }) => {

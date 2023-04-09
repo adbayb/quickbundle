@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { resolve } from "path";
-import { CWD } from "../constants";
-import { assert } from "../helpers";
+import { CWD } from "../../constants";
+import { assert } from "../../helpers";
 
-type PackageOriginalMetadata = {
+type PackageMetadata = {
 	main: string;
 	module?: string;
 	platform?: "node" | "browser";
@@ -14,7 +14,7 @@ type PackageOriginalMetadata = {
 	dependencies?: Record<string, string>;
 };
 
-export const getPackageMetadata = () => {
+export const getPkgConfig = () => {
 	const {
 		devDependencies = {},
 		peerDependencies = {},
@@ -24,7 +24,7 @@ export const getPackageMetadata = () => {
 		platform = "browser",
 		source,
 		types,
-	}: PackageOriginalMetadata = require(resolve(CWD, "package.json"));
+	}: PackageMetadata = require(resolve(CWD, "package.json"));
 
 	assert(
 		main,
