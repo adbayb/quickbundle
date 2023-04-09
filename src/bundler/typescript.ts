@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import ts from "typescript";
-import { generateDtsBundle } from "dts-bundle-generator";
+import { Thread, Worker, spawn } from "threads";
 import { CWD } from "../constants";
 
 export type TypeScriptConfiguration = {
@@ -9,18 +9,20 @@ export type TypeScriptConfiguration = {
 	hasJsxRuntime: boolean;
 };
 
+const TSCONFIG_PATH = resolve(CWD, "tsconfig.json");
+
 export const getTypeScriptConfiguration =
 	async (): Promise<TypeScriptConfiguration | null> => {
 		try {
 			const { jsx, jsxImportSource, target } =
 				ts.parseJsonConfigFileContent(
 					// eslint-disable-next-line @typescript-eslint/no-var-requires
-					require(resolve(CWD, "tsconfig.json")),
+					require(TSCONFIG_PATH),
 					ts.sys,
 					CWD
 				).options;
 
-			// @note: convert ts target value to esbuild ones (latest value is not supported)
+			// Convert ts target value to esbuild ones (latest value is not supported)
 			const esbuildTarget =
 				!target ||
 				[ts.ScriptTarget.ESNext, ts.ScriptTarget.Latest].includes(
@@ -53,18 +55,12 @@ export const generateTypeScriptDeclaration = async ({
 	destination: string;
 }) => {
 	try {
-		const content = generateDtsBundle([
-			{
-				filePath: source,
-				output: {
-					noBanner: true,
-				},
-			},
-		])[0] as string;
+		const worker = await spawn(new Worker("./workers/dts"));
+		const dtsContent = await worker(source);
 
-		ts.sys.writeFile(destination, content);
+		ts.sys.writeFile(destination, dtsContent);
 
-		// @todo: see https://github.com/timocov/dts-bundle-generator/blob/5bafb9a0ed97588a2885ce235e2b1b59c7d3bb7b/src/bin/dts-bundle-generator.ts#L264
+		await Thread.terminate(worker);
 
 		return destination;
 	} catch (error) {

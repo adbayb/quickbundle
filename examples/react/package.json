@@ -2,7 +2,7 @@
 	"name": "vanilla-react",
 	"private": true,
 	"source": "src/index.jsx",
-	"main": "dist/index.cjs.js",
+	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
 	"scripts": {
 		"clean": "rm -rf dist",

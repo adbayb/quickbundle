@@ -6,6 +6,7 @@ import { jsxPlugin } from "./plugins";
 import {
 	generateTypeScriptDeclaration,
 	getTypeScriptConfiguration,
+	hasTypeScript,
 } from "./typescript";
 
 export const build = async () => {
@@ -39,7 +40,7 @@ export const build = async () => {
 	return Promise.all(promises);
 };
 
-export const watch = async () => {
+export const watch = async (onWatch: (error?: string) => void) => {
 	const { esbuild, pkg, typescript } = await getConfiguration({
 		isProduction: false,
 	});
@@ -48,29 +49,27 @@ export const watch = async () => {
 		...esbuild({ format: "cjs", outfile: pkg.destination["cjs"] }),
 		plugins: [
 			{
-				name: "on-end",
+				name: "onBuildEnd",
 				setup(build) {
 					build.onEnd((result) => {
-						console.log(
-							`A build ended with ${result.errors.length} errors`
-						);
+						const error = result.errors.join("\n");
 
-						let error = result.errors.join("\n");
-
-						// @note: if there's already a build error, no need to run
+						// If there's already a build error, no need to run
 						// a heavy typing generation process until the error is fixed
 						if (!error && typescript.isEnabled) {
 							generateTypeScriptDeclaration({
 								source: pkg.source,
 								destination: pkg.types as string,
-							}).catch((err) => {
-								error = String(err);
-							});
+							})
+								.then(() => {
+									onWatch();
+								})
+								.catch((err) => {
+									onWatch(err);
+								});
+						} else {
+							onWatch(error);
 						}
-
-						console.log("errors", JSON.stringify(error));
-
-						// onWatch(error);
 					});
 				},
 			},
@@ -93,8 +92,8 @@ const getConfiguration = async ({ isProduction }: ConfigurationOptions) => {
 		source,
 		types,
 	} = getPackageMetadata();
-	const hasTyping = typeof types === "string";
 	const tsConfig = await getTypeScriptConfiguration();
+	const hasTyping = typeof types === "string" && hasTypeScript(tsConfig);
 
 	const esbuild = ({
 		format,

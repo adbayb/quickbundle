@@ -4,6 +4,6 @@
 		"moduleResolution": "Node",
 		"target": "ES2015"
 	},
-	"include": ["src", "types"],
+	"include": ["src"],
 	"exclude": ["node_modules"]
 }

@@ -2,7 +2,7 @@
 	"name": "ts-react",
 	"private": true,
 	"source": "src/index.tsx",
-	"main": "dist/index.cjs.js",
+	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
 	"scripts": {

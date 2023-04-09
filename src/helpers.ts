@@ -12,7 +12,7 @@ export const resolveModulePath = (path: string) => {
 	}
 };
 
-// @note: TS assertion not working properly with arrow function
+// TS assertion not working properly with arrow function
 // @see: https://github.com/microsoft/TypeScript/issues/34523
 export function assert(condition: unknown, message: string): asserts condition {
 	if (!condition) {

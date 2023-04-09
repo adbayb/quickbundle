@@ -5,6 +5,7 @@ import imageJpeg from "./assets/image.jpeg";
 import imagePng from "./assets/image.png";
 import imageSvg from "./assets/image.svg";
 import imageWebp from "./assets/image.webp";
+import "./types";
 
 export const App = () => {
 	const [counter, setCounter] = useState(0);

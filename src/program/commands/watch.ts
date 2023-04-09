@@ -2,8 +2,6 @@ import { Termost, helpers } from "termost";
 import { watch } from "../../bundler";
 
 type WatchCommandContext = {
-	port: number;
-	serve: string | undefined;
 	callbacks: {
 		onError: (message: string) => void;
 		onSuccess: () => void;
@@ -26,14 +24,13 @@ export const createWatchCommand = (program: Termost) => {
 					onSuccess() {},
 				};
 
-				watch()
-					/*onWatch(error) {
-						if (error) {
-							callbacks.onError(String(error));
-						} else {
-							callbacks.onSuccess();
-						}
-					},*/
+				watch((error) => {
+					if (error) {
+						callbacks.onError(String(error));
+					} else {
+						callbacks.onSuccess();
+					}
+				})
 					.then(() => callbacks.onSuccess())
 					.catch((error) => {
 						callbacks.onError(String(error));
@@ -61,10 +58,6 @@ export const createWatchCommand = (program: Termost) => {
 						);
 
 						return;
-					}
-
-					if (context.serve) {
-						helpers.message("Live reload enabled");
 					}
 
 					helpers.message(
