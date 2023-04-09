@@ -4,6 +4,7 @@ import { watch } from "../../bundler";
 type WatchCommandContext = {
 	callbacks: {
 		onError: (message: string) => void;
+		onLoading: () => void;
 		onSuccess: () => void;
 	};
 };
@@ -21,22 +22,19 @@ export const createWatchCommand = (program: Termost) => {
 			async handler() {
 				const callbacks: WatchCommandContext["callbacks"] = {
 					onError() {},
+					onLoading() {},
 					onSuccess() {},
 				};
 
-				watch((error) => {
+				watch((type, error) => {
+					if (type === "loading") return callbacks.onLoading();
+
 					if (error) {
 						callbacks.onError(String(error));
 					} else {
 						callbacks.onSuccess();
 					}
-				})
-					.then(() => callbacks.onSuccess())
-					.catch((error) => {
-						callbacks.onError(String(error));
-
-						throw error;
-					});
+				});
 
 				return callbacks;
 			},
@@ -50,12 +48,9 @@ export const createWatchCommand = (program: Termost) => {
 					console.clear();
 
 					if (type === "loading") {
-						helpers.message(
-							`Waiting for first build to be done...`,
-							{
-								type: "information",
-							}
-						);
+						helpers.message(`Waiting for the build to be done...`, {
+							type: "information",
+						});
 
 						return;
 					}
@@ -70,8 +65,7 @@ export const createWatchCommand = (program: Termost) => {
 
 				context.callbacks.onSuccess = () => onNotify("success");
 				context.callbacks.onError = (error) => onNotify("error", error);
-
-				onNotify("loading");
+				context.callbacks.onLoading = () => onNotify("loading");
 			},
 		});
 };

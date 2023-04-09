@@ -1,4 +1,4 @@
-import { context } from "esbuild";
+import { context, formatMessages } from "esbuild";
 import { Thread, Worker, spawn } from "threads";
 import { ModuleFormat } from "../types";
 import { writeFile } from "../helpers";
@@ -25,7 +25,9 @@ export const build = async () => {
 	return Promise.all(promises);
 };
 
-export const watch = async (onWatch: (error?: string) => void) => {
+export const watch = async (
+	onWatch: (type: "loading" | "result", error?: string) => void
+) => {
 	const { esbuild, pkg, typescript } = await getConfigs({
 		isProduction: false,
 	});
@@ -36,8 +38,17 @@ export const watch = async (onWatch: (error?: string) => void) => {
 			{
 				name: "onBuildEnd",
 				setup(build) {
-					build.onEnd((result) => {
-						const error = result.errors.join("\n");
+					build.onStart(() => {
+						onWatch("loading");
+					});
+					build.onEnd(async (result) => {
+						const error = (
+							await formatMessages(result.errors, {
+								kind: "error",
+								color: true,
+								terminalWidth: 100,
+							})
+						).join("\n");
 
 						// If there's already a build error, no need to run
 						// a heavy typing generation process until the error is fixed
@@ -47,13 +58,13 @@ export const watch = async (onWatch: (error?: string) => void) => {
 								destination: pkg.types as string,
 							})
 								.then(() => {
-									onWatch();
+									onWatch("result");
 								})
 								.catch((err) => {
-									onWatch(err);
+									onWatch("result", err);
 								});
 						} else {
-							onWatch(error);
+							onWatch("result", error);
 						}
 					});
 				},

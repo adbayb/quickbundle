@@ -14,15 +14,12 @@ expose((source: string) => {
 		return generateDtsBundle([
 			{
 				filePath: source,
-				noCheck: false,
 				output: {
 					noBanner: true,
-					// @ts-expect-error toto
-					noCheck: false,
 				},
 			},
 		])[0] as string;
-	} catch (error) {
+	} catch {
 		throw errors;
 	}
 });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import imageGif from "./assets/image.gif";
 import imageJpg from "./assets/image.jpg";
 import imageJpeg from "./assets/image.jpeg";
@@ -7,8 +7,14 @@ import imageSvg from "./assets/image.svg";
 import imageWebp from "./assets/image.webp";
 import "./types";
 
-export const App = () => {
+interface AppProps {
+	children?: ReactNode;
+}
+
+export const App = (props: AppProps) => {
 	const [counter, setCounter] = useState(0);
+
+	console.log(props);
 
 	return (
 		<>

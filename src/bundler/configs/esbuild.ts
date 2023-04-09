@@ -23,6 +23,7 @@ export const getEsbuildConfig = ({
 }: EsbuildConfig): BuildOptions => ({
 	absWorkingDir: CWD,
 	bundle: true,
+	color: true,
 	define: {
 		"process.env.NODE_ENV": isProduction ? '"production"' : '"development"',
 	},
