@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { resolve } from "path";
 import { CWD } from "../../constants";
 import { assert } from "../../helpers";
@@ -16,7 +15,6 @@ type PackageMetadata = {
 
 export const getPkgConfig = () => {
 	const {
-		devDependencies = {},
 		peerDependencies = {},
 		dependencies = {},
 		main,
@@ -24,7 +22,8 @@ export const getPkgConfig = () => {
 		platform = "browser",
 		source,
 		types,
-	}: PackageMetadata = require(resolve(CWD, "package.json"));
+	}: // eslint-disable-next-line @typescript-eslint/no-var-requires
+	PackageMetadata = require(resolve(CWD, "package.json"));
 
 	assert(
 		main,
@@ -41,18 +40,10 @@ export const getPkgConfig = () => {
 		"The `platform` package field can only accept `browser` or `node` value."
 	);
 
-	const isomorphicExternalDependencies = [
+	const externalDependencies = [
 		...Object.keys(peerDependencies),
 		...Object.keys(dependencies),
 	];
-
-	const externalDependencies =
-		platform === "browser"
-			? isomorphicExternalDependencies
-			: [
-					...isomorphicExternalDependencies,
-					...Object.keys(devDependencies),
-			  ];
 
 	return {
 		destination: {
