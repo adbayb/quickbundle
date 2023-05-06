@@ -41,8 +41,8 @@
 		"format": "prettier . --ignore-path .gitignore --ignore-path .prettierignore --write"
 	},
 	"dependencies": {
-		"dts-bundle-generator": "8.0.0",
-		"esbuild": "0.17.15",
+		"dts-bundle-generator": "8.0.1",
+		"esbuild": "0.17.18",
 		"gzip-size": "6.0.0",
 		"termost": "0.9.0",
 		"threads": "1.7.0",
@@ -52,16 +52,16 @@
 		"@adbayb/eslint-config": "0.14.0",
 		"@adbayb/prettier-config": "0.14.0",
 		"@adbayb/ts-config": "0.14.0",
-		"@commitlint/cli": "17.5.1",
-		"@commitlint/config-conventional": "17.4.4",
+		"@commitlint/cli": "17.6.3",
+		"@commitlint/config-conventional": "17.6.3",
 		"@semantic-release/git": "10.0.1",
 		"@types/node": "18.15.11",
-		"eslint": "8.38.0",
+		"eslint": "8.40.0",
 		"husky": "4.3.8",
-		"lint-staged": "13.2.1",
-		"prettier": "2.8.7",
-		"semantic-release": "21.0.1",
-		"vitest": "0.29.8"
+		"lint-staged": "13.2.2",
+		"prettier": "2.8.8",
+		"semantic-release": "21.0.2",
+		"vitest": "0.31.0"
 	},
 	"packageManager": "pnpm@8.1.1",
 	"engines": {
