@@ -31,9 +31,13 @@ export const watch = async (
 	const { esbuild, pkg, typescript } = await getConfigs({
 		isProduction: false,
 	});
+	const defaultTarget = pkg.hasModule ? "esm" : "cjs";
 
 	const ctx = await context({
-		...esbuild({ format: "cjs", outfile: pkg.destination["cjs"] }),
+		...esbuild({
+			format: defaultTarget,
+			outfile: pkg.destination[defaultTarget] as string,
+		}),
 		plugins: [
 			{
 				name: "onBuildEnd",

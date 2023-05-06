@@ -1,6 +1,7 @@
 {
 	"name": "ts-react",
 	"private": true,
+	"type": "module",
 	"source": "src/index.tsx",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",

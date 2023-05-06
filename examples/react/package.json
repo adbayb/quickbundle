@@ -1,6 +1,7 @@
 {
 	"name": "vanilla-react",
 	"private": true,
+	"type": "module",
 	"source": "src/index.jsx",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
