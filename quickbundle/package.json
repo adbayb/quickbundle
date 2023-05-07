@@ -24,18 +24,19 @@
         "microbundle"
 	],
 	"bin": {
-		"quickbundle": "bin/index.js"
+		"quickbundle": "bin/index.cjs"
 	},
 	"files": [
-		"bin"
+		"bin",
+		"dist"
 	],
-	"main": "bin/index.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"prepublishOnly": "pnpm verify && pnpm build",
 		"prestart": "pnpm build",
 		"start": "bin/index.js",
 		"clean": "rm -rf bin",
-		"build": "tsc && chmod +x bin/index.js",
+		"build": "tsc",
 		"watch": "tsc -w",
 		"release": "semantic-release"
 	},
