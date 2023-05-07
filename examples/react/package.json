@@ -6,8 +6,6 @@
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
 	"scripts": {
-		"clean": "rm -rf dist",
-		"start": "pnpm watch",
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},

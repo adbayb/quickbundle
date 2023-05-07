@@ -7,7 +7,8 @@
 		"fix": "scripts fix",
 		"start": "turbo start",
 		"build": "turbo build",
-		"watch": "turbo watch"
+		"watch": "turbo watch",
+		"release": "pnpm --filter quickbundle release"
 	},
 	"devDependencies": {
 		"@adbayb/eslint-config": "0.14.0",

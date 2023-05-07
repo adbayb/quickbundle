@@ -33,9 +33,6 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"prepublishOnly": "pnpm build",
-		"prestart": "pnpm build",
-		"start": "bin/index.js",
-		"clean": "rm -rf bin",
 		"build": "tsc",
 		"watch": "tsc -w",
 		"release": "semantic-release"

@@ -7,8 +7,6 @@
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"clean": "rm -rf dist",
-		"start": "pnpm watch",
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},
