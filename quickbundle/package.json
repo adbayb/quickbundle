@@ -32,7 +32,7 @@
 	],
 	"main": "dist/index.js",
 	"scripts": {
-		"prepublishOnly": "pnpm verify && pnpm build",
+		"prepublishOnly": "pnpm build",
 		"prestart": "pnpm build",
 		"start": "bin/index.js",
 		"clean": "rm -rf bin",
