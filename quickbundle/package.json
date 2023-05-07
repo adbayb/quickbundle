@@ -1,0 +1,107 @@
+{
+	"name": "quickbundle",
+	"version": "1.2.0",
+	"author": {
+		"name": "Ayoub Adib",
+		"email": "adbayb@gmail.com",
+		"url": "https://twitter.com/adbayb"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:adbayb/quickbundle.git",
+        "directory": "quickbundle"
+	},
+	"license": "MIT",
+	"keywords": [
+		"library",
+		"bundle",
+		"build",
+		"compiler",
+		"transpiler",
+		"module",
+		"fast",
+        "esbuild",
+        "microbundle"
+	],
+	"bin": {
+		"quickbundle": "bin/index.js"
+	},
+	"files": [
+		"bin"
+	],
+	"main": "bin/index.js",
+	"scripts": {
+		"prepublishOnly": "pnpm verify && pnpm build",
+		"prestart": "pnpm build",
+		"start": "bin/index.js",
+		"clean": "rm -rf bin",
+		"build": "tsc && chmod +x bin/index.js",
+		"watch": "tsc -w",
+		"release": "semantic-release"
+	},
+	"dependencies": {
+		"dts-bundle-generator": "8.0.1",
+		"esbuild": "0.17.18",
+		"gzip-size": "6.0.0",
+		"termost": "0.9.0",
+		"threads": "1.7.0",
+		"typescript": ">=4.0.0"
+	},
+	"devDependencies": {
+		"@semantic-release/git": "10.0.1",
+		"semantic-release": "21.0.2"
+	},
+	"release": {
+		"branches": [
+			"main"
+		],
+		"ci": false,
+		"plugins": [
+			[
+				"@semantic-release/commit-analyzer",
+				{
+					"releaseRules": [
+						{
+							"breaking": true,
+							"release": "major"
+						},
+						{
+							"revert": true,
+							"release": "patch"
+						},
+						{
+							"type": "feat",
+							"release": "minor"
+						},
+						{
+							"type": "fix",
+							"release": "patch"
+						},
+						{
+							"type": "perf",
+							"release": "patch"
+						},
+						{
+							"type": "refactor",
+							"release": "patch"
+						},
+						{
+							"type": "chore",
+							"scope": "deps",
+							"release": "patch"
+						}
+					]
+				}
+			],
+			"@semantic-release/release-notes-generator",
+			"@semantic-release/npm",
+			[
+				"@semantic-release/git",
+				{
+					"message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+				}
+			],
+			"@semantic-release/github"
+		]
+	}
+}
