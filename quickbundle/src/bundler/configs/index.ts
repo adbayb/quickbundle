@@ -1,5 +1,7 @@
-import { BuildOptions } from "esbuild";
-import { EsbuildConfig, getEsbuildConfig } from "./esbuild";
+import type { BuildOptions } from "esbuild";
+
+import { getEsbuildConfig } from "./esbuild";
+import type { EsbuildConfig } from "./esbuild";
 import { getPkgConfig } from "./package";
 import { getTSConfig } from "./typescript";
 
@@ -7,7 +9,7 @@ type ConfigOptions = {
 	isProduction: boolean;
 };
 
-export const getConfigs = async ({ isProduction }: ConfigOptions) => {
+export const getConfigs = ({ isProduction }: ConfigOptions) => {
 	const {
 		destination,
 		externalDependencies,
@@ -16,7 +18,8 @@ export const getConfigs = async ({ isProduction }: ConfigOptions) => {
 		source,
 		types,
 	} = getPkgConfig();
-	const tsConfig = await getTSConfig();
+
+	const tsConfig = getTSConfig();
 	const hasTyping = typeof types === "string" && Boolean(tsConfig);
 
 	const esbuild = ({

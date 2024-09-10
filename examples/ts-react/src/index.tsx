@@ -1,6 +1,11 @@
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
+
 import { App } from "./App";
 
-export { App };
+const container = document.getElementById("root");
 
-render(<App />, document.getElementById("root"));
+if (container) {
+	const root = createRoot(container);
+
+	root.render(<App />);
+}

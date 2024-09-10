@@ -1,0 +1,16 @@
+{
+	"$schema": "https://raw.githubusercontent.com/changesets/changesets/main/packages/config/schema.json",
+	"access": "public",
+	"baseBranch": "main",
+	"changelog": [
+		"@changesets/changelog-github",
+		{ "repo": "adbayb/quickbundle" }
+	],
+	"commit": false,
+	"ignore": ["@examples/*"],
+	"updateInternalDependencies": "patch",
+	"___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
+		"onlyUpdatePeerDependentsWhenOutOfRange": true,
+		"updateInternalDependents": "out-of-range"
+	}
+}

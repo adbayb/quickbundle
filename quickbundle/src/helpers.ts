@@ -1,6 +1,7 @@
-import { dirname } from "node:path";
-import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
+import fs from "node:fs/promises";
+import { dirname } from "node:path";
+
 import { CWD } from "./constants";
 
 // TS assertion not working properly with arrow function

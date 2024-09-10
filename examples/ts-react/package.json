@@ -1,5 +1,5 @@
 {
-	"name": "ts-react",
+	"name": "@examples/ts-react",
 	"private": true,
 	"type": "module",
 	"source": "src/index.tsx",
@@ -11,8 +11,8 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"react": "18.2.0",
-		"react-dom": "18.2.0"
+		"react": "18.3.1",
+		"react-dom": "18.3.1"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"

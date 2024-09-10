@@ -9,6 +9,6 @@ setTimeout(() => {
 	console.log(
 		fs.readFileSync(path.join(process.cwd(), "package.json"), {
 			encoding: "utf-8",
-		})
+		}),
 	);
 }, 3000);

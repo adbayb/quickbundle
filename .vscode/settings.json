@@ -8,7 +8,7 @@
 		"mdx"
 	],
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": "explicit"
 	},
 	"workbench.editor.labelFormat": "short",
 	"typescript.tsdk": "node_modules/typescript/lib",

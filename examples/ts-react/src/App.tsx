@@ -1,15 +1,18 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
+
 import imageGif from "./assets/image.gif";
-import imageJpg from "./assets/image.jpg";
 import imageJpeg from "./assets/image.jpeg";
+import imageJpg from "./assets/image.jpg";
 import imagePng from "./assets/image.png";
 import imageSvg from "./assets/image.svg";
 import imageWebp from "./assets/image.webp";
+// eslint-disable-next-line import/no-unassigned-import
 import "./types";
 
-interface AppProps {
+type AppProps = {
 	children?: ReactNode;
-}
+};
 
 export const App = (props: AppProps) => {
 	const [counter, setCounter] = useState(0);
@@ -18,7 +21,13 @@ export const App = (props: AppProps) => {
 
 	return (
 		<>
-			<button onClick={() => setCounter(counter + 1)}>Increment</button>
+			<button
+				onClick={() => {
+					setCounter(counter + 1);
+				}}
+			>
+				Increment
+			</button>
 			<div>{counter}</div>
 			<Image src={imageGif} />
 			<Image src={imageJpg} />

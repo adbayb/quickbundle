@@ -1,58 +1,41 @@
 {
+	"name": "root",
 	"private": true,
+	"version": "0.0.0",
+	"type": "module",
 	"scripts": {
-		"prepare": "scripts setup",
-		"clean": "scripts clean",
-		"check": "scripts verify",
-		"fix": "scripts fix",
-		"start": "turbo start",
-		"build": "turbo build",
-		"watch": "turbo watch",
-		"release": "pnpm --filter quickbundle release"
+		"prepare": "stack install",
+		"clean": "stack clean",
+		"check": "stack check",
+		"fix": "stack fix",
+		"start": "stack start",
+		"build": "stack build",
+		"watch": "stack watch",
+		"test": "stack test",
+		"release:log": "stack release --log",
+		"release:version": "stack release --tag",
+		"release:publish": "stack release --publish"
 	},
 	"devDependencies": {
-		"@adbayb/eslint-config": "0.14.0",
-		"@adbayb/prettier-config": "0.14.0",
-		"@adbayb/scripts": "0.14.0",
-		"@adbayb/ts-config": "0.14.0",
-		"@commitlint/cli": "17.6.3",
-		"@commitlint/config-conventional": "17.6.3",
-		"@types/node": "18.15.11",
-		"@types/react": "18.2.6",
-		"@types/react-dom": "18.2.4",
-		"eslint": "8.40.0",
-		"husky": "4.3.8",
-		"lint-staged": "13.2.2",
-		"prettier": "2.8.8",
-		"turbo": "1.9.3",
-		"typescript": "5.0.4",
-		"vitest": "0.31.0"
+		"@adbayb/eslint-config": "1.12.0",
+		"@adbayb/prettier-config": "1.5.0",
+		"@adbayb/stack": "1.16.1",
+		"@adbayb/ts-config": "1.0.0",
+		"@types/node": "22.5.4",
+		"@types/react": "18.3.5",
+		"@types/react-dom": "18.3.0",
+		"turbo": "2.1.1",
+		"vitest": "2.0.5"
 	},
-	"packageManager": "pnpm@8.1.1",
+	"packageManager": "pnpm@9.10.0",
 	"engines": {
-		"node": ">= 16.13.1"
-	},
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
+		"node": ">=20.0.0",
+		"pnpm": ">=9.0.0",
+		"npm": "please-use-pnpm",
+		"yarn": "please-use-pnpm"
 	},
 	"prettier": "@adbayb/prettier-config",
 	"eslintConfig": {
 		"extends": "@adbayb"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged",
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-		}
-	},
-	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx}": [
-			"pnpm check"
-		],
-		"**/*.{json,md,mdx,html,css}": [
-			"pnpm fix"
-		]
 	}
 }

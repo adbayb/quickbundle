@@ -1,1 +1,1 @@
-export type ModuleFormat = "esm" | "cjs";
+export type ModuleFormat = "cjs" | "esm";

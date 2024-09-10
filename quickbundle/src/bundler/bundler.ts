@@ -1,11 +1,13 @@
 import { context, formatMessages } from "esbuild";
 import { Thread, Worker, spawn } from "threads";
-import { ModuleFormat } from "../types";
+
 import { writeFile } from "../helpers";
+import type { ModuleFormat } from "../types";
+
 import { getConfigs } from "./configs";
 
 export const build = async () => {
-	const { pkg, typescript } = await getConfigs({
+	const { pkg, typescript } = getConfigs({
 		isProduction: true,
 	});
 
@@ -15,10 +17,10 @@ export const build = async () => {
 		...(typescript.isEnabled
 			? [
 					buildDts({
-						source: pkg.source,
 						destination: pkg.types as string,
+						source: pkg.source,
 					}),
-			  ]
+				]
 			: []),
 	];
 
@@ -26,11 +28,12 @@ export const build = async () => {
 };
 
 export const watch = async (
-	onWatch: (type: "loading" | "result", error?: string) => void
+	onWatch: (type: "loading" | "result", error?: string) => void,
 ) => {
-	const { esbuild, pkg, typescript } = await getConfigs({
+	const { esbuild, pkg, typescript } = getConfigs({
 		isProduction: false,
 	});
+
 	const defaultTarget = pkg.hasModule ? "esm" : "cjs";
 
 	const ctx = await context({
@@ -41,15 +44,15 @@ export const watch = async (
 		plugins: [
 			{
 				name: "onBuildEnd",
-				setup(build) {
-					build.onStart(() => {
+				setup(callbacks) {
+					callbacks.onStart(() => {
 						onWatch("loading");
 					});
-					build.onEnd(async (result) => {
+					callbacks.onEnd(async (result) => {
 						const error = (
 							await formatMessages(result.errors, {
-								kind: "error",
 								color: true,
+								kind: "error",
 								terminalWidth: 100,
 							})
 						).join("\n");
@@ -58,14 +61,14 @@ export const watch = async (
 						// a heavy typing generation process until the error is fixed
 						if (!error && typescript.isEnabled) {
 							buildDts({
-								source: pkg.source,
 								destination: pkg.types as string,
+								source: pkg.source,
 							})
 								.then(() => {
 									onWatch("result");
 								})
 								.catch((err) => {
-									onWatch("result", err);
+									onWatch("result", String(err));
 								});
 						} else {
 							onWatch("result", error);
@@ -81,7 +84,7 @@ export const watch = async (
 
 const buildJavaScript = async (format: ModuleFormat) => {
 	const worker = await spawn(new Worker("./workers/esbuild"));
-	const outfile = await worker(format);
+	const outfile = (await worker(format)) as string | null;
 
 	await Thread.terminate(worker);
 
@@ -89,21 +92,21 @@ const buildJavaScript = async (format: ModuleFormat) => {
 };
 
 const buildDts = async ({
-	source,
 	destination,
+	source,
 }: {
-	source: string;
 	destination: string;
+	source: string;
 }) => {
 	try {
 		const worker = await spawn(new Worker("./workers/dts"));
-		const dtsContent = await worker(source);
+		const dtsContent = (await worker(source)) as string;
 
 		await writeFile(destination, dtsContent);
 		await Thread.terminate(worker);
 
 		return destination;
 	} catch (error) {
-		throw new Error(`Type generation failed:\n${error}`);
+		throw new Error(`Type generation failed:\n${String(error)}`);
 	}
 };

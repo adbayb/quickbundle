@@ -1,7 +1,8 @@
 {
-	"name": "vanilla-node",
+	"name": "@examples/vanilla-node",
 	"private": true,
 	"platform": "node",
+	"type": "module",
 	"source": "src/index.js",
 	"main": "dist/index.cjs",
 	"module": "dist/index.mjs",
@@ -10,7 +11,7 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"ora": "5.4.0"
+		"ora": "5.4.1"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"

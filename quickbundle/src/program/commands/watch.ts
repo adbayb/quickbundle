@@ -1,4 +1,6 @@
-import { Termost, helpers } from "termost";
+import { helpers } from "termost";
+import type { Termost } from "termost";
+
 import { watch } from "../../bundler";
 
 type WatchCommandContext = {
@@ -19,15 +21,25 @@ export const createWatchCommand = (program: Termost) => {
 		.task({
 			key: "callbacks",
 			label: "Setup watcher",
-			async handler() {
+			handler() {
 				const callbacks: WatchCommandContext["callbacks"] = {
-					onError() {},
-					onLoading() {},
-					onSuccess() {},
+					onError() {
+						// No op
+					},
+					onLoading() {
+						// No op
+					},
+					onSuccess() {
+						// No op
+					},
 				};
 
-				watch((type, error) => {
-					if (type === "loading") return callbacks.onLoading();
+				void watch((type, error) => {
+					if (type === "loading") {
+						callbacks.onLoading();
+
+						return;
+					}
 
 					if (error) {
 						callbacks.onError(String(error));
@@ -42,8 +54,8 @@ export const createWatchCommand = (program: Termost) => {
 		.task({
 			handler(context) {
 				const onNotify = (
-					type: "error" | "success" | "loading",
-					message?: string
+					type: "error" | "loading" | "success",
+					message?: string,
 				) => {
 					console.clear();
 
@@ -59,13 +71,19 @@ export const createWatchCommand = (program: Termost) => {
 						`Last update at ${new Date().toLocaleTimeString()}\n${
 							message ? `\n${message}\n` : ""
 						}`,
-						{ type }
+						{ type },
 					);
 				};
 
-				context.callbacks.onSuccess = () => onNotify("success");
-				context.callbacks.onError = (error) => onNotify("error", error);
-				context.callbacks.onLoading = () => onNotify("loading");
+				context.callbacks.onSuccess = () => {
+					onNotify("success");
+				};
+				context.callbacks.onError = (error) => {
+					onNotify("error", error);
+				};
+				context.callbacks.onLoading = () => {
+					onNotify("loading");
+				};
 			},
 		});
 };

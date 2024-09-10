@@ -1,43 +1,44 @@
 import { resolve } from "node:path";
+
 import { CWD } from "../../constants";
 import { assert } from "../../helpers";
 
 type PackageMetadata = {
+	dependencies?: Record<string, string>;
+	devDependencies?: Record<string, string>;
 	main: string;
 	module?: string;
-	platform?: "node" | "browser";
-	types?: string;
-	source: string;
-	devDependencies?: Record<string, string>;
 	peerDependencies?: Record<string, string>;
-	dependencies?: Record<string, string>;
+	platform?: "browser" | "node";
+	source: string;
+	types?: string;
 };
 
 export const getPkgConfig = () => {
 	const {
-		peerDependencies = {},
 		dependencies = {},
 		main,
 		module,
+		peerDependencies = {},
 		platform = "browser",
 		source,
 		types,
-	}: // eslint-disable-next-line @typescript-eslint/no-var-requires
-	PackageMetadata = require(resolve(CWD, "package.json"));
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+	} = require(resolve(CWD, "package.json")) as PackageMetadata;
 
 	assert(
 		main,
-		"A `main` field is required in `package.json`. Did you forget to add it?"
+		"A `main` field is required in `package.json`. Did you forget to add it?",
 	);
 
 	assert(
 		source,
-		"A `source` field is required in `package.json`. Did you forget to add it?"
+		"A `source` field is required in `package.json`. Did you forget to add it?",
 	);
 
 	assert(
 		["browser", "node"].includes(platform),
-		"The `platform` package field can only accept `browser` or `node` value."
+		"The `platform` package field can only accept `browser` or `node` value.",
 	);
 
 	const externalDependencies = [

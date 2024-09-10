@@ -1,5 +1,5 @@
 {
-	"name": "ts-node",
+	"name": "@examples/ts-node",
 	"private": true,
 	"platform": "node",
 	"source": "src/index.ts",
@@ -11,7 +11,7 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"ora": "5.4.0"
+		"ora": "5.4.1"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"

@@ -1,11 +1,13 @@
 import gzipSize from "gzip-size";
-import { Termost, helpers } from "termost";
+import { helpers } from "termost";
+import type { Termost } from "termost";
+
 import { build } from "../../bundler";
 import { readFile } from "../../helpers";
 
 type BuildCommandContext = {
-	sizes: Array<{ filename: string; raw: number; gzip: number }>;
-	outfiles: Array<string>;
+	outfiles: string[];
+	sizes: { filename: string; gzip: number; raw: number }[];
 };
 
 export const createBuildCommand = (program: Termost) => {
@@ -21,7 +23,7 @@ export const createBuildCommand = (program: Termost) => {
 				const outfiles = await build();
 
 				return outfiles.filter(
-					(outfile): outfile is string => outfile !== null
+					(outfile): outfile is string => outfile !== null,
 				);
 			},
 		})
@@ -29,7 +31,7 @@ export const createBuildCommand = (program: Termost) => {
 			key: "sizes",
 			label: "Compute sizes 🔢",
 			async handler(context) {
-				return await calculateBundleSize(context.outfiles);
+				return calculateBundleSize(context.outfiles);
 			},
 		})
 		.task({
@@ -50,7 +52,7 @@ export const createBuildCommand = (program: Termost) => {
 						{
 							label: item.filename,
 							type: "information",
-						}
+						},
 					);
 				});
 			},
@@ -64,12 +66,12 @@ const calculateBundleSize = async (filenames: string[]) => {
 
 		return {
 			filename,
-			raw: content.byteLength,
 			gzip: gzSize,
+			raw: content.byteLength,
 		};
 	};
 
-	return await Promise.all(
-		filenames.map((filename) => calculateFileSize(filename))
+	return Promise.all(
+		filenames.map(async (filename) => calculateFileSize(filename)),
 	);
 };
