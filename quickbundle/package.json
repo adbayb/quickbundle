@@ -9,7 +9,7 @@
 	"repository": {
 		"type": "git",
 		"url": "git@github.com:adbayb/quickbundle.git",
-        "directory": "quickbundle"
+		"directory": "quickbundle"
 	},
 	"license": "MIT",
 	"keywords": [
@@ -20,8 +20,8 @@
 		"transpiler",
 		"module",
 		"fast",
-        "esbuild",
-        "microbundle"
+		"esbuild",
+		"microbundle"
 	],
 	"bin": {
 		"quickbundle": "bin/index.cjs"
@@ -34,8 +34,7 @@
 	"scripts": {
 		"prepublishOnly": "pnpm build",
 		"build": "tsc",
-		"watch": "tsc -w",
-		"release": "semantic-release"
+		"watch": "tsc -w"
 	},
 	"dependencies": {
 		"dts-bundle-generator": "8.0.1",
@@ -44,62 +43,5 @@
 		"termost": "0.9.0",
 		"threads": "1.7.0",
 		"typescript": ">=4.0.0"
-	},
-	"devDependencies": {
-		"@semantic-release/git": "10.0.1",
-		"semantic-release": "21.0.2"
-	},
-	"release": {
-		"branches": [
-			"main"
-		],
-		"ci": false,
-		"plugins": [
-			[
-				"@semantic-release/commit-analyzer",
-				{
-					"releaseRules": [
-						{
-							"breaking": true,
-							"release": "major"
-						},
-						{
-							"revert": true,
-							"release": "patch"
-						},
-						{
-							"type": "feat",
-							"release": "minor"
-						},
-						{
-							"type": "fix",
-							"release": "patch"
-						},
-						{
-							"type": "perf",
-							"release": "patch"
-						},
-						{
-							"type": "refactor",
-							"release": "patch"
-						},
-						{
-							"type": "chore",
-							"scope": "deps",
-							"release": "patch"
-						}
-					]
-				}
-			],
-			"@semantic-release/release-notes-generator",
-			"@semantic-release/npm",
-			[
-				"@semantic-release/git",
-				{
-					"message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
-				}
-			],
-			"@semantic-release/github"
-		]
 	}
 }
