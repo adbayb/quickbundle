@@ -20,14 +20,15 @@ export const createWatchCommand = (program: Termost) => {
 				"Watch and rebuild on any code change (development mode)",
 		})
 		.task({
-			label: "Watch and rebuild assets 🔎",
-			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			async handler() {
 				process.env.NODE_ENV ??= "development";
 
 				try {
 					await helpers.exec(
 						createBundlerCommand([...BUNDLER_OPTIONS, "--watch"]),
+						{
+							hasLiveOutput: true,
+						},
 					);
 				} catch (error) {
 					console.error(

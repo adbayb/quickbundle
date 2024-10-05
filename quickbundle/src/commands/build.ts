@@ -12,7 +12,6 @@ export const createBuildCommand = (program: Termost) => {
 		})
 		.task({
 			label: "Bundle assets 📦",
-			// eslint-disable-next-line @typescript-eslint/no-misused-promises
 			async handler() {
 				process.env.NODE_ENV ??= "development";
 
