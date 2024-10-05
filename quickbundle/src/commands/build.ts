@@ -1,7 +1,8 @@
-import { execa } from "execa";
+import { helpers } from "termost";
 import type { Termost } from "termost";
 
 import { BUNDLER_OPTIONS } from "../constants";
+import { createBundlerCommand } from "../helpers";
 
 export const createBuildCommand = (program: Termost) => {
 	program
@@ -16,16 +17,12 @@ export const createBuildCommand = (program: Termost) => {
 				process.env.NODE_ENV ??= "development";
 
 				try {
-					await execa("rollup", BUNDLER_OPTIONS, {
-						stdio: "inherit",
-					});
+					await helpers.exec(createBundlerCommand(BUNDLER_OPTIONS));
 				} catch (error) {
 					console.error(
-						"❌ An error occurred while bundling files",
+						"❌ An error occurred while building files",
 						error,
 					);
-
-					process.exit(1);
 				}
 			},
 		});

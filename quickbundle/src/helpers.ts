@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 
-import { CWD } from "./constants";
+import { CWD, PACKAGE_DIRECTORY } from "./constants";
 
 // TS assertion not working properly with arrow function
 // @see: https://github.com/microsoft/TypeScript/issues/34523
@@ -30,4 +30,10 @@ export const writeFile = async (filePath: string, content: string) => {
 	}
 
 	await fs.writeFile(filePath, content, "utf8");
+};
+
+export const createBundlerCommand = (options: string[]) => {
+	const bundlerBinary = join(PACKAGE_DIRECTORY, "./node_modules/.bin/rollup");
+
+	return `${bundlerBinary} ${options.join(" ")}`;
 };

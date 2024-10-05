@@ -1,7 +1,8 @@
-import { execa } from "execa";
+import { helpers } from "termost";
 import type { Termost } from "termost";
 
 import { BUNDLER_OPTIONS } from "../constants";
+import { createBundlerCommand } from "../helpers";
 
 type WatchCommandContext = {
 	callbacks: {
@@ -25,16 +26,14 @@ export const createWatchCommand = (program: Termost) => {
 				process.env.NODE_ENV ??= "development";
 
 				try {
-					await execa("rollup", [...BUNDLER_OPTIONS, "--watch"], {
-						stdio: "inherit",
-					});
+					await helpers.exec(
+						createBundlerCommand([...BUNDLER_OPTIONS, "--watch"]),
+					);
 				} catch (error) {
 					console.error(
-						"❌ An error occurred while bundling files",
+						"❌ An error occurred while watching files",
 						error,
 					);
-
-					process.exit(1);
 				}
 			},
 		});
