@@ -11,6 +11,8 @@ import { swc } from "rollup-plugin-swc3";
 
 // TODO: add assets config (see src/bundlers/configs/esbuild.ts config)
 // TODO: error overlay to manage in watch mode
+// TODO: configurable minification/source maps (CLI flag, by default false since the build tool focuses on lib and source maps/minification process should be an application concern)
+// TODO: update README (esbuild backend references -> rollup/swc/dts bundle)
 
 const require = createRequire(import.meta.url);
 const PKG = require(join(process.cwd(), "./package.json")) as PackageJson;

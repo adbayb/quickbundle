@@ -1,11 +1,14 @@
 {
 	"name": "@examples/vanilla-node",
 	"private": true,
-	"platform": "node",
 	"type": "module",
-	"source": "src/index.js",
-	"main": "dist/index.cjs",
-	"module": "dist/index.mjs",
+	"exports": {
+		".": {
+			"source": "./src/index.js",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		}
+	},
 	"scripts": {
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"

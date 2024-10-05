@@ -15,7 +15,6 @@ Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy**
 -   Support of multiple module formats including `cjs` & `esm`
 -   JavaScript, TypeScript, JSX, CSS, JSON, Image and Text support following [esbuild support](https://esbuild.github.io/content-types/)
 -   TypeScript declaration file (`.d.ts`) generation with bundling support
--   Bundling can be done for several platform targets including `browser` or `node`
 -   Optimized build with automatic dependency inclusion (`peerDependencies` and `dependencies` are not bundled in the final output)
 
 <br>
@@ -38,15 +37,19 @@ yarn add quickbundle
 ```jsonc
 {
 	"name": "lib", // Package name
-	"source": "src/index.ts", // Source code entrypoint
-	"main": "./dist/index.cjs", // CommonJS output file
-	"module": "./dist/index.mjs", // ESM output file
-	"types": "./dist/index.d.ts", // Typing output file (if defined, can increase build time)
-	"platform": "node", // Platform target (optional, by default "browser")
+	"exports": {
+		".": {
+			"source": "src/index.ts(x)?", // Source code entrypoint
+			"types": "./dist/index.d.ts", // Typing output file (if defined, can increase build time)
+			"import": "./dist/index.mjs", // ESM output file
+			"require": "./dist/index.cjs" // CommonJS output file
+		}
+	}
 	"scripts": {
 		"build": "quickbundle build", // Production mode (optimizes bundle)
-		"watch": "quickbundle watch" // Development mode (watches each file change)
-	}
+		"watch": "quickbundle watch", // Development mode (watches each file change)
+	},
+	// ...
 }
 ```
 

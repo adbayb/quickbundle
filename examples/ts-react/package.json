@@ -2,10 +2,14 @@
 	"name": "@examples/ts-react",
 	"private": true,
 	"type": "module",
-	"source": "src/index.tsx",
-	"main": "dist/index.cjs",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"source": "./src/index.tsx",
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		}
+	},
 	"scripts": {
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"

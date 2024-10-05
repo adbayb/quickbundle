@@ -2,9 +2,13 @@
 	"name": "@examples/vanilla-react",
 	"private": true,
 	"type": "module",
-	"source": "src/index.jsx",
-	"main": "dist/index.cjs",
-	"module": "dist/index.mjs",
+	"exports": {
+		".": {
+			"source": "./src/index.jsx",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		}
+	},
 	"scripts": {
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
