@@ -34,7 +34,7 @@ export const createBuildCommand = (program: Termost) => {
 		})
 		.task({
 			key: "logInput",
-			label: "Compute sizes 🔢",
+			label: "Generate report 📝",
 			async handler(context) {
 				return computeBundleSize(context.buildOutput);
 			},

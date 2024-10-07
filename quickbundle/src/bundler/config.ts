@@ -1,6 +1,7 @@
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import url from "@rollup/plugin-url";
 import { createRequire } from "node:module";
 import { join } from "node:path";
 import type { InputPluginOption, RollupOptions } from "rollup";
@@ -8,7 +9,6 @@ import dts from "rollup-plugin-dts";
 import externals from "rollup-plugin-node-externals";
 import { swc } from "rollup-plugin-swc3";
 
-// TODO: add assets config (see src/bundlers/configs/esbuild.ts config)
 // TODO: configurable minification/source maps (CLI flag, by default false since the build tool focuses on lib and source maps/minification process should be an application concern)
 // TODO: update README (esbuild backend references -> rollup/swc/dts bundle)
 
@@ -30,7 +30,7 @@ type EntryPoints = {
 	types?: string;
 };
 
-const createConfig = () => {
+export const createConfig = () => {
 	/**
 	 * Entry-point resolution:
 	 * Following the [package entry-point specification](https://nodejs.org/api/packages.html#package-entry-points),
@@ -100,6 +100,7 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 			exportConditions: ["types"],
 		}),
 		commonjs(),
+		url(),
 		json(),
 		...customPlugins,
 	];
@@ -155,5 +156,3 @@ const createTypesConfig = (
 		),
 	};
 };
-
-export const CONFIGURATIONS = createConfig();
