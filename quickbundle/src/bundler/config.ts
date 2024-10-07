@@ -9,7 +9,6 @@ import externals from "rollup-plugin-node-externals";
 import { swc } from "rollup-plugin-swc3";
 
 // TODO: add assets config (see src/bundlers/configs/esbuild.ts config)
-// TODO: error overlay to manage in watch mode
 // TODO: configurable minification/source maps (CLI flag, by default false since the build tool focuses on lib and source maps/minification process should be an application concern)
 // TODO: update README (esbuild backend references -> rollup/swc/dts bundle)
 
@@ -75,7 +74,7 @@ const createConfig = () => {
 					source: entryPoints.source,
 					types: entryPoints.types,
 				}),
-		].filter(Boolean);
+		].filter(Boolean) as RollupOptions[];
 	});
 };
 
@@ -157,5 +156,4 @@ const createTypesConfig = (
 	};
 };
 
-// eslint-disable-next-line import/no-default-export
-export default createConfig();
+export const CONFIGURATIONS = createConfig();

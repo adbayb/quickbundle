@@ -23,19 +23,12 @@ export const createWatchCommand = (program: Termost) => {
 			async handler() {
 				process.env.NODE_ENV ??= "development";
 
-				try {
-					await helpers.exec(
-						createBundlerCommand([...BUNDLER_OPTIONS, "--watch"]),
-						{
-							hasLiveOutput: true,
-						},
-					);
-				} catch (error) {
-					console.error(
-						"❌ An error occurred while watching files",
-						error,
-					);
-				}
+				await helpers.exec(
+					createBundlerCommand([...BUNDLER_OPTIONS, "--watch"]),
+					{
+						hasLiveOutput: true,
+					},
+				);
 			},
 		});
 };
