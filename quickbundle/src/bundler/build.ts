@@ -1,13 +1,14 @@
 import { rollup } from "rollup";
 
-import { CONFIGURATIONS } from "./config";
+import { createConfig } from "./config";
 
 export type BuildItemOutput = { elapedTime: number; filename: string };
 
 export const build = async () => {
 	const output: BuildItemOutput[] = [];
+	const configurations = createConfig();
 
-	for (const config of CONFIGURATIONS) {
+	for (const config of configurations) {
 		const initialTime = Date.now();
 
 		const bundle = await rollup({
