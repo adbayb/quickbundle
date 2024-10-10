@@ -40,8 +40,8 @@
 	},
 	"scripts": {
 		"prepublishOnly": "pnpm build",
-		"build": "rollup --config ./config/bundler.ts --configPlugin rollup-plugin-swc3",
-		"watch": "rollup --watch --config ./config/bundler.ts --configPlugin rollup-plugin-swc3"
+		"build": "rollup --config ./src/bundler/createConfigurations.ts --configPlugin rollup-plugin-swc3 && chmod +x ./dist/index.js",
+		"watch": "rollup --watch --config ./src/bundler/createConfigurations.ts --configPlugin rollup-plugin-swc3"
 	},
 	"dependencies": {
 		"termost": "^0.14.0",

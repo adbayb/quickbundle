@@ -30,7 +30,9 @@ type EntryPoints = {
 	types?: string;
 };
 
-export const createConfig = () => {
+export type Configuration = RollupOptions;
+
+const createConfigurations = (): Configuration[] => {
 	/**
 	 * Entry-point resolution:
 	 * Following the [package entry-point specification](https://nodejs.org/api/packages.html#package-entry-points),
@@ -74,7 +76,7 @@ export const createConfig = () => {
 					source: entryPoints.source,
 					types: entryPoints.types,
 				}),
-		].filter(Boolean) as RollupOptions[];
+		].filter(Boolean) as Configuration;
 	});
 };
 
@@ -109,7 +111,7 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 const createMainConfig = (
 	entryPoints: Partial<Pick<EntryPoints, "default" | "import" | "require">> &
 		Required<Pick<EntryPoints, "source">>,
-): RollupOptions => {
+): Configuration => {
 	const output = [
 		entryPoints.require && {
 			file: entryPoints.require,
@@ -121,7 +123,7 @@ const createMainConfig = (
 			format: "es",
 			sourcemap: false,
 		},
-	].filter(Boolean) as NonNullable<RollupOptions["output"]>;
+	].filter(Boolean) as NonNullable<Configuration["output"]>;
 
 	return {
 		input: entryPoints.source,
@@ -142,7 +144,7 @@ const createMainConfig = (
 
 const createTypesConfig = (
 	entryPoints: Required<Pick<EntryPoints, "source" | "types">>,
-): RollupOptions => {
+): Configuration => {
 	return {
 		input: entryPoints.source,
 		output: [{ file: entryPoints.types }],
@@ -156,3 +158,6 @@ const createTypesConfig = (
 		),
 	};
 };
+
+// eslint-disable-next-line import/no-default-export
+export default createConfigurations();

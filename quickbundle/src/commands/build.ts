@@ -27,8 +27,6 @@ export const createBuildCommand = (program: Termost) => {
 			key: "buildOutput",
 			label: "Bundle assets 📦",
 			async handler() {
-				process.env.NODE_ENV ??= "production";
-
 				return build();
 			},
 		})
