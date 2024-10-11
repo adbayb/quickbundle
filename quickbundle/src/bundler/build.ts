@@ -1,6 +1,7 @@
 import { rollup } from "rollup";
 
-import CONFIGURATIONS from "./createConfigurations";
+import CONFIGURATIONS from "./config";
+import { onLog } from "./helpers";
 
 export type BuildItemOutput = { elapedTime: number; filename: string };
 
@@ -14,9 +15,7 @@ export const build = async () => {
 
 		const bundle = await rollup({
 			...config,
-			onLog(_, log) {
-				if (log.message.includes("Generated an empty chunk")) return;
-			},
+			onLog,
 		});
 
 		if (config.output) {

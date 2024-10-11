@@ -1,35 +1,60 @@
+import { relative } from "node:path";
 import { watch as rollupWatch } from "rollup";
+import type { InputOption } from "rollup";
+import { helpers } from "termost";
 
-import CONFIGURATIONS from "./createConfigurations";
+import CONFIGURATIONS from "./config";
+import { onLog } from "./helpers";
 
 export const watch = () => {
 	process.env.NODE_ENV ??= "development";
 
-	const watcher = rollupWatch(CONFIGURATIONS);
+	const watcher = rollupWatch(
+		CONFIGURATIONS.map((config) => ({
+			...config,
+			onLog,
+		})),
+	);
 
-	watcher.on("event", (event) => {
+	console.clear();
+
+	watcher.on("event", async (event) => {
 		switch (event.code) {
 			case "BUNDLE_START": {
+				console.clear();
+
 				const { input, output } = event;
 
-				console.log(JSON.stringify(input), JSON.stringify(output));
-				console.log("[rollup] Start");
+				helpers.message(
+					`Waiting for ${getStringifiedInputOutput(input, output)} build to be done...`,
+					{
+						type: "information",
+					},
+				);
 
 				return;
 			}
 			case "BUNDLE_END": {
-				const { duration, input, output } = event;
+				console.clear();
 
-				console.log(JSON.stringify(input), JSON.stringify(output));
+				const { duration, input, output, result } = event;
 
-				console.log("[rollup] End", `in ${duration}ms`);
+				await result.close();
 
-				// await watcher.close();
+				helpers.message(
+					`Build of ${getStringifiedInputOutput(input, output)} done in ${duration}ms (at ${new Date().toLocaleTimeString()})`,
+					{ type: "success" },
+				);
 
 				return;
 			}
 			case "ERROR": {
-				console.error("Error trigger", event.error);
+				console.clear();
+
+				const { error } = event;
+
+				helpers.message(`${String(error)}`, { type: "error" });
+				console.error("\n", error);
 
 				return;
 			}
@@ -37,4 +62,11 @@ export const watch = () => {
 				break;
 		}
 	});
+};
+
+const getStringifiedInputOutput = (
+	input: InputOption | undefined,
+	output: readonly string[],
+) => {
+	return `${JSON.stringify(input)} ~> ${output.map((filepath) => JSON.stringify(relative(process.cwd(), filepath))).join(", ")}`;
 };

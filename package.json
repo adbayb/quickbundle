@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"prepare": "stack install",
+		"prepare": "stack install && pnpm --filter quickbundle build",
 		"clean": "stack clean",
 		"check": "stack check",
 		"fix": "stack fix",
