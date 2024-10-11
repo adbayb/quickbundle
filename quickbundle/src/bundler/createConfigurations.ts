@@ -10,7 +10,7 @@ import externals from "rollup-plugin-node-externals";
 import { swc } from "rollup-plugin-swc3";
 
 // TODO: configurable minification/source maps (CLI flag, by default false since the build tool focuses on lib and source maps/minification process should be an application concern)
-// TODO: update README (esbuild backend references -> rollup/swc/dts bundle)
+// TODO: Configure `default` to output ESM if type set to module and output extension filename finish with .js or .mjs, CJS otherwise (i.e. if type is not specified or specified to commonjs or specified to module but with extension name set to `.cjs`).
 
 const require = createRequire(import.meta.url);
 const PKG = require(join(process.cwd(), "./package.json")) as PackageJson;
