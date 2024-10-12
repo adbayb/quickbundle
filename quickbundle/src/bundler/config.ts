@@ -21,12 +21,14 @@ type PackageJson = {
 	types?: string;
 };
 
-type EntryPoints = {
-	import?: string;
-	require?: string;
-	source?: string;
-	types?: string;
-};
+type EntryPoints =
+	| string
+	| {
+			import?: string;
+			require?: string;
+			source?: string;
+			types?: string;
+	  };
 
 export type Configuration = RollupOptions;
 
@@ -46,6 +48,8 @@ const createConfigurations = (): Configuration[] => {
 	const outputEntryPointFields = ["import", "require", "types"];
 
 	return Object.entries(PKG.exports).flatMap(([name, entryPoints]) => {
+		if (typeof entryPoints === "string") return [];
+
 		const entryPointKeys = Object.keys(entryPoints);
 
 		if (entryPointKeys.includes("source")) {
