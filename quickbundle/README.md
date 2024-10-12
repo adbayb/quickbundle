@@ -80,7 +80,7 @@ We're open to new contributions, you can find more details [here](./CONTRIBUTING
 
 ## 💙 Acknowledgements
 
--   The backend is powered by [Rollup](https://github.com/rollup/rollup) and its plugin ecosystem including [SWC](https://github.com/swc-project/swc) to make blazing-fast builds. A special shoutout to all contributors involved ([Rollup](https://github.com/rollup/rollup/graphs/contributors) and [SWC](https://github.com/swc-project/swc/graphs/contributors)).
+-   The backend is powered by [Rollup](https://github.com/rollup/rollup) and its plugin ecosystem (including [SWC](https://github.com/swc-project/swc)) to make blazing-fast builds. A special shoutout to all contributors involved.
 -   The zero-configuration approach was inspired by [microbundle](https://github.com/developit/microbundle). A special shoutout to its author [Jason Miller](https://github.com/developit) and [all contributors](https://github.com/developit/microbundle/graphs/contributors).
 
 <br>

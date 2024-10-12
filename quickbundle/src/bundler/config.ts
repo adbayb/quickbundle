@@ -15,20 +15,18 @@ const require = createRequire(import.meta.url);
 const PKG = require(join(process.cwd(), "./package.json")) as PackageJson;
 
 type PackageJson = {
-	exports?: Record<string, EntryPoints>;
+	exports?: Record<string, EntryPoints | string>;
 	main?: string;
 	module?: string;
 	types?: string;
 };
 
-type EntryPoints =
-	| string
-	| {
-			import?: string;
-			require?: string;
-			source?: string;
-			types?: string;
-	  };
+type EntryPoints = {
+	import?: string;
+	require?: string;
+	source?: string;
+	types?: string;
+};
 
 export type Configuration = RollupOptions;
 
