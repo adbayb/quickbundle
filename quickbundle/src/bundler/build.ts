@@ -1,16 +1,16 @@
 import { rollup } from "rollup";
 
-import CONFIGURATIONS from "./config";
+import type { Configuration } from "./config";
 import { onLog } from "./helpers";
 
 export type BuildItemOutput = { elapedTime: number; filename: string };
 
-export const build = async () => {
+export const build = async (configurations: Configuration[]) => {
 	process.env.NODE_ENV ??= "production";
 
 	const output: BuildItemOutput[] = [];
 
-	for (const config of CONFIGURATIONS) {
+	for (const config of configurations) {
 		const initialTime = Date.now();
 
 		const bundle = await rollup({

@@ -4,6 +4,7 @@ import type { Termost } from "termost";
 
 import { build } from "../bundler";
 import type { BuildItemOutput } from "../bundler";
+import { createConfigurations } from "../bundler/config";
 import { readFile } from "../helpers";
 
 type LogInput = BuildItemOutput & {
@@ -15,19 +16,39 @@ type LogInput = BuildItemOutput & {
 type BuildCommandContext = {
 	buildOutput: BuildItemOutput[];
 	logInput: LogInput[];
+	minification: boolean;
+	sourceMaps: boolean;
 };
 
+// TODO: createCommand factory to share option flags between build and watch
 export const createBuildCommand = (program: Termost) => {
 	program
 		.command<BuildCommandContext>({
 			name: "build",
 			description: "Build the source code (production mode)",
 		})
+		.option({
+			key: "minification",
+			name: "minification",
+			description: "Enable minification",
+			defaultValue: false,
+		})
+		.option({
+			key: "sourceMaps",
+			name: "source-maps",
+			description: "Enable source maps generation",
+			defaultValue: false,
+		})
 		.task({
 			key: "buildOutput",
 			label: "Bundle assets 📦",
-			async handler() {
-				return build();
+			async handler(context) {
+				return build(
+					createConfigurations({
+						minification: context.minification,
+						sourceMaps: context.sourceMaps,
+					}),
+				);
 			},
 		})
 		.task({

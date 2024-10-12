@@ -9,8 +9,6 @@ import dts from "rollup-plugin-dts";
 import externals from "rollup-plugin-node-externals";
 import { swc } from "rollup-plugin-swc3";
 
-// TODO: configurable minification/source maps (CLI flag, by default false since the build tool focuses on lib and source maps/minification process should be an application concern)
-
 const require = createRequire(import.meta.url);
 const PKG = require(join(process.cwd(), "./package.json")) as PackageJson;
 
@@ -30,7 +28,17 @@ type EntryPoints = {
 
 export type Configuration = RollupOptions;
 
-const createConfigurations = (): Configuration[] => {
+type Options = {
+	minification: boolean;
+	sourceMaps: boolean;
+};
+
+export const createConfigurations = (
+	options: Options = {
+		minification: false,
+		sourceMaps: false,
+	},
+): Configuration[] => {
 	/**
 	 * Entry-point resolution:
 	 * Following the [package entry-point specification](https://nodejs.org/api/packages.html#package-entry-points),
@@ -39,7 +47,7 @@ const createConfigurations = (): Configuration[] => {
 	 */
 	if (PKG.main ?? PKG.module ?? PKG.types ?? !PKG.exports) {
 		throw new Error(
-			"Invalid package entry points contract. Use the recommended [`exports` field](https://nodejs.org/api/packages.html#package-entry-points) instead and configure the TypeScript configuration to resolve it properly (`moduleResolution` must be set to `Bundler` (or `NodeNext`)).",
+			"Invalid package entry points contract. Use the recommended [`exports` field](https://nodejs.org/api/packages.html#package-entry-points) instead and, for TypeScript-based projects, update the `tsconfig.json` file to resolve it properly (`moduleResolution` must be set to `Bundler` (or `NodeNext`)).",
 		);
 	}
 
@@ -66,10 +74,13 @@ const createConfigurations = (): Configuration[] => {
 
 		return [
 			entryPoints.source &&
-				createMainConfig({
-					...entryPoints,
-					source: entryPoints.source,
-				}),
+				createMainConfig(
+					{
+						...entryPoints,
+						source: entryPoints.source,
+					},
+					options,
+				),
 			entryPoints.source &&
 				entryPoints.types &&
 				createTypesConfig({
@@ -111,17 +122,20 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 const createMainConfig = (
 	entryPoints: Partial<Pick<EntryPoints, "import" | "require">> &
 		Required<Pick<EntryPoints, "source">>,
+	options: Options,
 ): Configuration => {
+	const { minification, sourceMaps } = options;
+
 	const output = [
 		entryPoints.require && {
 			file: entryPoints.require,
 			format: "cjs",
-			sourcemap: false,
+			sourcemap: sourceMaps,
 		},
 		entryPoints.import && {
 			file: entryPoints.import,
 			format: "es",
-			sourcemap: false,
+			sourcemap: sourceMaps,
 		},
 	].filter(Boolean) as NonNullable<Configuration["output"]>;
 
@@ -130,13 +144,8 @@ const createMainConfig = (
 		output,
 		plugins: getPlugins(
 			swc({
-				/**
-				 * Minification and source maps generation are disabled to delegate such responsibility to the application bundler.
-				 * Indeed, The responsibility of the library bundler should be only about generating an unoptimized bundle and instructing the application about its build context
-				 * especially on how to eliminate its dead code (tree shaking) with hints like with `sideEffects` package flag and pure comment annotations.
-				 */
-				minify: false,
-				sourceMaps: false,
+				minify: minification,
+				sourceMaps,
 			}),
 		),
 	};

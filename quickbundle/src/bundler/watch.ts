@@ -1,14 +1,14 @@
 import { watch as rollupWatch } from "rollup";
 import { helpers } from "termost";
 
-import CONFIGURATIONS from "./config";
+import type { Configuration } from "./config";
 import { onLog } from "./helpers";
 
-export const watch = () => {
+export const watch = (configurations: Configuration[]) => {
 	process.env.NODE_ENV ??= "development";
 
 	const watcher = rollupWatch(
-		CONFIGURATIONS.map((config) => ({
+		configurations.map((config) => ({
 			...config,
 			onLog,
 		})),
