@@ -42,8 +42,7 @@ yarn add quickbundle
 			"source": "src/index.ts(x)?", // Source code entrypoint
 			"types": "./dist/index.d.ts", // Typing output file (if defined, can increase build time)
 			"import": "./dist/index.mjs", // ESM output file
-			"require": "./dist/index.cjs", // CommonJS output file
-			// "default": "./dist/index.js", // Or replace `import` and `require` by the `default` fallback (must always come last), the bundler will automatically assess the module format based on `type` field and file extension name.
+			"require": "./dist/index.cjs" // CommonJS output file
 		}
 	}
 	"scripts": {

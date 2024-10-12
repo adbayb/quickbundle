@@ -22,7 +22,6 @@ type PackageJson = {
 };
 
 type EntryPoints = {
-	default?: string;
 	import?: string;
 	require?: string;
 	source?: string;
@@ -44,7 +43,7 @@ const createConfigurations = (): Configuration[] => {
 		);
 	}
 
-	const outputEntryPointFields = ["default", "import", "require", "types"];
+	const outputEntryPointFields = ["import", "require", "types"];
 
 	return Object.entries(PKG.exports).flatMap(([name, entryPoints]) => {
 		const entryPointKeys = Object.keys(entryPoints);
@@ -108,7 +107,7 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 };
 
 const createMainConfig = (
-	entryPoints: Partial<Pick<EntryPoints, "default" | "import" | "require">> &
+	entryPoints: Partial<Pick<EntryPoints, "import" | "require">> &
 		Required<Pick<EntryPoints, "source">>,
 ): Configuration => {
 	const output = [
@@ -117,8 +116,8 @@ const createMainConfig = (
 			format: "cjs",
 			sourcemap: false,
 		},
-		(entryPoints.import ?? entryPoints.default) && {
-			file: entryPoints.import ?? entryPoints.default,
+		entryPoints.import && {
+			file: entryPoints.import,
 			format: "es",
 			sourcemap: false,
 		},
