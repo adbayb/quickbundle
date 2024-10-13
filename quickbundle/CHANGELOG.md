@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.1.0
+
+### Minor Changes
+
+- [`2863feb`](https://github.com/adbayb/quickbundle/commit/2863feba5443375463df7f0ed99da8238ac02d78) Thanks [@adbayb](https://github.com/adbayb)! - Provide developer feedback if no source field is configured in the package exports contract.
+
 ## 2.0.0
 
 ### Major Changes
