@@ -9,8 +9,10 @@ import dts from "rollup-plugin-dts";
 import externals from "rollup-plugin-node-externals";
 import { swc } from "rollup-plugin-swc3";
 
+import { CWD } from "../constants";
+
 const require = createRequire(import.meta.url);
-const PKG = require(join(process.cwd(), "./package.json")) as PackageJson;
+const PKG = require(join(CWD, "./package.json")) as PackageJson;
 
 type PackageJson = {
 	exports?: Record<string, EntryPoints | string>;
