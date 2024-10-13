@@ -1,5 +1,9 @@
 import { existsSync } from "node:fs";
-import fs from "node:fs/promises";
+import {
+	readFile as fsReadFile,
+	writeFile as fsWriteFile,
+	mkdir,
+} from "node:fs/promises";
 import { dirname } from "node:path";
 
 import { CWD } from "./constants";
@@ -12,7 +16,7 @@ export function assert(condition: unknown, message: string): asserts condition {
 	}
 }
 
-export const readFile = fs.readFile;
+export const readFile = fsReadFile;
 
 export const resolveModulePath = (path: string) => {
 	try {
@@ -26,8 +30,8 @@ export const writeFile = async (filePath: string, content: string) => {
 	const dir = dirname(filePath);
 
 	if (!existsSync(dir)) {
-		await fs.mkdir(dir, { recursive: true });
+		await mkdir(dir, { recursive: true });
 	}
 
-	await fs.writeFile(filePath, content, "utf8");
+	await fsWriteFile(filePath, content, "utf8");
 };
