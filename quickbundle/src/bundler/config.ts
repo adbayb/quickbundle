@@ -68,7 +68,7 @@ export const createConfigurations = (
 
 				if (!hasAtLeastOneRequiredField) {
 					throw new Error(
-						`A \`source\` field is defined without a provided \`${name}\` module entry point. Make sure to define at least one entry point (including ${outputEntryPointFields.join(
+						`A \`source\` field is defined without a provided output target for the \`${name}\` export. Make sure to define at least one entry point (including ${outputEntryPointFields.join(
 							", ",
 						)})`,
 					);
@@ -96,7 +96,7 @@ export const createConfigurations = (
 
 	if (output.length === 0) {
 		throw new Error(
-			"No `source` field is set for the targetted package. If a build step is necessary, make sure to configure at least one `source` field in the package `exports` contract.",
+			"No `source` field is set for the targeted package. If a build step is necessary, make sure to configure at least one `source` field in the package `exports` contract.",
 		);
 	}
 
