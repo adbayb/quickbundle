@@ -55,42 +55,52 @@ export const createConfigurations = (
 
 	const outputEntryPointFields = ["import", "require", "types"];
 
-	return Object.entries(PKG.exports).flatMap(([name, entryPoints]) => {
-		if (typeof entryPoints === "string") return [];
+	const output = Object.entries(PKG.exports).flatMap(
+		([name, entryPoints]) => {
+			if (typeof entryPoints === "string") return [];
 
-		const entryPointKeys = Object.keys(entryPoints);
+			const entryPointKeys = Object.keys(entryPoints);
 
-		if (entryPointKeys.includes("source")) {
-			const hasAtLeastOneRequiredField = outputEntryPointFields.some(
-				(field) => entryPointKeys.includes(field),
-			);
-
-			if (!hasAtLeastOneRequiredField) {
-				throw new Error(
-					`A \`source\` field is defined without a provided \`${name}\` module entry point. Make sure to define at least one entry point (including ${outputEntryPointFields.join(
-						", ",
-					)})`,
+			if (entryPointKeys.includes("source")) {
+				const hasAtLeastOneRequiredField = outputEntryPointFields.some(
+					(field) => entryPointKeys.includes(field),
 				);
-			}
-		}
 
-		return [
-			entryPoints.source &&
-				createMainConfig(
-					{
-						...entryPoints,
+				if (!hasAtLeastOneRequiredField) {
+					throw new Error(
+						`A \`source\` field is defined without a provided \`${name}\` module entry point. Make sure to define at least one entry point (including ${outputEntryPointFields.join(
+							", ",
+						)})`,
+					);
+				}
+			}
+
+			return [
+				entryPoints.source &&
+					createMainConfig(
+						{
+							...entryPoints,
+							source: entryPoints.source,
+						},
+						options,
+					),
+				entryPoints.source &&
+					entryPoints.types &&
+					createTypesConfig({
 						source: entryPoints.source,
-					},
-					options,
-				),
-			entryPoints.source &&
-				entryPoints.types &&
-				createTypesConfig({
-					source: entryPoints.source,
-					types: entryPoints.types,
-				}),
-		].filter(Boolean) as Configuration;
-	});
+						types: entryPoints.types,
+					}),
+			].filter(Boolean) as Configuration;
+		},
+	);
+
+	if (output.length === 0) {
+		throw new Error(
+			"No `source` field is set for the targetted package. If a build step is necessary, make sure to configure at least one `source` field in the package `exports` contract.",
+		);
+	}
+
+	return output;
 };
 
 const getPlugins = (...customPlugins: InputPluginOption[]) => {
