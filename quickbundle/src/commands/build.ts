@@ -2,10 +2,13 @@ import { gzipSize } from "gzip-size";
 import { helpers } from "termost";
 import type { Termost } from "termost";
 
-import { build } from "../bundler";
-import type { BuildItemOutput } from "../bundler";
+import { build } from "../bundler/build";
+import type { BuildItemOutput } from "../bundler/build";
 import { createConfigurations } from "../bundler/config";
 import { readFile } from "../helpers";
+
+import { createCommand } from "./createCommand";
+import type { CreateCommandContext } from "./createCommand";
 
 type LogInput = BuildItemOutput & {
 	compressedSize: number;
@@ -13,32 +16,16 @@ type LogInput = BuildItemOutput & {
 	rawSize: number;
 };
 
-type BuildCommandContext = {
+type BuildCommandContext = CreateCommandContext<{
 	buildOutput: BuildItemOutput[];
 	logInput: LogInput[];
-	minification: boolean;
-	sourceMaps: boolean;
-};
+}>;
 
-// TODO: createCommand factory to share option flags between build and watch
 export const createBuildCommand = (program: Termost) => {
-	program
-		.command<BuildCommandContext>({
-			name: "build",
-			description: "Build the source code (production mode)",
-		})
-		.option({
-			key: "minification",
-			name: "minification",
-			description: "Enable minification",
-			defaultValue: false,
-		})
-		.option({
-			key: "sourceMaps",
-			name: "source-maps",
-			description: "Enable source maps generation",
-			defaultValue: false,
-		})
+	createCommand<BuildCommandContext>(program, {
+		name: "build",
+		description: "Build the source code (production mode)",
+	})
 		.task({
 			key: "buildOutput",
 			label: "Bundle assets 📦",

@@ -75,9 +75,9 @@ By default, Quickbundle does the following built-in optimizations during the bun
 -   Include, in the build output, only the code that is effectively imported and used in the source code. Setting the `sideEffects` package.json field to `false` marks the package as a side-effect-free one and helps Quickbundle to safely prune unused exports.
 -   [Identify and annotate](https://rollupjs.org/configuration-options/#treeshake-annotations) side-effect-free code (functions, ...) to enable a fine-grained dead-code elimination process later consumer side. For example, if a consumer uses only one library API, build output annotations added by Quickbundle allow the consumer's bundler remove all other unused APIs.
 
-However, Quickbundle doesn't minify the build output. Indeed, in general, **if the build concerns a library (the most Quickbundle use case)**, minification is not necessary since enabling it can introduce some challenges:
+However, Quickbundle doesn't minify the build output. Indeed, in general, **if the build targets a library (the most Quickbundle use case)**, minification is not necessary since enabling it can introduce some challenges:
 
--   Reduce the build output discoverability inside `node_modules` folder (minified code is an obfuscated code that can be hard to read for code audit/debugging purposes).
+-   Reduce the build output discoverability inside the `node_modules` folder (minified code is an obfuscated code that can be hard to read for code audit/debugging purposes).
 -   Generate suboptimal source maps for the bundled library, as the consumer bundler will generate source maps based on the already minified library build (transformed code, mangled variable names, etc.).
 -   Risk of side effects with double optimizations (producer side and then consumer side).
 

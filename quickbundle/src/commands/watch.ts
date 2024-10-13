@@ -3,38 +3,26 @@ import type { Termost } from "termost";
 import { createConfigurations } from "../bundler/config";
 import { watch } from "../bundler/watch";
 
-type WatchCommandContext = {
+import { createCommand } from "./createCommand";
+import type { CreateCommandContext } from "./createCommand";
+
+type WatchCommandContext = CreateCommandContext<{
 	minification: boolean;
 	sourceMaps: boolean;
-};
+}>;
 
 export const createWatchCommand = (program: Termost) => {
-	program
-		.command<WatchCommandContext>({
-			name: "watch",
-			description:
-				"Watch and rebuild on any code change (development mode)",
-		})
-		.option({
-			key: "minification",
-			name: "minification",
-			description: "Enable minification",
-			defaultValue: false,
-		})
-		.option({
-			key: "sourceMaps",
-			name: "source-maps",
-			description: "Enable source maps generation",
-			defaultValue: false,
-		})
-		.task({
-			handler(context) {
-				watch(
-					createConfigurations({
-						minification: context.minification,
-						sourceMaps: context.sourceMaps,
-					}),
-				);
-			},
-		});
+	createCommand<WatchCommandContext>(program, {
+		name: "watch",
+		description: "Watch and rebuild on any code change (development mode)",
+	}).task({
+		handler(context) {
+			watch(
+				createConfigurations({
+					minification: context.minification,
+					sourceMaps: context.sourceMaps,
+				}),
+			);
+		},
+	});
 };
