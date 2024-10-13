@@ -1,6 +1,7 @@
 {
 	"name": "quickbundle",
 	"version": "1.2.0",
+	"description": "The zero-configuration transpiler and bundler for the web",
 	"author": {
 		"name": "Ayoub Adib",
 		"email": "adbayb@gmail.com",
@@ -28,8 +29,7 @@
 		"quickbundle": "dist/index.js"
 	},
 	"files": [
-		"dist",
-		"config"
+		"dist"
 	],
 	"type": "module",
 	"exports": {
