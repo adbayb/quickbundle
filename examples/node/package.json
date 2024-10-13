@@ -14,7 +14,7 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"ora": "5.4.1"
+		"ora": "^5.4.1"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"
