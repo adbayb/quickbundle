@@ -1,5 +1,15 @@
 # quickbundle
 
+## 2.2.0
+
+### Minor Changes
+
+- [`75176d9`](https://github.com/adbayb/quickbundle/commit/75176d9f36cadcef4c03136bb2031ee53182dcee) Thanks [@adbayb](https://github.com/adbayb)! - Add a TypeScript peer dependency contract to set the lowest acceptable TypeScript version able to process `exports` package.json field.
+
+### Patch Changes
+
+- [`e1b4605`](https://github.com/adbayb/quickbundle/commit/e1b4605d4066e2a3473ab005d20b8d855a706dcf) Thanks [@adbayb](https://github.com/adbayb)! - Fix some error feedback typo.
+
 ## 2.1.0
 
 ### Minor Changes
