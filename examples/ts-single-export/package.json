@@ -1,0 +1,25 @@
+{
+	"name": "@examples/ts-single-export",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"source": "./src/index.ts",
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"scripts": {
+		"build": "quickbundle build",
+		"watch": "quickbundle watch"
+	},
+	"dependencies": {
+		"ora": "^5.4.1"
+	},
+	"devDependencies": {
+		"quickbundle": "workspace:*",
+		"@types/node": "20.16.11"
+	}
+}

@@ -22,6 +22,7 @@ type PackageJson = {
 };
 
 type EntryPoints = {
+	default?: string;
 	import?: string;
 	require?: string;
 	source?: string;
@@ -53,7 +54,7 @@ export const createConfigurations = (
 		);
 	}
 
-	const outputEntryPointFields = ["import", "require", "types"];
+	const outputEntryPointFields = ["default", "import", "require", "types"];
 
 	const output = Object.entries(PKG.exports).flatMap(
 		([name, entryPoints]) => {
@@ -132,11 +133,22 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 };
 
 const createMainConfig = (
-	entryPoints: Partial<Pick<EntryPoints, "import" | "require">> &
+	entryPoints: Partial<Pick<EntryPoints, "default" | "import" | "require">> &
 		Required<Pick<EntryPoints, "source">>,
 	options: Options,
 ): Configuration => {
 	const { minification, sourceMaps } = options;
+	const esmInput = entryPoints.import ?? entryPoints.default;
+
+	if (
+		entryPoints.import &&
+		entryPoints.default &&
+		entryPoints.import !== entryPoints.default
+	) {
+		throw new Error(
+			"Both `import` and `default` export fields have been defined but with different values. To preserve proper `default` field resolution on the consumer side, make sure to provide the same file path for both fields, as the `import` field export instruction will be the only one considered to define the output file path.",
+		);
+	}
 
 	const output = [
 		entryPoints.require && {
@@ -144,8 +156,8 @@ const createMainConfig = (
 			format: "cjs",
 			sourcemap: sourceMaps,
 		},
-		entryPoints.import && {
-			file: entryPoints.import,
+		esmInput && {
+			file: esmInput,
 			format: "es",
 			sourcemap: sourceMaps,
 		},

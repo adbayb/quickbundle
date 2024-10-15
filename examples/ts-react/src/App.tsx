@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
@@ -17,7 +18,7 @@ type AppProps = {
 export const App = (props: AppProps) => {
 	const [counter, setCounter] = useState(0);
 
-	console.log(props);
+	console.log(props, process.env.TZ, join("./", "test"));
 
 	return (
 		<>

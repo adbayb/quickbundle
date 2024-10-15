@@ -88,6 +88,19 @@ importers:
         specifier: workspace:*
         version: link:../../quickbundle
 
+  examples/ts-single-export:
+    dependencies:
+      ora:
+        specifier: ^5.4.1
+        version: 5.4.1
+    devDependencies:
+      '@types/node':
+        specifier: 20.16.11
+        version: 20.16.11
+      quickbundle:
+        specifier: workspace:*
+        version: link:../../quickbundle
+
   quickbundle:
     dependencies:
       '@rollup/plugin-commonjs':

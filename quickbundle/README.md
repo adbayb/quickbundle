@@ -34,6 +34,8 @@ yarn add quickbundle
 
 2️⃣ Set up your package configuration (`package.json`):
 
+-   When exporting both CommonJS (CJS) and ECMAScript Modules (ESM) format:
+
 ```jsonc
 {
 	"name": "lib", // Package name
@@ -41,8 +43,35 @@ yarn add quickbundle
 		".": {
 			"source": "src/index.ts(x)?", // Source code entrypoint
 			"types": "./dist/index.d.ts", // Typing output file (if defined, can increase build time)
-			"import": "./dist/index.mjs", // ESM output file
-			"require": "./dist/index.cjs" // CommonJS output file
+			"import": "./dist/index.mjs", // ESM output file (matches when the package is loaded via import or import() consumer side)
+			"require": "./dist/index.cjs", // CommonJS output file (matches when the module is loaded via require() consumer side)
+			"default": "./dist/index.mjs", // The generic fallback that always matches (this condition should always come last). By default, Quickbundle will always output ESM format for the `default` field. However, take care: if both `import` and `default` fields are defined, provide the same file path, as the `import` field export instruction will be the only one considered to define the output file path.
+		},
+		"./otherSubModule": {
+			// ...
+		}
+	}
+	"scripts": {
+		"build": "quickbundle build", // Production mode (optimizes bundle)
+		"watch": "quickbundle watch", // Development mode (watches each file change)
+	},
+	// ...
+}
+```
+
+-   When exporting exclusively ESM format:
+
+```jsonc
+{
+	"name": "lib", // Package name
+	"exports": {
+		".": {
+			"source": "src/index.ts(x)?", // Source code entrypoint
+			"types": "./dist/index.d.ts", // Typing output file (if defined, can increase build time)
+			"default": "./dist/index.js", // The generic fallback that always matches (this condition should always come last). By default, Quickbundle will always output ESM format for the `default` field. However, take care: if both `import` and `default` fields are defined, provide the same file path, as the `import` field export instruction will be the only one considered to define the output file path.
+		},
+		"./otherSubModule": {
+			// ...
 		}
 	}
 	"scripts": {
