@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.3.0
+
+### Minor Changes
+
+- [`5306e0f`](https://github.com/adbayb/quickbundle/commit/5306e0f9a7b7bbba81cb9c11e42c7601b7e27d27) Thanks [@adbayb](https://github.com/adbayb)! - Add support for the `default` export field contract.
+
 ## 2.2.0
 
 ### Minor Changes
