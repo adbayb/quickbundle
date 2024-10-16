@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.4.1
+
+### Patch Changes
+
+- [`752a91f`](https://github.com/adbayb/quickbundle/commit/752a91fc27a6d258426688f5814aa8e4716e7510) Thanks [@adbayb](https://github.com/adbayb)! - Fix `picomatch` peerDependency warning.
+
 ## 2.4.0
 
 ### Minor Changes
