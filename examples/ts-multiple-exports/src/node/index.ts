@@ -12,3 +12,5 @@ setTimeout(() => {
 		}),
 	);
 }, 3000);
+
+export { ora };

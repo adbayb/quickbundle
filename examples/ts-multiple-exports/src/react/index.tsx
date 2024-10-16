@@ -9,3 +9,5 @@ if (container) {
 
 	root.render(<App />);
 }
+
+export { App };

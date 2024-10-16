@@ -8,8 +8,6 @@ import imageJpg from "./assets/image.jpg";
 import imagePng from "./assets/image.png";
 import imageSvg from "./assets/image.svg";
 import imageWebp from "./assets/image.webp";
-// eslint-disable-next-line import/no-unassigned-import
-import "./types";
 
 type AppProps = {
 	children?: ReactNode;
