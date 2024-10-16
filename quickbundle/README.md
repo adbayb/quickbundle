@@ -10,12 +10,16 @@
 
 Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy** way:
 
--   Fast build and watch mode powered by [Rollup module bundler](https://rollupjs.org/) and [SWC transpiler](https://swc.rs/).
+-   Fast build and watch mode powered by Rollup[^1] and SWC[^2].
 -   Zero configuration: define the build artifacts in your `package.json`, and you're all set!
 -   Support of `cjs` & `esm` module formats output.
 -   Support of several loaders including JavaScript, TypeScript, JSX, JSON, and Images.
 -   TypeScript's declaration file (`.d.ts`) bundling.
 -   Automatic dependency inclusion (`peerDependencies` and `dependencies` are not bundled in the final output, `devDependencies` are unless they're not imported).
+
+[^1]: A [module bundler](https://rollupjs.org/) optimized for better tree-shaking processing and seamless interoperability of CommonJS and ESM formats with minimal code footprint.
+
+[^2]: A [TypeScript / JavaScript transpiler](https://swc.rs/) for quicker code processing including TypeScript transpilation, JavaScript transformation, and, minification.
 
 <br>
 
