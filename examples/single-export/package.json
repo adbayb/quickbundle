@@ -1,21 +1,19 @@
 {
-	"name": "@examples/vanilla-react",
+	"name": "@examples/single-export",
 	"private": true,
 	"type": "module",
 	"exports": {
-		".": {
-			"source": "./src/index.jsx",
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.cjs"
-		}
+		"source": "./src/index.js",
+		"require": "./dist/index.cjs",
+		"import": "./dist/index.mjs",
+		"default": "./dist/index.mjs"
 	},
 	"scripts": {
 		"build": "quickbundle build",
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1"
+		"ora": "^5.4.1"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"

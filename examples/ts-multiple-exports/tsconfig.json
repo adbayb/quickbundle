@@ -1,8 +1,9 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "Node",
-		"target": "ES2015"
+		"jsx": "react-jsx",
+		"moduleResolution": "Bundler",
+		"target": "ESNext"
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

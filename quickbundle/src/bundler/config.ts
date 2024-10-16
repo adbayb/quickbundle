@@ -11,17 +11,19 @@ import { swc } from "rollup-plugin-swc3";
 
 import { CWD } from "../constants";
 
+import { isRecord } from "./helpers";
+
 const require = createRequire(import.meta.url);
 const PKG = require(join(CWD, "./package.json")) as PackageJson;
 
 type PackageJson = {
-	exports?: Record<string, EntryPoints | string>;
+	exports?: BuildableExport | Record<string, BuildableExport | string>;
 	main?: string;
 	module?: string;
 	types?: string;
 };
 
-type EntryPoints = {
+type BuildableExport = {
 	default?: string;
 	import?: string;
 	require?: string;
@@ -42,6 +44,27 @@ export const createConfigurations = (
 		sourceMaps: false,
 	},
 ): Configuration[] => {
+	return getBuildableExports().flatMap((buildableExport) => {
+		return [
+			buildableExport.source &&
+				createMainConfig(
+					{
+						...buildableExport,
+						source: buildableExport.source,
+					},
+					options,
+				),
+			buildableExport.source &&
+				buildableExport.types &&
+				createTypesConfig({
+					source: buildableExport.source,
+					types: buildableExport.types,
+				}),
+		].filter(Boolean) as Configuration;
+	});
+};
+
+const getBuildableExports = () => {
 	/**
 	 * Entry-point resolution:
 	 * Following the [package entry-point specification](https://nodejs.org/api/packages.html#package-entry-points),
@@ -54,50 +77,59 @@ export const createConfigurations = (
 		);
 	}
 
-	const outputEntryPointFields = ["default", "import", "require", "types"];
+	const buildableExportFields = ["default", "import", "require", "types"];
+	let singleExport: BuildableExport | undefined = undefined;
 
-	const output = Object.entries(PKG.exports).flatMap(
-		([name, entryPoints]) => {
-			if (typeof entryPoints === "string") return [];
-
-			const entryPointKeys = Object.keys(entryPoints);
-
-			if (entryPointKeys.includes("source")) {
-				const hasAtLeastOneRequiredField = outputEntryPointFields.some(
-					(field) => entryPointKeys.includes(field),
-				);
-
-				if (!hasAtLeastOneRequiredField) {
-					throw new Error(
-						`A \`source\` field is defined without a provided output target for the \`${name}\` export. Make sure to define at least one entry point (including ${outputEntryPointFields.join(
-							", ",
-						)})`,
-					);
-				}
+	const output = Object.entries(PKG.exports)
+		.map(([field, value]) => {
+			if (isRecord(value)) {
+				return [field, value] as const;
 			}
 
-			return [
-				entryPoints.source &&
-					createMainConfig(
-						{
-							...entryPoints,
-							source: entryPoints.source,
-						},
-						options,
-					),
-				entryPoints.source &&
-					entryPoints.types &&
-					createTypesConfig({
-						source: entryPoints.source,
-						types: entryPoints.types,
-					}),
-			].filter(Boolean) as Configuration;
-		},
-	);
+			if (["source", ...buildableExportFields].includes(field)) {
+				if (!singleExport) {
+					singleExport = {};
+
+					singleExport[field as keyof BuildableExport] = value;
+
+					return [".", singleExport] as const;
+				}
+
+				singleExport[field as keyof BuildableExport] = value;
+			}
+
+			return undefined;
+		})
+		.reduce<BuildableExport[]>((buildableExports, currentExport) => {
+			if (!currentExport) return buildableExports;
+
+			const [exportField, exportValue] = currentExport;
+			const conditionalExportFields = Object.keys(exportValue);
+
+			if (!conditionalExportFields.includes("source"))
+				return buildableExports;
+
+			const hasAtLeastOneRequiredField = buildableExportFields.some(
+				(entryPointField) =>
+					conditionalExportFields.includes(entryPointField),
+			);
+
+			if (hasAtLeastOneRequiredField) {
+				buildableExports.push(exportValue);
+
+				return buildableExports;
+			}
+
+			throw new Error(
+				`A \`source\` field is defined without an output defined for the \`${exportField}\` export. Make sure to define at least one conditional entry point (including ${buildableExportFields
+					.map((field) => `\`${field}\``)
+					.join(", ")})`,
+			);
+		}, []);
 
 	if (output.length === 0) {
 		throw new Error(
-			"No `source` field is set for the targeted package. If a build step is necessary, make sure to configure at least one `source` field in the package `exports` contract.",
+			"No `source` field is set for the targeted package. If a build step is necessary, make sure to configure at least one `source` field in the package `exports` contract. If not, do not execute quickbundle on this package.",
 		);
 	}
 
@@ -133,8 +165,10 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 };
 
 const createMainConfig = (
-	entryPoints: Partial<Pick<EntryPoints, "default" | "import" | "require">> &
-		Required<Pick<EntryPoints, "source">>,
+	entryPoints: Partial<
+		Pick<BuildableExport, "default" | "import" | "require">
+	> &
+		Required<Pick<BuildableExport, "source">>,
 	options: Options,
 ): Configuration => {
 	const { minification, sourceMaps } = options;
@@ -146,7 +180,7 @@ const createMainConfig = (
 		entryPoints.import !== entryPoints.default
 	) {
 		throw new Error(
-			"Both `import` and `default` export fields have been defined but with different values. To preserve proper `default` field resolution on the consumer side, make sure to provide the same file path for both fields, as the `import` field export instruction will be the only one considered to define the output file path.",
+			"Both `import` and `default` export fields have been defined but with different values. To preserve proper `default` field resolution on the consumer side (i.e. to target ESM format), make sure to provide the same file path for both fields.",
 		);
 	}
 
@@ -176,7 +210,7 @@ const createMainConfig = (
 };
 
 const createTypesConfig = (
-	entryPoints: Required<Pick<EntryPoints, "source" | "types">>,
+	entryPoints: Required<Pick<BuildableExport, "source" | "types">>,
 ): Configuration => {
 	return {
 		input: entryPoints.source,

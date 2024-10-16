@@ -1,0 +1,36 @@
+{
+	"name": "@examples/ts-multiple-exports",
+	"private": true,
+	"type": "module",
+	"exports": {
+		"./react": {
+			"source": "./src/react/index.tsx",
+			"types": "./dist/react.d.ts",
+			"require": "./dist/react.cjs",
+			"import": "./dist/react.mjs",
+			"default": "./dist/react.mjs"
+		},
+		"./node": {
+			"source": "./src/node/index.ts",
+			"types": "./dist/node.d.ts",
+			"require": "./dist/node.cjs",
+			"import": "./dist/node.mjs",
+			"default": "./dist/node.mjs"
+		}
+	},
+	"scripts": {
+		"build": "quickbundle build",
+		"watch": "quickbundle watch"
+	},
+	"dependencies": {
+		"ora": "^5.4.1",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1"
+	},
+	"devDependencies": {
+		"quickbundle": "workspace:*",
+		"@types/node": "20.16.11",
+		"@types/react": "18.3.11",
+		"@types/react-dom": "18.3.1"
+	}
+}
