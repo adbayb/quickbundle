@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.4.0
+
+### Minor Changes
+
+- [`5baccca`](https://github.com/adbayb/quickbundle/commit/5bacccae092a84f0e19e04c87739a543a1ea59e4) Thanks [@adbayb](https://github.com/adbayb)! - Add support for lighter single export syntax.
+
 ## 2.3.0
 
 ### Minor Changes
