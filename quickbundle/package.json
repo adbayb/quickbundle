@@ -26,21 +26,22 @@
 		"microbundle"
 	],
 	"bin": {
-		"quickbundle": "dist/index.js"
+		"quickbundle": "bin/index.mjs"
 	},
 	"files": [
+		"bin",
 		"dist"
 	],
 	"type": "module",
 	"exports": {
 		".": {
 			"source": "./src/index.ts",
-			"import": "./dist/index.js"
+			"default": "./dist/index.mjs"
 		}
 	},
 	"scripts": {
 		"prepublishOnly": "pnpm build",
-		"build": "rollup --config ./src/bundler/config.ts --configPlugin rollup-plugin-swc3 && chmod +x ./dist/index.js",
+		"build": "rollup --config ./src/bundler/config.ts --configPlugin rollup-plugin-swc3",
 		"watch": "rollup --watch --config ./src/bundler/config.ts --configPlugin rollup-plugin-swc3"
 	},
 	"peerDependencies": {
