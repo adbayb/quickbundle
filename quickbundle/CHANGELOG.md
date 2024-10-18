@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.5.0
+
+### Minor Changes
+
+- [`2bf11dd`](https://github.com/adbayb/quickbundle/commit/2bf11dd8e039e2c6b4cdbb48360b1fa03b526ce0) Thanks [@adbayb](https://github.com/adbayb)! - Update bin entry point.
+
 ## 2.4.1
 
 ### Patch Changes
