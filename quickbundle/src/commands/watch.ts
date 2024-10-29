@@ -6,10 +6,7 @@ import { watch } from "../bundler/watch";
 import { createCommand } from "./createCommand";
 import type { CreateCommandContext } from "./createCommand";
 
-type WatchCommandContext = CreateCommandContext<{
-	minification: boolean;
-	sourceMaps: boolean;
-}>;
+type WatchCommandContext = CreateCommandContext;
 
 export const createWatchCommand = (program: Termost) => {
 	createCommand<WatchCommandContext>(program, {

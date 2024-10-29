@@ -43,6 +43,8 @@ yarn add quickbundle
 ```jsonc
 {
 	"name": "lib", // Package name
+	"type": "module", // Optional if you want Node-like runtime to process by default `.js` file as ESM modules.
+	"sideEffects": false, // Mark the package as a side-effect-free one to support the consumer dead-code elimination (tree-shaking) process. If your library contains global side effects (ideally, it should be avoided), configure the field to list the files that do have side effects.
 	"exports": {
 		".": {
 			"source": "src/index.ts(x)?", // Source code entry point.
@@ -66,6 +68,8 @@ yarn add quickbundle
 ```jsonc
 {
 	"name": "lib", // Package name
+	"type": "module", // Optional if you want Node-like runtime to process by default `.js` file as ESM modules.
+	"sideEffects": false, // Mark the package as a side-effect-free one to support the consumer dead-code elimination (tree-shaking) process. If your library contains global side effects (ideally, it should be avoided), configure the field to list the files that do have side effects.
 	"exports": {
 		".": {
 			"source": "src/index.ts(x)?", // Source code entry point.

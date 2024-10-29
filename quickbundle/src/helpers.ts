@@ -21,7 +21,7 @@ export const readFile = fsReadFile;
 export const resolveModulePath = (path: string) => {
 	try {
 		return Boolean(require.resolve(path, { paths: [CWD] }));
-	} catch (error) {
+	} catch {
 		return false;
 	}
 };

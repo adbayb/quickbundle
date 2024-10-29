@@ -10,7 +10,7 @@ import imageSvg from "./assets/image.svg";
 import imageWebp from "./assets/image.webp";
 
 type AppProps = {
-	children?: ReactNode;
+	readonly children?: ReactNode;
 };
 
 export const App = (props: AppProps) => {
@@ -39,7 +39,7 @@ export const App = (props: AppProps) => {
 };
 
 type ImageProps = {
-	src: string;
+	readonly src: string;
 };
 
 const Image = (props: ImageProps) => {

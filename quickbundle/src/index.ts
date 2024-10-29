@@ -8,7 +8,7 @@ import { createWatchCommand } from "./commands/watch";
 
 const createProgram = (...commandBuilders: ((program: Termost) => void)[]) => {
 	const program = termost(
-		"The zero-configuration bundler powered by ESBuild",
+		"The zero-configuration transpiler and bundler for the web",
 	);
 
 	for (const commandBuilder of commandBuilders) {
