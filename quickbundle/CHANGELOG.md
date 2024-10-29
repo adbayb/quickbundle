@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.5.1
+
+### Patch Changes
+
+- [`cc3fc51`](https://github.com/adbayb/quickbundle/commit/cc3fc51b7fc1ff1094c62d3491c5413663012eab) Thanks [@adbayb](https://github.com/adbayb)! - Add missing `@swc/core` dependency.
+
 ## 2.5.0
 
 ### Minor Changes
