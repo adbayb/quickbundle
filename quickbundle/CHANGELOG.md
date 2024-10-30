@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.5.2
+
+### Patch Changes
+
+- [`a6f51b4`](https://github.com/adbayb/quickbundle/commit/a6f51b47ae9f33b28724c0c5beaa212b489a3af2) Thanks [@adbayb](https://github.com/adbayb)! - Prevent `exports.xxx.types` high priority resolution for non-dts bundle target.
+
 ## 2.5.1
 
 ### Patch Changes
