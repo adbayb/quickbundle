@@ -149,14 +149,6 @@ const getPlugins = (...customPlugins: InputPluginOption[]) => {
 			optDeps: true,
 			peerDeps: true,
 		}),
-		nodeResolve({
-			/**
-			 * The `exports` conditional fields definition order is important in the `package.json file`.
-			 * To be resolved first, `types` field must always come first in the package.json exports definition.
-			 * @see https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#package-json-exports-imports-and-self-referencing.
-			 */
-			exportConditions: ["types"],
-		}),
 		commonjs(),
 		url(),
 		json(),
@@ -201,6 +193,7 @@ const createMainConfig = (
 		input: entryPoints.source,
 		output,
 		plugins: getPlugins(
+			nodeResolve(),
 			swc({
 				minify: minification,
 				sourceMaps,
@@ -216,6 +209,14 @@ const createTypesConfig = (
 		input: entryPoints.source,
 		output: [{ file: entryPoints.types }],
 		plugins: getPlugins(
+			nodeResolve({
+				/**
+				 * The `exports` conditional fields definition order is important in the `package.json file`.
+				 * To be resolved first, `types` field must always come first in the package.json exports definition.
+				 * @see https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#package-json-exports-imports-and-self-referencing.
+				 */
+				exportConditions: ["types"],
+			}),
 			dts({
 				compilerOptions: {
 					incremental: false,

@@ -64,7 +64,7 @@ export const createBuildCommand = (program: Termost) => {
 							`${item.compressedSize.toString().padStart(padding)} B gz`,
 						],
 						{
-							label: `${item.filename} (took ${item.elapedTime}ms)`,
+							label: `${item.filename} (took ${item.elapsedTime}ms)`,
 							type: "information",
 						},
 					);

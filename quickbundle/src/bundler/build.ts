@@ -3,7 +3,7 @@ import { rollup } from "rollup";
 import type { Configuration } from "./config";
 import { onLog } from "./helpers";
 
-export type BuildItemOutput = { elapedTime: number; filename: string };
+export type BuildItemOutput = { elapsedTime: number; filename: string };
 
 export const build = async (configurations: Configuration[]) => {
 	process.env.NODE_ENV ??= "production";
@@ -40,7 +40,7 @@ export const build = async (configurations: Configuration[]) => {
 							.write(outputEntry)
 							.then(() => {
 								resolve({
-									elapedTime: Date.now() - initialTime,
+									elapsedTime: Date.now() - initialTime,
 									filename: outputFilename,
 								});
 							})
