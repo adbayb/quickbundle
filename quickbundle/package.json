@@ -1,6 +1,6 @@
 {
 	"name": "quickbundle",
-	"version": "2.5.1",
+	"version": "2.5.2",
 	"description": "The zero-configuration transpiler and bundler for the web",
 	"author": {
 		"name": "Ayoub Adib",
