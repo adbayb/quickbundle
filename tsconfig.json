@@ -1,4 +1,9 @@
 {
 	"extends": "@adbayb/ts-config",
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler"
+	},
 	"exclude": ["node_modules", "**/dist"]
 }

@@ -57,15 +57,15 @@
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^15.3.0",
 		"@rollup/plugin-url": "^8.0.2",
-		"@swc/core": "^1.7.40",
+		"@swc/core": "^1.7.42",
 		"gzip-size": "^7.0.0",
-		"rollup": "^4.24.0",
+		"rollup": "^4.24.3",
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-node-externals": "^7.1.3",
 		"rollup-plugin-swc3": "^0.12.1",
-		"termost": "^0.14.0"
+		"termost": "^0.17.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.16.11"
+		"@types/node": "22.8.5"
 	}
 }
