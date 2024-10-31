@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.6.0
+
+### Minor Changes
+
+- [`dddf6fa`](https://github.com/adbayb/quickbundle/commit/dddf6faa6a50f409e85701be36941b4bee951521) Thanks [@adbayb](https://github.com/adbayb)! - Better format size output by including kB unit whenever it makes sense.
+
 ## 2.5.2
 
 ### Patch Changes
