@@ -130,8 +130,8 @@ importers:
         specifier: ^0.12.1
         version: 0.12.1(@swc/core@1.7.42)(rollup@4.24.3)
       termost:
-        specifier: ^0.17.0
-        version: 0.17.0
+        specifier: ^0.18.0
+        version: 0.18.0
       typescript:
         specifier: '>=4.7.0'
         version: 5.6.3
@@ -2972,8 +2972,8 @@ packages:
     resolution: {integrity: sha512-jcfEHVbbYseoc2WRlb0c9vuV65Za/duEMm+A/O9nGXkhSqNBd5GkbcS6cSu4xOTQ/NTrXYQ3muONnniRaQTKuQ==}
     hasBin: true
 
-  termost@0.17.0:
-    resolution: {integrity: sha512-+OMi6yZl3k1VW5qXXYPK9QmP6vzoRog1yA7wVUZhW7pHX/F0vtoOotoWXCVGnObyXbWMfB73p+kjsi5HNl4t4A==}
+  termost@0.18.0:
+    resolution: {integrity: sha512-lkcG6Ul1RK8SgyKQr8AiuF3gp3cJwY+8v+Ps7jtd7kBLSKiY2d6mYfZlrrza8y6qsv1qqXdqvkwYn/ToiVwwkw==}
 
   text-extensions@2.4.0:
     resolution: {integrity: sha512-te/NtwBwfiNRLf9Ijqx3T0nlqZiQ2XrrtBvu+cLL8ZRrGkO0NHTug8MYFKyoSrv/sHTaSKfilUkizV6XhxMJ3g==}
@@ -6717,7 +6717,7 @@ snapshots:
       listr2: 8.2.5
       picocolors: 1.1.1
 
-  termost@0.17.0:
+  termost@0.18.0:
     dependencies:
       enquirer: 2.4.1
       listr2: 8.2.5

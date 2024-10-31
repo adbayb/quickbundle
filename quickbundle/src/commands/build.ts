@@ -50,19 +50,16 @@ export const createBuildCommand = (program: Termost) => {
 		})
 		.task({
 			handler(context) {
-				const padding =
-					context.logInput
-						.map((item) => item.rawSize)
-						.reduce((pad: number, currentRawSize: number) => {
-							return Math.max(pad, String(currentRawSize).length);
-						}, 0) + 2;
-
 				context.logInput.forEach((item) => {
 					helpers.message(
 						[
-							`${item.rawSize.toString().padStart(padding)} B raw`,
-							`${item.compressedSize.toString().padStart(padding)} B gz`,
-						],
+							`${formatSize(item.rawSize)} raw`,
+							`${formatSize(item.compressedSize)} gzip`,
+						]
+							.map((message, index) => {
+								return index === 0 ? message : `   ${message}`;
+							})
+							.join("\n"),
 						{
 							label: `${item.filename} (took ${item.elapsedTime}ms)`,
 							type: "information",
@@ -91,4 +88,10 @@ const computeBundleSize = async (buildOutput: BuildItemOutput[]) => {
 	};
 
 	return Promise.all(buildOutput.map(async (item) => computeFileSize(item)));
+};
+
+const formatSize = (bytes: number) => {
+	const kiloBytes = bytes / 1000;
+
+	return kiloBytes < 1 ? `${bytes} B` : `${kiloBytes.toFixed(2)} kB`;
 };

@@ -63,7 +63,7 @@
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-node-externals": "^7.1.3",
 		"rollup-plugin-swc3": "^0.12.1",
-		"termost": "^0.17.0"
+		"termost": "^0.18.0"
 	},
 	"devDependencies": {
 		"@types/node": "22.8.5"
