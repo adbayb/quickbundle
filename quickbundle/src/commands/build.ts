@@ -5,10 +5,8 @@ import type { Termost } from "termost";
 import { build } from "../bundler/build";
 import type { BuildItemOutput } from "../bundler/build";
 import { createConfigurations } from "../bundler/config";
-import { readFile } from "../helpers";
-
-import { createCommand } from "./createCommand";
-import type { CreateCommandContext } from "./createCommand";
+import { createCommand, readFile } from "../helpers";
+import type { CreateCommandContext } from "../helpers";
 
 type LogInput = BuildItemOutput & {
 	compressedSize: number;
@@ -22,7 +20,7 @@ type BuildCommandContext = CreateCommandContext<{
 }>;
 
 export const createBuildCommand = (program: Termost) => {
-	createCommand<BuildCommandContext>(program, {
+	return createCommand<BuildCommandContext>(program, {
 		name: "build",
 		description: "Build the source code (production mode)",
 	})
@@ -34,6 +32,7 @@ export const createBuildCommand = (program: Termost) => {
 					createConfigurations({
 						minification: context.minification,
 						sourceMaps: context.sourceMaps,
+						standalone: false,
 					}),
 				);
 			},

@@ -17,9 +17,11 @@ const require = createRequire(import.meta.url);
 const PKG = require(join(CWD, "./package.json")) as PackageJson;
 
 type PackageJson = {
+	bin?: Record<string, string> | string;
 	exports?: BuildableExport | Record<string, BuildableExport | string>;
 	main?: string;
 	module?: string;
+	source?: string;
 	types?: string;
 };
 
@@ -36,15 +38,17 @@ export type Configuration = RollupOptions;
 type Options = {
 	minification: boolean;
 	sourceMaps: boolean;
+	standalone: boolean;
 };
 
 export const createConfigurations = (
 	options: Options = {
 		minification: false,
 		sourceMaps: false,
+		standalone: false,
 	},
 ): Configuration[] => {
-	return getBuildableExports().flatMap((buildableExport) => {
+	return getBuildableExports(options).flatMap((buildableExport) => {
 		return [
 			buildableExport.source &&
 				createMainConfig(
@@ -64,9 +68,29 @@ export const createConfigurations = (
 	});
 };
 
-const getBuildableExports = () => {
+const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
+	if (standalone) {
+		/**
+		 * Entry-point resolution invariants for standalone target (mostly binaries).
+		 */
+		if (!PKG.source || !PKG.bin) {
+			throw new Error(
+				"Invalid package entry points contract. Standalone compilation is enabled but required fields `source` and/or `bin` are missing. Make sure to set them.",
+			);
+		}
+
+		const bin = PKG.bin;
+
+		return isRecord(bin)
+			? Object.entries(bin).map((data) => ({
+					require: data[1],
+					source: data[0],
+				}))
+			: [{ require: bin, source: PKG.source }];
+	}
+
 	/**
-	 * Entry-point resolution:
+	 * Entry-point resolution invariants for non-standalone target (mostly libraries):
 	 * Following the [package entry-point specification](https://nodejs.org/api/packages.html#package-entry-points),
 	 * whenever an export object is defined, it take precedence over other classical entry-point fields
 	 * (such as main, module, and types defined at the root package.json level).
@@ -180,6 +204,7 @@ const createMainConfig = (
 		entryPoints.require && {
 			file: entryPoints.require,
 			format: "cjs",
+			inlineDynamicImports: Boolean(options.standalone),
 			sourcemap: sourceMaps,
 		},
 		esmInput && {
