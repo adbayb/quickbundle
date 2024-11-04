@@ -1,8 +1,10 @@
-import { watch as rollupWatch } from "rollup";
-import { helpers } from "termost";
+import process from "node:process";
 
-import type { Configuration } from "./config";
+import { helpers } from "termost";
+import { watch as rollupWatch } from "rollup";
+
 import { onLog } from "./helpers";
+import type { Configuration } from "./config";
 
 export const watch = (configurations: Configuration[]) => {
 	process.env.NODE_ENV ??= "development";
@@ -46,11 +48,12 @@ export const watch = (configurations: Configuration[]) => {
 			case "ERROR": {
 				const { error } = event;
 
-				clearLog(`${String(error)}`, { type: "error" });
+				clearLog(error.message, { type: "error" });
 				console.error("\n", error);
 
 				return;
 			}
+			case "BUNDLE_START":
 			default:
 				break;
 		}

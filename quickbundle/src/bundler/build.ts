@@ -1,7 +1,9 @@
+import process from "node:process";
+
 import { rollup } from "rollup";
 
-import type { Configuration } from "./config";
 import { onLog } from "./helpers";
+import type { Configuration } from "./config";
 
 export type BuildItemOutput = { elapsedTime: number; filename: string };
 
@@ -44,7 +46,9 @@ export const build = async (configurations: Configuration[]) => {
 									filename: outputFilename,
 								});
 							})
-							.catch(reject);
+							.catch((reason: unknown) => {
+								reject(reason as Error);
+							});
 					}),
 				);
 			}

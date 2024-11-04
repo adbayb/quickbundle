@@ -1,3 +1,3 @@
-declare const image: string;
+declare const imageGif: string;
 
-export default image;
+export default imageGif;

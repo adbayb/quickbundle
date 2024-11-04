@@ -1,10 +1,8 @@
-#!/usr/bin/env node
-
 import { termost } from "termost";
 import type { Termost } from "termost";
 
-import { createBuildCommand } from "./commands/build";
 import { createWatchCommand } from "./commands/watch";
+import { createBuildCommand } from "./commands/build";
 
 const createProgram = (...commandBuilders: ((program: Termost) => void)[]) => {
 	const program = termost(

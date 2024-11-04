@@ -1,3 +1,3 @@
-declare const image: string;
+declare const imageJpeg: string;
 
-export default image;
+export default imageJpeg;

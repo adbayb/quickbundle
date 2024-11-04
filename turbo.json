@@ -6,12 +6,17 @@
 			"cache": true,
 			"outputs": ["dist/**"]
 		},
+		"start": {
+			"dependsOn": ["build"],
+			"cache": false,
+			"persistent": true
+		},
 		"watch": {
 			"dependsOn": ["^build"],
 			"cache": false,
 			"persistent": true
 		},
-		"start": {
+		"test": {
 			"dependsOn": ["build"],
 			"cache": false,
 			"persistent": true

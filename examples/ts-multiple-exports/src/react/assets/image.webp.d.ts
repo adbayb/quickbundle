@@ -1,3 +1,3 @@
-declare const image: string;
+declare const imageWebp: string;
 
-export default image;
+export default imageWebp;

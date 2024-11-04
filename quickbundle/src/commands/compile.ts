@@ -1,14 +1,13 @@
 import type { Termost } from "termost";
 
-import { build } from "../bundler/build";
 import { createConfigurations } from "../bundler/config";
+import { build } from "../bundler/build";
 
 export const createCompileCommand = (program: Termost) => {
 	return program
 		.command({
 			name: "compile",
-			description:
-				"Compiles the source code into a self-contained executable",
+			description: "Compiles the source code into a self-contained executable",
 		})
 		.task({
 			async handler() {

@@ -1,16 +1,24 @@
-import { existsSync } from "node:fs";
+import { dirname } from "node:path";
 import {
 	readFile as fsReadFile,
 	writeFile as fsWriteFile,
 	mkdir,
 } from "node:fs/promises";
-import { dirname } from "node:path";
+import { existsSync } from "node:fs";
+
 import type { Termost } from "termost";
 
 import { CWD } from "./constants";
 
-// TS assertion not working properly with arrow function
-// @see: https://github.com/microsoft/TypeScript/issues/34523
+/**
+ * TS assertion not working properly with arrow function.
+ * @param condition - The passing condition.
+ * @param message - The message to display if error is thrown.
+ * @throws
+ * @see https://github.com/microsoft/TypeScript/issues/34523
+ * @example
+ * 	assert(isValidTitle, "The title is not valid. Make sure to...");
+ */
 export function assert(condition: unknown, message: string): asserts condition {
 	if (!condition) {
 		throw new Error(message);

@@ -1,3 +1,3 @@
-declare const image: string;
+declare const imageSvg: string;
 
-export default image;
+export default imageSvg;

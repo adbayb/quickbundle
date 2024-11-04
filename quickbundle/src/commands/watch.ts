@@ -1,8 +1,8 @@
 import type { Termost } from "termost";
 
-import { createConfigurations } from "../bundler/config";
-import { watch } from "../bundler/watch";
 import { createCommand } from "../helpers";
+import { watch } from "../bundler/watch";
+import { createConfigurations } from "../bundler/config";
 
 export const createWatchCommand = (program: Termost) => {
 	return createCommand(program, {

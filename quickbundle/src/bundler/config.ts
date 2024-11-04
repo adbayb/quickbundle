@@ -1,16 +1,16 @@
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
-import url from "@rollup/plugin-url";
-import { createRequire } from "node:module";
 import { join } from "node:path";
-import type { InputPluginOption, RollupOptions } from "rollup";
-import dts from "rollup-plugin-dts";
-import externals from "rollup-plugin-node-externals";
+import { createRequire } from "node:module";
+
 import { swc } from "rollup-plugin-swc3";
+import externals from "rollup-plugin-node-externals";
+import dts from "rollup-plugin-dts";
+import type { InputPluginOption, RollupOptions } from "rollup";
+import url from "@rollup/plugin-url";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
+import commonjs from "@rollup/plugin-commonjs";
 
 import { CWD } from "../constants";
-
 import { isRecord } from "./helpers";
 
 const require = createRequire(import.meta.url);
@@ -130,12 +130,10 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 			const [exportField, exportValue] = currentExport;
 			const conditionalExportFields = Object.keys(exportValue);
 
-			if (!conditionalExportFields.includes("source"))
-				return buildableExports;
+			if (!conditionalExportFields.includes("source")) return buildableExports;
 
 			const hasAtLeastOneRequiredField = buildableExportFields.some(
-				(entryPointField) =>
-					conditionalExportFields.includes(entryPointField),
+				(entryPointField) => conditionalExportFields.includes(entryPointField),
 			);
 
 			if (hasAtLeastOneRequiredField) {
@@ -252,5 +250,4 @@ const createTypesConfig = (
 	};
 };
 
-// eslint-disable-next-line import/no-default-export
 export default createConfigurations();

@@ -1,12 +1,12 @@
-import { gzipSize } from "gzip-size";
 import { helpers } from "termost";
 import type { Termost } from "termost";
+import { gzipSize } from "gzip-size";
 
-import { build } from "../bundler/build";
-import type { BuildItemOutput } from "../bundler/build";
-import { createConfigurations } from "../bundler/config";
 import { createCommand, readFile } from "../helpers";
 import type { CreateCommandContext } from "../helpers";
+import { createConfigurations } from "../bundler/config";
+import { build } from "../bundler/build";
+import type { BuildItemOutput } from "../bundler/build";
 
 type LogInput = BuildItemOutput & {
 	compressedSize: number;
