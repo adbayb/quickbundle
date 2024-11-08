@@ -4,13 +4,13 @@ import { gzipSize } from "gzip-size";
 
 import { createCommand, readFile } from "../helpers";
 import type { CreateCommandContext } from "../helpers";
-import { createConfigurations } from "../bundler/config";
+import { createConfiguration } from "../bundler/config";
 import { build } from "../bundler/build";
 import type { BuildItemOutput } from "../bundler/build";
 
 type LogInput = BuildItemOutput & {
 	compressedSize: number;
-	filename: string;
+	filePath: string;
 	rawSize: number;
 };
 
@@ -29,7 +29,7 @@ export const createBuildCommand = (program: Termost) => {
 			label: "Bundle assets 📦",
 			async handler(context) {
 				return build(
-					createConfigurations({
+					createConfiguration({
 						minification: context.minification,
 						sourceMaps: context.sourceMaps,
 						standalone: false,
@@ -60,7 +60,7 @@ export const createBuildCommand = (program: Termost) => {
 							})
 							.join("\n"),
 						{
-							label: `${item.filename} (took ${item.elapsedTime}ms)`,
+							label: `${item.filePath} (took ${item.elapsedTime}ms)`,
 							type: "information",
 						},
 					);
@@ -76,7 +76,7 @@ const computeBundleSize = async (buildOutput: BuildItemOutput[]) => {
 	const computeFileSize = async (
 		buildItemOutput: BuildItemOutput,
 	): Promise<LogInput> => {
-		const content = await readFile(buildItemOutput.filename);
+		const content = await readFile(buildItemOutput.filePath);
 		const gzSize = await gzipSize(content);
 
 		return {

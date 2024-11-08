@@ -1,0 +1,21 @@
+{
+	"name": "@examples/multiple-standalones",
+	"private": true,
+	"type": "module",
+	"source": "./src/index.ts",
+	"bin": {
+		"standaloneA": "./dist/standaloneA.cjs",
+		"standaloneB": "./dist/standaloneB.js"
+	},
+	"scripts": {
+		"build": "quickbundle compile",
+		"watch": "pnpm build"
+	},
+	"dependencies": {
+		"ora": "^8.1.1"
+	},
+	"devDependencies": {
+		"quickbundle": "workspace:*",
+		"@types/node": "22.9.0"
+	}
+}

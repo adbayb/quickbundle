@@ -17,6 +17,7 @@ const require = createRequire(import.meta.url);
 const PKG = require(join(CWD, "./package.json")) as PackageJson;
 
 type PackageJson = {
+	name?: string;
 	bin?: Record<string, string> | string;
 	exports?: BuildableExport | Record<string, BuildableExport | string>;
 	main?: string;
@@ -26,6 +27,7 @@ type PackageJson = {
 };
 
 type BuildableExport = {
+	bin?: string;
 	default?: string;
 	import?: string;
 	require?: string;
@@ -33,60 +35,86 @@ type BuildableExport = {
 	types?: string;
 };
 
-export type Configuration = RollupOptions;
-
 type Options = {
 	minification: boolean;
 	sourceMaps: boolean;
 	standalone: boolean;
 };
 
-export const createConfigurations = (
+type ConfigurationItem = RollupOptions;
+
+export type Configuration = {
+	data: ConfigurationItem[];
+	metadata: BuildableExport[];
+};
+
+export const createConfiguration = (
 	options: Options = {
 		minification: false,
 		sourceMaps: false,
 		standalone: false,
 	},
-): Configuration[] => {
-	return getBuildableExports(options).flatMap((buildableExport) => {
-		return [
-			buildableExport.source &&
-				createMainConfig(
-					{
-						...buildableExport,
-						source: buildableExport.source,
-					},
-					options,
-				),
-			buildableExport.source &&
-				buildableExport.types &&
-				createTypesConfig({
-					source: buildableExport.source,
-					types: buildableExport.types,
-				}),
-		].filter(Boolean) as Configuration;
-	});
+): Configuration => {
+	const buildableExports = getBuildableExports(options);
+
+	return {
+		data: buildableExports.flatMap((buildableExport) => {
+			return [
+				buildableExport.source &&
+					createMainConfig(
+						{
+							...buildableExport,
+							source: buildableExport.source,
+						},
+						options,
+					),
+				buildableExport.source &&
+					buildableExport.types &&
+					createTypesConfig(
+						{
+							source: buildableExport.source,
+							types: buildableExport.types,
+						},
+						options,
+					),
+			].filter(Boolean) as Configuration["data"];
+		}),
+		metadata: buildableExports,
+	};
 };
 
+// eslint-disable-next-line sonarjs/cyclomatic-complexity
 const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	if (standalone) {
 		/**
 		 * Entry-point resolution invariants for standalone target (mostly binaries).
 		 */
-		if (!PKG.source || !PKG.bin) {
+		if (!PKG.source || !PKG.bin || !PKG.name) {
 			throw new Error(
-				"Invalid package entry points contract. Standalone compilation is enabled but required fields `source` and/or `bin` are missing. Make sure to set them.",
+				"Invalid package entry points contract. Standalone compilation is enabled but required fields are missing. Make sure to set `name`, `source`, and `bin` fields.",
 			);
 		}
 
 		const bin = PKG.bin;
+		const name = PKG.name;
+		const source = PKG.source;
 
-		return isRecord(bin)
-			? Object.entries(bin).map((data) => ({
-					require: data[1],
-					source: data[0],
-				}))
-			: [{ require: bin, source: PKG.source }];
+		if (isRecord(bin)) {
+			return Object.entries(bin).map((data) => ({
+				bin: data[0],
+				require: data[1],
+				source,
+			}));
+		}
+
+		return [
+			{
+				// For scoped packages and if the `bin` is defined with a string value, the [scope name is discarded](the scope name is discarded when creating a binary) when creating a binary.
+				bin: name.replace(/^(@.*?\/)/, ""),
+				require: bin,
+				source,
+			},
+		];
 	}
 
 	/**
@@ -95,7 +123,7 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	 * whenever an export object is defined, it take precedence over other classical entry-point fields
 	 * (such as main, module, and types defined at the root package.json level).
 	 */
-	if (PKG.main ?? PKG.module ?? PKG.types ?? !PKG.exports) {
+	if (PKG.main || PKG.module || PKG.types || !PKG.exports) {
 		throw new Error(
 			"Invalid package entry points contract. Use the recommended [`exports` field](https://nodejs.org/api/packages.html#package-entry-points) instead and, for TypeScript-based projects, update the `tsconfig.json` file to resolve it properly (`moduleResolution` must be set to `Bundler` (or `NodeNext`)).",
 		);
@@ -158,24 +186,25 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	return output;
 };
 
-const getPlugins = (...customPlugins: InputPluginOption[]) => {
+const getPlugins = (customPlugins: InputPluginOption[], options: Options) => {
 	return [
-		externals({
-			builtins: true,
-			deps: true,
-			/**
-			 * As they're not installed consumer side, `devDependencies` are declared as internal dependencies (via the `false` value)
-			 * and bundled into the dist if and only if imported and not listed as `peerDependencies` (otherwise, they're considered external).
-			 */
-			devDeps: false,
-			optDeps: true,
-			peerDeps: true,
-		}),
+		!options.standalone &&
+			externals({
+				builtins: true,
+				deps: true,
+				/**
+				 * As they're not installed consumer side, `devDependencies` are declared as internal dependencies (via the `false` value)
+				 * and bundled into the dist if and only if imported and not listed as `peerDependencies` (otherwise, they're considered external).
+				 */
+				devDeps: false,
+				optDeps: true,
+				peerDeps: true,
+			}),
 		commonjs(),
 		url(),
 		json(),
 		...customPlugins,
-	];
+	].filter(Boolean);
 };
 
 const createMainConfig = (
@@ -184,7 +213,7 @@ const createMainConfig = (
 	> &
 		Required<Pick<BuildableExport, "source">>,
 	options: Options,
-): Configuration => {
+): ConfigurationItem => {
 	const { minification, sourceMaps } = options;
 	const esmInput = entryPoints.import ?? entryPoints.default;
 
@@ -210,44 +239,49 @@ const createMainConfig = (
 			format: "es",
 			sourcemap: sourceMaps,
 		},
-	].filter(Boolean) as NonNullable<Configuration["output"]>;
+	].filter(Boolean) as NonNullable<ConfigurationItem["output"]>;
 
 	return {
 		input: entryPoints.source,
 		output,
 		plugins: getPlugins(
-			nodeResolve(),
-			swc({
-				minify: minification,
-				sourceMaps,
-			}),
+			[
+				nodeResolve(),
+				swc({
+					minify: minification,
+					sourceMaps,
+				}),
+			],
+			options,
 		),
 	};
 };
 
 const createTypesConfig = (
 	entryPoints: Required<Pick<BuildableExport, "source" | "types">>,
-): Configuration => {
+	options: Options,
+): ConfigurationItem => {
 	return {
 		input: entryPoints.source,
 		output: [{ file: entryPoints.types }],
 		plugins: getPlugins(
-			nodeResolve({
-				/**
-				 * The `exports` conditional fields definition order is important in the `package.json file`.
-				 * To be resolved first, `types` field must always come first in the package.json exports definition.
-				 * @see https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#package-json-exports-imports-and-self-referencing.
-				 */
-				exportConditions: ["types"],
-			}),
-			dts({
-				compilerOptions: {
-					incremental: false,
-				},
-				respectExternal: true,
-			}),
+			[
+				nodeResolve({
+					/**
+					 * The `exports` conditional fields definition order is important in the `package.json file`.
+					 * To be resolved first, `types` field must always come first in the package.json exports definition.
+					 * @see https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#package-json-exports-imports-and-self-referencing.
+					 */
+					exportConditions: ["types"],
+				}),
+				dts({
+					compilerOptions: {
+						incremental: false,
+					},
+					respectExternal: true,
+				}),
+			],
+			options,
 		),
 	};
 };
-
-export default createConfigurations();

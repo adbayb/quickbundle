@@ -2,7 +2,7 @@ import type { Termost } from "termost";
 
 import { createCommand } from "../helpers";
 import { watch } from "../bundler/watch";
-import { createConfigurations } from "../bundler/config";
+import { createConfiguration } from "../bundler/config";
 
 export const createWatchCommand = (program: Termost) => {
 	return createCommand(program, {
@@ -11,7 +11,7 @@ export const createWatchCommand = (program: Termost) => {
 	}).task({
 		handler(context) {
 			watch(
-				createConfigurations({
+				createConfiguration({
 					minification: context.minification,
 					sourceMaps: context.sourceMaps,
 					standalone: false,

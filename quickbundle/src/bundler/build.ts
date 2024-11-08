@@ -5,11 +5,12 @@ import { rollup } from "rollup";
 import { onLog } from "./helpers";
 import type { Configuration } from "./config";
 
-export type BuildItemOutput = { elapsedTime: number; filename: string };
+export type BuildItemOutput = { elapsedTime: number; filePath: string };
 
-export const build = async (configurations: Configuration[]) => {
+export const build = async (input: Configuration) => {
 	process.env.NODE_ENV ??= "production";
 
+	const { data: configurations } = input;
 	const output: BuildItemOutput[] = [];
 
 	for (const config of configurations) {
@@ -28,9 +29,9 @@ export const build = async (configurations: Configuration[]) => {
 			const promises: Promise<BuildItemOutput>[] = [];
 
 			for (const outputEntry of outputEntries) {
-				const outputFilename = outputEntry.file ?? outputEntry.dir;
+				const outputFilePath = outputEntry.file ?? outputEntry.dir;
 
-				if (!outputFilename) {
+				if (!outputFilePath) {
 					throw new Error(
 						"Misconfigured file entry point. Make sure to define an `import`, `require`, or `default` field.",
 					);
@@ -43,7 +44,7 @@ export const build = async (configurations: Configuration[]) => {
 							.then(() => {
 								resolve({
 									elapsedTime: Date.now() - initialTime,
-									filename: outputFilename,
+									filePath: outputFilePath,
 								});
 							})
 							.catch((reason: unknown) => {

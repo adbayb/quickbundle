@@ -11,21 +11,26 @@
 Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy** way:
 
 - Fast build and watch mode powered by Rollup[^1] and SWC[^2].
+- Compile mode to create standalone binaries for systems that do not have Node.js installed[^3].
 - Zero configuration: define the build artifacts in your `package.json`, and you're all set!
 - Support of `cjs` & `esm` module formats output.
 - Support of several loaders including JavaScript, TypeScript, JSX, JSON, and Images.
 - TypeScript's declaration file (`.d.ts`) bundling.
-- Automatic dependency inclusion (`peerDependencies` and `dependencies` are not bundled in the final output, `devDependencies` are unless they're not imported).
+- Automatic dependency inclusion:
+  - For the build and watch mode, `peerDependencies` and `dependencies` are not bundled in the final output, `devDependencies` are unless they're not imported.
+  - For the compile mode, all dependencies are included to make the code standalone.
 
 [^1]: A [module bundler](https://rollupjs.org/) optimized for better tree-shaking processing and seamless interoperability of CommonJS and ESM formats with minimal code footprint.
 
 [^2]: A [TypeScript / JavaScript transpiler](https://swc.rs/) for quicker code processing including TypeScript transpilation, JavaScript transformation, and, minification.
 
+[^3]: It relies on the [Node.js single executable applications feature](https://nodejs.org/api/single-executable-applications.html).
+
 <br>
 
 ## 🚀 Quick Start
 
-1️⃣ Install by running:
+### 1️⃣ Install
 
 ```bash
 # Npm
@@ -36,7 +41,9 @@ pnpm add quickbundle
 yarn add quickbundle
 ```
 
-2️⃣ Set up your package configuration (`package.json`):
+### 2️⃣ Update your package configuration (`package.json`)
+
+#### For building libraries
 
 - When exporting exclusively ESM format:
 
@@ -53,8 +60,8 @@ yarn add quickbundle
 		},
 		"./otherModulePath": {
 			// ...
-		}
-	}
+		},
+	},
 	"scripts": {
 		"build": "quickbundle build", // Production mode (optimizes bundle)
 		"watch": "quickbundle watch", // Development mode (watches each file change)
@@ -63,7 +70,10 @@ yarn add quickbundle
 }
 ```
 
-- When exporting both CommonJS (CJS) and ECMAScript Modules (ESM) format (please be aware of [dual package hazard risk](https://nodejs.org/api/packages.html#dual-package-hazard)):
+- When exporting both CommonJS (CJS) and ECMAScript Modules (ESM) format:
+
+> [!warning]
+> Please be aware of [dual-package-hazard-related risks](https://github.com/nodejs/package-examples?tab=readme-ov-file#dual-package-hazard) first.
 
 ```jsonc
 {
@@ -80,8 +90,8 @@ yarn add quickbundle
 		},
 		"./otherModulePath": {
 			// ...
-		}
-	}
+		},
+	},
 	"scripts": {
 		"build": "quickbundle build", // Production mode (optimizes bundle)
 		"watch": "quickbundle watch", // Development mode (watches each file change)
@@ -90,7 +100,30 @@ yarn add quickbundle
 }
 ```
 
-3️⃣ Try it by running:
+#### For compiling executables
+
+> [!warning]
+> The `compile` command relies on the [Node.js SEA (Single Executable Applications feature)](https://nodejs.org/api/single-executable-applications.html). This feature comes with some limitations which Quickbundle attempts to address:
+>
+> - The source code must not rely on [external dependencies](https://github.com/nodejs/single-executable/discussions/70) 🛑. To partially address this, Quickbundle bundles all dependencies (whatever their types, as long as they're used) and inline dynamic imports by default ✅.
+> - The bundled code must use the CommonJS module system 🛑. To address this, Quickbundle always outputs CJS modules in compile mode ✅.
+
+```jsonc
+{
+	"name": "lib", // Package name
+	"source": "./src/index.ts", // Source code entry point. Make sure that it starts with `#!/usr/bin/env node` pragme to make the binary portable for consumers who would like to use it by installing the package instead of using the generated standalone executable.
+	"bin": {
+		"your-binary-name": "./dist/index.cjs", // Binary information to get the executable name from the key and, from the value, the bundled file to generate from the source code and inject into the executable. The generated executable will be located in the same folder as the bundled file and, dependending on the current operating system running the `compile` command, the executable will be named either `your-binary-name.exe` on Windows or `your-binary-name` on Linux and macOS.
+	},
+	// "bin": "./dist/index.cjs", // Or, if the binary name follows the package name, you can define a string-based `bin` value.
+	"scripts": {
+		"build": "quickbundle compile",
+	},
+	// ...
+}
+```
+
+### 3️⃣ Try it
 
 ```bash
 # Npm
