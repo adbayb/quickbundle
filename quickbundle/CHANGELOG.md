@@ -1,5 +1,13 @@
 # quickbundle
 
+## 2.7.0
+
+### Minor Changes
+
+- [`71fed0b`](https://github.com/adbayb/quickbundle/commit/71fed0b71441e34ac6e49358c10b888c236810e6) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies including rollup and swc.
+
+- [`bc06d62`](https://github.com/adbayb/quickbundle/commit/bc06d6251f5af6e33c73cb7e28a8b3e713d3de76) Thanks [@adbayb](https://github.com/adbayb)! - Add `compile` command to build standalone executables.
+
 ## 2.6.0
 
 ### Minor Changes
