@@ -173,6 +173,12 @@ Enabling source map generation is needed only if a build is [obfuscated (minifie
 
 <br>
 
+## ☑️ Roadmap
+
+- [ ] Support cross compilation to other platforms (ala [Bun](https://bun.sh/docs/bundler/executables#cross-compile-to-other-platforms)). For now, Quickbundle only supports local compilation (i.e. generate executables compatible only with machines running the same operating system / architecture). Action: add a `--target` flag to specify a different operating system compilation target than the machine running the command.
+
+<br>
+
 ## 🤩 Used by
 
 - [@adbayb/stack](https://github.com/adbayb/stack) My opinionated toolbox for JavaScript/TypeScript projects.
@@ -195,3 +201,5 @@ We're open to new contributions, you can find more details [here](./CONTRIBUTING
 ## 📖 License
 
 [MIT](./LICENSE "License MIT").
+
+<br>
