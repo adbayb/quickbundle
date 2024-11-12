@@ -1,8 +1,21 @@
 #!/usr/bin/env node
 
+import process from "node:process";
+
 import ora from "ora";
 
-console.info("A standalone program");
+console.info("Hello world\n");
+
+console.debug(
+	"Debug information",
+	JSON.stringify(
+		{
+			embeddedNodeVersion: process.version,
+		},
+		null,
+		2,
+	),
+);
 
 const spinner = ora("Fake processing").start();
 
@@ -12,5 +25,4 @@ const sleep = async (duration = 3000) => {
 
 void sleep().then(() => {
 	spinner.stop();
-	console.info("End processing");
 });

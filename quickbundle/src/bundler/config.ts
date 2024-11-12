@@ -1,4 +1,3 @@
-import { join } from "node:path";
 import { createRequire } from "node:module";
 
 import { swc } from "rollup-plugin-swc3";
@@ -10,11 +9,14 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import commonjs from "@rollup/plugin-commonjs";
 
-import { CWD } from "../constants";
+import { resolveFromExternalDirectory } from "../helpers";
 import { isRecord } from "./helpers";
 
 const require = createRequire(import.meta.url);
-const PKG = require(join(CWD, "./package.json")) as PackageJson;
+
+const PKG = require(
+	resolveFromExternalDirectory("package.json"),
+) as PackageJson;
 
 type PackageJson = {
 	name?: string;

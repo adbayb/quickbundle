@@ -10,9 +10,9 @@
 
 Quickbundle allows you to bundle a library in a **quick**, **fast** and **easy** way:
 
-- Fast build and watch mode powered by Rollup[^1] and SWC[^2].
-- Compile mode to create standalone binaries for systems that do not have Node.js installed[^3].
 - Zero configuration: define the build artifacts in your `package.json`, and you're all set!
+- Fast build and watch mode powered by Rollup[^1] and SWC[^2].
+- Compile and cross compile standalone executables for systems that do not have Node.js installed[^3].
 - Support of `cjs` & `esm` module formats output.
 - Support of several loaders including JavaScript, TypeScript, JSX, JSON, and Images.
 - TypeScript's declaration file (`.d.ts`) bundling.
@@ -113,7 +113,7 @@ yarn add quickbundle
 	"name": "lib", // Package name
 	"source": "./src/index.ts", // Source code entry point. Make sure that it starts with `#!/usr/bin/env node` pragme to make the binary portable for consumers who would like to use it by installing the package instead of using the generated standalone executable.
 	"bin": {
-		"your-binary-name": "./dist/index.cjs", // Binary information to get the executable name from the key and, from the value, the bundled file to generate from the source code and inject into the executable. The generated executable will be located in the same folder as the bundled file and, dependending on the current operating system running the `compile` command, the executable will be named either `your-binary-name.exe` on Windows or `your-binary-name` on Linux and macOS.
+		"your-binary-name": "./dist/index.cjs", // Binary information to get the executable name from the key and, from the value, the bundled file to generate from the source code and inject into the executable. The generated executable will be located in the same folder as the bundled file and, by default, dependending on the current operating system running the `compile` command, the executable will be named either `your-binary-name.exe` on Windows or `your-binary-name` on Linux and macOS. For cross-compilation output, check the `Patterns` section.
 	},
 	// "bin": "./dist/index.cjs", // Or, if the binary name follows the package name, you can define a string-based `bin` value.
 	"scripts": {
@@ -171,11 +171,23 @@ quickbundle watch --source-maps
 
 Enabling source map generation is needed only if a build is [obfuscated (minified)](#optimize-the-build-output) for debugging-easing purposes. It generally pairs with the [`minification` flag](#optimize-the-build-output).
 
-<br>
+### Cross compilation to other platforms
 
-## ☑️ Roadmap
+By default, the `compile` command embeds the runtime at the origin of its execution which means it generates executables compatible only with machines running the same operating system, processor architecture, and Node.js version.
 
-- [ ] Support cross compilation to other platforms (ala [Bun](https://bun.sh/docs/bundler/executables#cross-compile-to-other-platforms)). For now, Quickbundle only supports local compilation (i.e. generate executables compatible only with machines running the same operating system / architecture). Action: add a `--target` flag to specify a different operating system compilation target than the machine running the command.
+However, Quickbundle provides the ability to target a different operating system, processor architecture, or Node.js version (also known as cross-compilation):
+
+```bash
+quickbundle compile --target node-v23.1.0-darwin-arm64 # Embeds Node v23 runtime built for macOS ARM64 target
+quickbundle compile --target node-v23.1.0-darwin-x64 # Embeds Node v23 runtime built for macOS X64 target
+quickbundle compile --target node-v23.1.0-linux-arm64 # Embeds Node v23 runtime built for Linux ARM64 target
+quickbundle compile --target node-v23.1.0-linux-x64 # Embeds Node v23 runtime built for Linux X64 target
+quickbundle compile --target node-v23.1.0-win-arm64 # Embeds Node v23 runtime built for Windows ARM64 target
+quickbundle compile --target node-v23.1.0-win-x64 # Embeds Node v23 runtime built for Windows X64 target
+```
+
+> [!note]
+> The target input must follow the `node-vx.y.z-(darwin|linux|win)-(arm64|x64|x86)` format (for an exhaustive view, check available filenames in [https://nodejs.org/download/release/vx.y.z](https://nodejs.org/download/release/latest/)).
 
 <br>
 

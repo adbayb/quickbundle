@@ -1,18 +1,32 @@
-import { basename, dirname, resolve } from "node:path";
+import process from "node:process";
+import { basename, dirname, join, resolve } from "node:path";
 import os from "node:os";
-import { rm, writeFile } from "node:fs/promises";
 
 import { helpers } from "termost";
 import type { Termost } from "termost";
 
+import {
+	copyFile,
+	createRegExpMatcher,
+	download,
+	removePath,
+	resolveFromInternalDirectory,
+	unzip,
+	writeFile,
+} from "../helpers";
 import { createConfiguration } from "../bundler/config";
 import type { Configuration } from "../bundler/config";
 import { build } from "../bundler/build";
 
 type CompileCommandContext = {
 	config: Configuration;
-	osType: "linux" | "macos" | "windows";
+	osType: OsType;
+	targetInput: string;
 };
+
+const TEMPORARY_PATH = resolveFromInternalDirectory("dist", "tmp");
+const TEMPORARY_DOWNLOAD_PATH = join(TEMPORARY_PATH, "zip");
+const TEMPORARY_RUNTIME_PATH = join(TEMPORARY_PATH, "runtime");
 
 export const createCompileCommand = (program: Termost) => {
 	return program
@@ -20,18 +34,14 @@ export const createCompileCommand = (program: Termost) => {
 			name: "compile",
 			description: "Compiles the source code into a self-contained executable",
 		})
-		.task({
-			key: "osType",
-			label: "Get context",
-			handler() {
-				const type = os.type();
-
-				return type === "Windows_NT"
-					? "windows"
-					: type === "Darwin"
-						? "macos"
-						: "linux";
+		.option({
+			key: "targetInput",
+			name: {
+				long: "target",
+				short: "t",
 			},
+			description: "Set a different cross-compilation target",
+			defaultValue: "local",
 		})
 		.task({
 			key: "config",
@@ -42,6 +52,51 @@ export const createCompileCommand = (program: Termost) => {
 					sourceMaps: false,
 					standalone: true,
 				});
+			},
+		})
+		.task({
+			key: "osType",
+			label({ targetInput }) {
+				return `Get \`${targetInput}\` runtime`;
+			},
+			async handler({ targetInput }) {
+				if (targetInput === "local") {
+					await copyFile(process.execPath, TEMPORARY_RUNTIME_PATH);
+
+					return getOsType(os.type());
+				}
+
+				const matchedRuntimeParts = matchRuntimeParts(targetInput);
+
+				if (!matchedRuntimeParts) {
+					throw new Error(
+						"Invalid `runtime` flag input. The accepted targets are the one listed in https://nodejs.org/download/release/ with the following format `node-vx.y.z-(darwin|linux|win)-(arm64|x64|x86)`.",
+					);
+				}
+
+				const osType = getOsType(matchedRuntimeParts.os);
+				const extension = osType === "windows" ? "zip" : "tar.gz";
+
+				await download(
+					`https://nodejs.org/download/release/${matchedRuntimeParts.version}/${targetInput}.${extension}`,
+					TEMPORARY_DOWNLOAD_PATH,
+				);
+
+				await unzip(
+					{
+						path: TEMPORARY_DOWNLOAD_PATH,
+						targetedArchivePath:
+							osType === "windows"
+								? join(targetInput, "node.exe")
+								: join(targetInput, "bin", "node"),
+					},
+					{
+						directoryPath: dirname(TEMPORARY_RUNTIME_PATH),
+						filename: basename(TEMPORARY_RUNTIME_PATH),
+					},
+				);
+
+				return osType;
 			},
 		})
 		.task({
@@ -74,6 +129,30 @@ export const createCompileCommand = (program: Termost) => {
 			},
 		});
 };
+
+type OsType = "linux" | "macos" | "windows";
+
+const getOsType = (input: string): OsType => {
+	switch (input) {
+		case "Windows_NT":
+		case "win":
+			return "windows";
+		case "Darwin":
+		case "darwin":
+			return "macos";
+		case "Linux":
+		case "linux":
+			return "linux";
+		default:
+			throw new Error(`Unsupported operating system \`${input}\``);
+	}
+};
+
+const matchRuntimeParts = createRegExpMatcher<
+	"architecture" | "os" | "version"
+>(
+	/^node-(?<version>v\d+\.\d+\.\d+)-(?<os>darwin|linux|win)-(?<architecture>arm64|x64|x86)$/,
+);
 
 const compile = async ({
 	bin,
@@ -109,15 +188,12 @@ const compile = async ({
 			useCodeCache: false,
 			useSnapshot: false,
 		}),
-		"utf-8",
 	);
 
-	await Promise.all(
-		[
-			`node --experimental-sea-config ${seaConfigFileName}`,
-			`node -e "require('fs').copyFileSync(process.execPath, '${executableFileName}')"`,
-		].map(async (command) => helpers.exec(command)),
-	);
+	await Promise.all([
+		helpers.exec(`node --experimental-sea-config ${seaConfigFileName}`),
+		copyFile(TEMPORARY_RUNTIME_PATH, executableFileName),
+	]);
 
 	if (osType === "macos") {
 		await helpers.exec(`codesign --remove-signature ${executableFileName}`);
@@ -132,6 +208,8 @@ const compile = async ({
 	}
 
 	await Promise.all(
-		[blobFileName, seaConfigFileName].map(async (file) => rm(file)),
+		[blobFileName, seaConfigFileName, TEMPORARY_PATH].map(async (path) =>
+			removePath(path),
+		),
 	);
 };
