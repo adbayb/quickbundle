@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.8.0
+
+### Minor Changes
+
+- [`3b75337`](https://github.com/adbayb/quickbundle/commit/3b753371b98a5c341324945f1ebd6166d3fed834) Thanks [@adbayb](https://github.com/adbayb)! - Add cross-compilation feature.
+
 ## 2.7.0
 
 ### Minor Changes
