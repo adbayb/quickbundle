@@ -25,16 +25,17 @@ export const watch = (input: Configuration) => {
 			case "START": {
 				startDuration = Date.now();
 
-				clearLog(`Build in progress...`, {
+				clearLog("Build in progress…", {
 					type: "information",
 				});
 
 				return;
 			}
-			case "BUNDLE_END":
+			case "BUNDLE_END": {
 				await event.result.close();
 
 				break;
+			}
 			case "END": {
 				const duration = Date.now() - startDuration;
 
@@ -54,8 +55,9 @@ export const watch = (input: Configuration) => {
 				return;
 			}
 			case "BUNDLE_START":
-			default:
+			default: {
 				break;
+			}
 		}
 	});
 };

@@ -47,8 +47,8 @@ export const build = async (input: Configuration) => {
 									filePath: outputFilePath,
 								});
 							})
-							.catch((reason: unknown) => {
-								reject(reason as Error);
+							.catch((error: unknown) => {
+								reject(error as Error);
 							});
 					}),
 				);

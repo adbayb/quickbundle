@@ -135,16 +135,20 @@ type OsType = "linux" | "macos" | "windows";
 const getOsType = (input: string): OsType => {
 	switch (input) {
 		case "Windows_NT":
-		case "win":
+		case "win": {
 			return "windows";
+		}
 		case "Darwin":
-		case "darwin":
+		case "darwin": {
 			return "macos";
+		}
 		case "Linux":
-		case "linux":
+		case "linux": {
 			return "linux";
-		default:
+		}
+		default: {
 			throw new Error(`Unsupported operating system \`${input}\``);
+		}
 	}
 };
 

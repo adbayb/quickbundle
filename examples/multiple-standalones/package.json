@@ -14,7 +14,7 @@
 		"watch": "pnpm build"
 	},
 	"dependencies": {
-		"ora": "^8.1.1"
+		"picospinner": "^2.0.0"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*",

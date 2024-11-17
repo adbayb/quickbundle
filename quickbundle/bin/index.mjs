@@ -3,6 +3,6 @@
 import { join } from "node:path";
 import { createRequire } from "node:module";
 
-const pkg = createRequire(import.meta.url)("../package.json");
+const package_ = createRequire(import.meta.url)("../package.json");
 
-import(join("..", pkg.exports["."].default));
+import(join("..", package_.exports["."].default));

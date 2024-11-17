@@ -50,12 +50,14 @@ export type Configuration = {
 	metadata: BuildableExport[];
 };
 
+const DEFAULT_OPTIONS: Options = {
+	minification: false,
+	sourceMaps: false,
+	standalone: false,
+};
+
 export const createConfiguration = (
-	options: Options = {
-		minification: false,
-		sourceMaps: false,
-		standalone: false,
-	},
+	options: Options = DEFAULT_OPTIONS,
 ): Configuration => {
 	const buildableExports = getBuildableExports(options);
 

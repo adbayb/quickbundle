@@ -48,11 +48,11 @@ type ImageProps = {
 	readonly src: string;
 };
 
-const Image = (props: ImageProps) => {
+const Image = ({ src }: ImageProps) => {
 	return (
 		<img
 			alt="test"
-			src={props.src}
+			src={src}
 			width="100"
 		/>
 	);

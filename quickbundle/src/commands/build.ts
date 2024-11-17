@@ -61,6 +61,7 @@ export const createBuildCommand = (program: Termost) => {
 							.join("\n"),
 						{
 							label: `${item.filePath} (took ${item.elapsedTime}ms)`,
+							lineBreak: { end: false, start: true },
 							type: "information",
 						},
 					);

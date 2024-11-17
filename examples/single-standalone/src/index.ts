@@ -2,7 +2,7 @@
 
 import process from "node:process";
 
-import ora from "ora";
+import { Spinner } from "picospinner";
 
 console.info("Hello world\n");
 
@@ -17,12 +17,15 @@ console.debug(
 	),
 );
 
-const spinner = ora("Fake processing").start();
+const spinner = new Spinner("Fake processing");
+
+spinner.start();
 
 const sleep = async (duration = 3000) => {
 	return new Promise((resolve) => setTimeout(resolve, duration));
 };
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 void sleep().then(() => {
-	spinner.stop();
+	spinner.succeed("Finished.");
 });

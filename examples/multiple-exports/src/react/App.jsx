@@ -39,11 +39,11 @@ export const App = (props) => {
 	);
 };
 
-const Image = (props) => {
+const Image = ({ src }) => {
 	return (
 		<img
 			alt="test"
-			src={props.src}
+			src={src}
 			width="100"
 		/>
 	);
