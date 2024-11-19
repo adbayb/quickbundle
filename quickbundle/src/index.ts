@@ -9,7 +9,8 @@ import { createBuildCommand } from "./commands/build";
 const createProgram = (...commandBuilders: ((program: Termost) => void)[]) => {
 	const program = termost({
 		name,
-		description: "The zero-configuration transpiler and bundler for the web",
+		description:
+			"The zero-configuration transpiler and bundler for the web",
 		version,
 	});
 

@@ -32,7 +32,8 @@ export const createCompileCommand = (program: Termost) => {
 	return program
 		.command<CompileCommandContext>({
 			name: "compile",
-			description: "Compiles the source code into a self-contained executable",
+			description:
+				"Compiles the source code into a self-contained executable",
 		})
 		.option({
 			key: "targetInput",

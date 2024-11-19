@@ -162,10 +162,12 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 			const [exportField, exportValue] = currentExport;
 			const conditionalExportFields = Object.keys(exportValue);
 
-			if (!conditionalExportFields.includes("source")) return buildableExports;
+			if (!conditionalExportFields.includes("source"))
+				return buildableExports;
 
 			const hasAtLeastOneRequiredField = buildableExportFields.some(
-				(entryPointField) => conditionalExportFields.includes(entryPointField),
+				(entryPointField) =>
+					conditionalExportFields.includes(entryPointField),
 			);
 
 			if (hasAtLeastOneRequiredField) {
