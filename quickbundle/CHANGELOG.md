@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.9.0
+
+### Minor Changes
+
+- [`919d4ea`](https://github.com/adbayb/quickbundle/commit/919d4ea9a53aba699cd88fee5398dea78e739da0) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies including rollup, swc, and termost.
+
 ## 2.8.0
 
 ### Minor Changes
