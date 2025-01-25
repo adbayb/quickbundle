@@ -2,17 +2,6 @@
 	"name": "quickbundle",
 	"version": "2.8.0",
 	"description": "The zero-configuration transpiler and bundler for the web",
-	"author": {
-		"name": "Ayoub Adib",
-		"email": "adbayb@gmail.com",
-		"url": "https://twitter.com/adbayb"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:adbayb/quickbundle.git",
-		"directory": "quickbundle"
-	},
-	"license": "MIT",
 	"keywords": [
 		"library",
 		"bundle",
@@ -25,13 +14,17 @@
 		"swc",
 		"microbundle"
 	],
-	"bin": {
-		"quickbundle": "bin/index.mjs"
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:adbayb/quickbundle.git",
+		"directory": "quickbundle"
 	},
-	"files": [
-		"bin",
-		"dist"
-	],
+	"license": "MIT",
+	"author": {
+		"name": "Ayoub Adib",
+		"email": "adbayb@gmail.com",
+		"url": "https://twitter.com/adbayb"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -39,10 +32,36 @@
 			"default": "./dist/index.mjs"
 		}
 	},
+	"bin": {
+		"quickbundle": "bin/index.mjs"
+	},
+	"files": [
+		"bin",
+		"dist"
+	],
 	"scripts": {
-		"prepublishOnly": "pnpm build",
 		"build": "rollup --config ./bundler.config.ts --configPlugin rollup-plugin-swc3",
+		"prepublishOnly": "pnpm build",
+		"test": "exit 0",
 		"watch": "rollup --watch --config ./bundler.config.ts --configPlugin rollup-plugin-swc3"
+	},
+	"dependencies": {
+		"@rollup/plugin-commonjs": "^28.0.2",
+		"@rollup/plugin-json": "^6.1.0",
+		"@rollup/plugin-node-resolve": "^16.0.0",
+		"@rollup/plugin-url": "^8.0.2",
+		"@swc/core": "^1.10.9",
+		"decompress": "^4.2.1",
+		"gzip-size": "^7.0.0",
+		"rollup": "^4.32.0",
+		"rollup-plugin-dts": "^6.1.1",
+		"rollup-plugin-node-externals": "^8.0.0",
+		"rollup-plugin-swc3": "^0.12.1",
+		"termost": "^1.4.0"
+	},
+	"devDependencies": {
+		"@types/decompress": "4.2.7",
+		"@types/node": "22.10.10"
 	},
 	"peerDependencies": {
 		"typescript": "^4.7.0 || ^5.0.0"
@@ -51,23 +70,5 @@
 		"typescript": {
 			"optional": true
 		}
-	},
-	"dependencies": {
-		"@rollup/plugin-commonjs": "^28.0.1",
-		"@rollup/plugin-json": "^6.1.0",
-		"@rollup/plugin-node-resolve": "^15.3.0",
-		"@rollup/plugin-url": "^8.0.2",
-		"@swc/core": "^1.9.2",
-		"decompress": "^4.2.1",
-		"gzip-size": "^7.0.0",
-		"rollup": "^4.27.2",
-		"rollup-plugin-dts": "^6.1.1",
-		"rollup-plugin-node-externals": "^7.1.3",
-		"rollup-plugin-swc3": "^0.12.1",
-		"termost": "^1.4.0"
-	},
-	"devDependencies": {
-		"@types/decompress": "4.2.7",
-		"@types/node": "22.9.0"
 	}
 }
