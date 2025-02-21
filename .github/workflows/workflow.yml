@@ -32,8 +32,8 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
             - name: Build
-              run: pnpm -r --filter="!@examples/*-standalone*" build # pnpm build # Temporary fix to avoid flaky jobs with `postject` issues (needs more investigation).
+              run: pnpm build
             - name: Check (static analysis including linters, types, and commit message)
               run: pnpm check
             - name: Test
-              run: pnpm --filter quickbundle test # pnpm test # Temporary fix to avoid flaky jobs with `postject` issues (needs more investigation).
+              run: pnpm test
