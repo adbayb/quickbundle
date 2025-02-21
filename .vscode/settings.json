@@ -5,10 +5,18 @@
 		"typescript",
 		"typescriptreact",
 		"markdown",
-		"mdx"
+		"mdx",
+		"astro"
 	],
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit"
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.ts": "explicit",
+		"source.addMissingImports.ts": "explicit",
+		"source.organizeImports": "never",
+		"source.organizeLinkDefinitions": "explicit",
+		"source.removeUnused.ts": "never",
+		"source.removeUnusedImports": "never",
+		"source.sortImports": "never"
 	},
 	"workbench.editor.labelFormat": "short",
 	"typescript.tsdk": "node_modules/typescript/lib",
