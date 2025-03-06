@@ -282,7 +282,10 @@ const createTypesConfig = (
 				}),
 				dts({
 					compilerOptions: {
+						declaration: true,
+						emitDeclarationOnly: true,
 						incremental: false,
+						preserveSymlinks: false, // Enforce import resolution relative to the real path and not the symbolic link path to prevent issues such as https://github.com/Swatinem/rollup-plugin-dts/issues/143
 					},
 					respectExternal: true,
 				}),
