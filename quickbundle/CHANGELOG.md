@@ -1,5 +1,15 @@
 # quickbundle
 
+## 2.10.0
+
+### Minor Changes
+
+- [`d3fe291`](https://github.com/adbayb/quickbundle/commit/d3fe291ce83f6b27849d62a3a079f872a2ef0bef) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies.
+
+### Patch Changes
+
+- [`38ec6dd`](https://github.com/adbayb/quickbundle/commit/38ec6dd1904c74fdc26da26759de6cb2900861a6) Thanks [@adbayb](https://github.com/adbayb)! - Fix wrong declaration type resolution relative to symlinks.
+
 ## 2.9.0
 
 ### Minor Changes
