@@ -5,7 +5,6 @@
 	"source": "./src/index.ts",
 	"bin": "./dist/index.cjs",
 	"scripts": {
-		"build:all": "pnpm build:local",
 		"build:cross": "quickbundle compile --target node-v21.7.3-linux-arm64",
 		"build:local": "quickbundle compile",
 		"watch": "pnpm build"
