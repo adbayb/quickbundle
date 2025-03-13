@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.12.0
+
+### Minor Changes
+
+- [`8a2cf9d`](https://github.com/adbayb/quickbundle/commit/8a2cf9ddd35c3b2cbc2f21f73741bb319208c895) Thanks [@adbayb](https://github.com/adbayb)! - Update binary contract.
+
 ## 2.11.0
 
 ### Minor Changes
