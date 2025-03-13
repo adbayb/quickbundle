@@ -1,5 +1,15 @@
 # quickbundle
 
+## 2.11.0
+
+### Minor Changes
+
+- [`b1927e7`](https://github.com/adbayb/quickbundle/commit/b1927e71f89a304959e4d14750173b14e73d78f3) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies.
+
+### Patch Changes
+
+- [`195592b`](https://github.com/adbayb/quickbundle/commit/195592bdddd0e091b354568db81d917065d4b80a) Thanks [@adbayb](https://github.com/adbayb)! - Make the CLI runnable for winOS users.
+
 ## 2.10.0
 
 ### Minor Changes
