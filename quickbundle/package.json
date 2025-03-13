@@ -29,11 +29,11 @@
 	"exports": {
 		".": {
 			"source": "./src/index.ts",
-			"default": "./dist/index.mjs"
+			"default": "./dist/index.js"
 		}
 	},
 	"bin": {
-		"quickbundle": "bin/index.mjs"
+		"quickbundle": "./bin/index.js"
 	},
 	"files": [
 		"bin",
