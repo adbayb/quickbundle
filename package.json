@@ -18,13 +18,13 @@
 	},
 	"prettier": "@adbayb/stack/prettier",
 	"devDependencies": {
-		"@adbayb/stack": "2.19.0"
+		"@adbayb/stack": "2.20.0"
 	},
-	"packageManager": "pnpm@10.6.0",
+	"packageManager": "pnpm@10.6.2",
 	"engines": {
 		"node": ">=22.0.0",
 		"npm": "please-use-pnpm",
-		"pnpm": ">=9.0.0",
+		"pnpm": ">=10.0.0",
 		"yarn": "please-use-pnpm"
 	}
 }
