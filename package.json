@@ -23,8 +23,6 @@
 	"packageManager": "pnpm@10.6.2",
 	"engines": {
 		"node": ">=22.0.0",
-		"npm": "please-use-pnpm",
-		"pnpm": ">=10.0.0",
-		"yarn": "please-use-pnpm"
+		"pnpm": ">=10.0.0"
 	}
 }
