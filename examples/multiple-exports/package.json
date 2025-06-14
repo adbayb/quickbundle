@@ -21,9 +21,9 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"picospinner": "^2.0.0",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
+		"picospinner": "^2.1.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"
