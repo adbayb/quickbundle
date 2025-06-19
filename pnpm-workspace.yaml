@@ -1,3 +1,5 @@
 packages:
-    - "examples/*"
-    - "quickbundle"
+    - examples/*
+    - quickbundle
+onlyBuiltDependencies:
+    - "@swc/core"

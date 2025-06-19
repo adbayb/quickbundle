@@ -14,10 +14,10 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"picospinner": "^2.0.0"
+		"picospinner": "^3.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.10",
+		"@types/node": "22.15.32",
 		"quickbundle": "workspace:*"
 	}
 }

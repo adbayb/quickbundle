@@ -18,9 +18,9 @@
 	},
 	"prettier": "@adbayb/stack/prettier",
 	"devDependencies": {
-		"@adbayb/stack": "2.20.0"
+		"@adbayb/stack": "2.23.0"
 	},
-	"packageManager": "pnpm@10.6.2",
+	"packageManager": "pnpm@10.6.5",
 	"engines": {
 		"node": ">=22.0.0",
 		"pnpm": ">=10.0.0"

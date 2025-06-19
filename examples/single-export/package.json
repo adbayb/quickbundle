@@ -13,7 +13,7 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"picospinner": "^2.0.0"
+		"picospinner": "^3.0.0"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"
