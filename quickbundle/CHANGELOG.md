@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.13.0
+
+### Minor Changes
+
+- [`bcec0ee`](https://github.com/adbayb/quickbundle/commit/bcec0eebb540a25ebce4bda2e0941a33be58ce6d) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies including rollup, rollup plugins, and swc.
+
 ## 2.12.0
 
 ### Minor Changes
