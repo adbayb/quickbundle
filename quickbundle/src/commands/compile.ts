@@ -1,4 +1,3 @@
-import process from "node:process";
 import { basename, dirname, join, resolve } from "node:path";
 import os from "node:os";
 

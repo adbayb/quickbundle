@@ -1,7 +1,3 @@
-#!/usr/bin/env node
-
-import process from "node:process";
-
 import { Spinner } from "picospinner";
 
 console.info("Hello world\n");

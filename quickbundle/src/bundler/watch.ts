@@ -1,5 +1,3 @@
-import process from "node:process";
-
 import { helpers } from "termost";
 import { watch as rollupWatch } from "rollup";
 

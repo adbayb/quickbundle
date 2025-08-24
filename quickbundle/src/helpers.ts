@@ -1,6 +1,6 @@
+import type { ReadableStream } from "node:stream/web";
 import { finished } from "node:stream/promises";
 import { Readable } from "node:stream";
-import process from "node:process";
 import { dirname, join, resolve } from "node:path";
 import {
 	copyFile as fsCopyFile,
@@ -100,7 +100,11 @@ export const download = async (url: string, filePath: string) => {
 		throw new Error(`Empty body received while downloading \`${url}\`.`);
 	}
 
-	await finished(Readable.fromWeb(body).pipe(createWriteStream(filePath)));
+	await finished(
+		Readable.fromWeb(body as ReadableStream).pipe(
+			createWriteStream(filePath),
+		),
+	);
 };
 
 export const unzip = async (
