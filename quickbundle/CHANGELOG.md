@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.14.0
+
+### Minor Changes
+
+- [`b36be21`](https://github.com/adbayb/quickbundle/commit/b36be2158a066454b840b79a013152f57969711a) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies including SWC.
+
 ## 2.13.0
 
 ### Minor Changes
