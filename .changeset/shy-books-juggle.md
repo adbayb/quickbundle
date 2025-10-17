@@ -1,5 +1,0 @@
----
-"quickbundle": minor
----
-
-Update dependencies.

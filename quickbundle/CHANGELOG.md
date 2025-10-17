@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.15.0
+
+### Minor Changes
+
+- [`8ddd449`](https://github.com/adbayb/quickbundle/commit/8ddd449fc219d513a82aa995a7b4e6e494221fc4) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies.
+
 ## 2.14.0
 
 ### Minor Changes
