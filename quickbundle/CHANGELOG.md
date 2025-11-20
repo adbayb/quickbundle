@@ -1,5 +1,17 @@
 # quickbundle
 
+## 2.16.0
+
+### Minor Changes
+
+- [`8b15817`](https://github.com/adbayb/quickbundle/commit/8b158177b0d451ab44dbd223dff4d9fabfdb4fae) Thanks [@adbayb](https://github.com/adbayb)! - Support building dynamic imports.
+
+- [`552a1f9`](https://github.com/adbayb/quickbundle/commit/552a1f9892fa0d124fc69e1cada27551d168f305) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies.
+
+### Patch Changes
+
+- [`953d259`](https://github.com/adbayb/quickbundle/commit/953d25997de960f12aafb8f882a3c13183eecdc1) Thanks [@adbayb](https://github.com/adbayb)! - Preserve import attributes keyword `with` instead of deprecated `assert` transformation during the build.
+
 ## 2.15.0
 
 ### Minor Changes
