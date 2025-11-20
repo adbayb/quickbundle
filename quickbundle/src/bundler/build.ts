@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 import { rollup } from "rollup";
 
 import { onLog } from "./helpers";
@@ -5,6 +7,7 @@ import type { Configuration } from "./config";
 
 export type BuildItemOutput = { elapsedTime: number; filePath: string };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const build = async (input: Configuration) => {
 	process.env.NODE_ENV ??= "production";
 
@@ -27,7 +30,12 @@ export const build = async (input: Configuration) => {
 			const promises: Promise<BuildItemOutput>[] = [];
 
 			for (const outputEntry of outputEntries) {
-				const outputFilePath = outputEntry.file ?? outputEntry.dir;
+				const entryFileName = outputEntry.entryFileNames;
+
+				const outputFilePath = join(
+					outputEntry.dir ?? "",
+					typeof entryFileName === "string" ? entryFileName : "",
+				);
 
 				if (!outputFilePath) {
 					throw new Error(

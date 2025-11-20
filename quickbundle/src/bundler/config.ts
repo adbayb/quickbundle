@@ -1,3 +1,4 @@
+import { basename, dirname } from "node:path";
 import { createRequire } from "node:module";
 
 import { swc } from "rollup-plugin-swc3";
@@ -190,6 +191,15 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	return output;
 };
 
+const getFileOutput = (
+	filePath: string,
+): { dir: string; entryFileNames: string } => {
+	return {
+		dir: dirname(filePath),
+		entryFileNames: basename(filePath),
+	};
+};
+
 const getPlugins = (customPlugins: InputPluginOption[], options: Options) => {
 	return [
 		!options.standalone &&
@@ -240,13 +250,13 @@ const createMainConfig = (
 	const output = [
 		cjsInput && {
 			...commonOutputConfig,
-			file: cjsInput,
+			...getFileOutput(cjsInput),
 			format: "cjs",
 			inlineDynamicImports: Boolean(options.standalone),
 		},
 		esmInput && {
 			...commonOutputConfig,
-			file: esmInput,
+			...getFileOutput(esmInput),
 			format: "es",
 		},
 	].filter(Boolean) as NonNullable<ConfigurationItem["output"]>;
@@ -273,7 +283,7 @@ const createTypesConfig = (
 ): ConfigurationItem => {
 	return {
 		input: entryPoints.source,
-		output: [{ file: entryPoints.types }],
+		output: [getFileOutput(entryPoints.types)],
 		plugins: getPlugins(
 			[
 				nodeResolve({
