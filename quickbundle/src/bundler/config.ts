@@ -144,9 +144,7 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 
 			if (["source", ...buildableExportFields].includes(field)) {
 				if (!singleExport) {
-					singleExport = {};
-
-					singleExport[field as keyof BuildableExport] = value;
+					singleExport = { [field as keyof BuildableExport]: value };
 
 					return [".", singleExport] as const;
 				}
@@ -221,6 +219,7 @@ const createMainConfig = (
 	options: Options,
 ): ConfigurationItem => {
 	const { minification, sourceMaps } = options;
+	const cjsInput = entryPoints.require;
 	const esmInput = entryPoints.import ?? entryPoints.default;
 
 	if (
@@ -234,8 +233,8 @@ const createMainConfig = (
 	}
 
 	const output = [
-		entryPoints.require && {
-			file: entryPoints.require,
+		cjsInput && {
+			file: cjsInput,
 			format: "cjs",
 			inlineDynamicImports: Boolean(options.standalone),
 			sourcemap: sourceMaps,
