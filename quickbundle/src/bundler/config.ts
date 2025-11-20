@@ -232,17 +232,22 @@ const createMainConfig = (
 		);
 	}
 
+	const commonOutputConfig = {
+		importAttributesKey: "with",
+		sourcemap: sourceMaps,
+	};
+
 	const output = [
 		cjsInput && {
+			...commonOutputConfig,
 			file: cjsInput,
 			format: "cjs",
 			inlineDynamicImports: Boolean(options.standalone),
-			sourcemap: sourceMaps,
 		},
 		esmInput && {
+			...commonOutputConfig,
 			file: esmInput,
 			format: "es",
-			sourcemap: sourceMaps,
 		},
 	].filter(Boolean) as NonNullable<ConfigurationItem["output"]>;
 
