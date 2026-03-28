@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
 		"moduleResolution": "Node",
-		"target": "ES2015"
+		"target": "ES2015",
+		"types": ["node"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

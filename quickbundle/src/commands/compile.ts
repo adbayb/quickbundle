@@ -1,9 +1,13 @@
-import { basename, dirname, join, resolve } from "node:path";
-import os from "node:os";
-
-import { helpers } from "termost";
 import type { Termost } from "termost";
 
+import os from "node:os";
+import { basename, dirname, join, resolve } from "node:path";
+import { helpers } from "termost";
+
+import type { Configuration } from "../bundler/config";
+
+import { build } from "../bundler/build";
+import { createConfiguration } from "../bundler/config";
 import {
 	copyFile,
 	createRegExpMatcher,
@@ -13,9 +17,6 @@ import {
 	unzip,
 	writeFile,
 } from "../helpers";
-import { createConfiguration } from "../bundler/config";
-import type { Configuration } from "../bundler/config";
-import { build } from "../bundler/build";
 
 type CompileCommandContext = {
 	config: Configuration;
@@ -30,22 +31,20 @@ const TEMPORARY_RUNTIME_PATH = join(TEMPORARY_PATH, "runtime");
 export const createCompileCommand = (program: Termost) => {
 	return program
 		.command<CompileCommandContext>({
-			name: "compile",
 			description:
 				"Compiles the source code into a self-contained executable",
+			name: "compile",
 		})
 		.option({
+			defaultValue: "local",
+			description: "Set a different cross-compilation target",
 			key: "targetInput",
 			name: {
 				long: "target",
 				short: "t",
 			},
-			description: "Set a different cross-compilation target",
-			defaultValue: "local",
 		})
 		.task({
-			key: "config",
-			label: "Create configuration",
 			handler() {
 				return createConfiguration({
 					minification: true,
@@ -53,12 +52,10 @@ export const createCompileCommand = (program: Termost) => {
 					standalone: true,
 				});
 			},
+			key: "config",
+			label: "Create configuration",
 		})
 		.task({
-			key: "osType",
-			label({ targetInput }) {
-				return `Get \`${targetInput}\` runtime`;
-			},
 			async handler({ targetInput }) {
 				if (targetInput === "local") {
 					await copyFile(process.execPath, TEMPORARY_RUNTIME_PATH);
@@ -98,14 +95,27 @@ export const createCompileCommand = (program: Termost) => {
 
 				return osType;
 			},
-		})
-		.task({
-			label: "Build",
-			async handler({ config }) {
-				await build(config);
+			key: "osType",
+			label({ targetInput }) {
+				return `Get \`${targetInput}\` runtime`;
 			},
 		})
 		.task({
+			async handler({ config }) {
+				await build(config);
+			},
+			label: "Build",
+		})
+		.task({
+			async handler({ config, osType }) {
+				await Promise.all(
+					config.metadata.map(async ({ bin, require }) => {
+						if (!require || !bin) return;
+
+						return compile({ bin, input: require, osType });
+					}),
+				);
+			},
 			label({ config }) {
 				const binaries = config.metadata
 					.map(({ bin }) => {
@@ -118,15 +128,6 @@ export const createCompileCommand = (program: Termost) => {
 
 				return `Compile ${binaries}`;
 			},
-			async handler({ config, osType }) {
-				await Promise.all(
-					config.metadata.map(async ({ bin, require }) => {
-						if (!require || !bin) return;
-
-						return compile({ bin, input: require, osType });
-					}),
-				);
-			},
 		});
 };
 
@@ -134,10 +135,6 @@ type OsType = "linux" | "macos" | "windows";
 
 const getOsType = (input: string): OsType => {
 	switch (input) {
-		case "Windows_NT":
-		case "win": {
-			return "windows";
-		}
 		case "Darwin":
 		case "darwin": {
 			return "macos";
@@ -145,6 +142,10 @@ const getOsType = (input: string): OsType => {
 		case "Linux":
 		case "linux": {
 			return "linux";
+		}
+		case "win":
+		case "Windows_NT": {
+			return "windows";
 		}
 		default: {
 			throw new Error(`Unsupported operating system \`${input}\``);
@@ -162,10 +163,10 @@ const compile = async ({
 	bin,
 	input,
 	osType,
-}: Pick<CompileCommandContext, "osType"> & {
+}: {
 	bin: string;
 	input: string;
-}) => {
+} & Pick<CompileCommandContext, "osType">) => {
 	const inputFileName = basename(input);
 	const inputDirectory = dirname(input);
 

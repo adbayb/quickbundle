@@ -1,9 +1,9 @@
 import { join } from "node:path";
-
 import { rollup } from "rollup";
 
-import { onLog } from "./helpers";
 import type { Configuration } from "./config";
+
+import { onLog } from "./helpers";
 
 export type BuildItemOutput = { elapsedTime: number; filePath: string };
 

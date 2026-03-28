@@ -1,8 +1,9 @@
-import { helpers } from "termost";
 import { watch as rollupWatch } from "rollup";
+import { helpers } from "termost";
+
+import type { Configuration } from "./config";
 
 import { onLog } from "./helpers";
-import type { Configuration } from "./config";
 
 export const watch = (input: Configuration) => {
 	process.env.NODE_ENV ??= "development";
@@ -20,15 +21,6 @@ export const watch = (input: Configuration) => {
 
 	watcher.on("event", async (event) => {
 		switch (event.code) {
-			case "START": {
-				startDuration = Date.now();
-
-				clearLog("Build in progress…", {
-					type: "information",
-				});
-
-				return;
-			}
 			case "BUNDLE_END": {
 				await event.result.close();
 
@@ -49,6 +41,15 @@ export const watch = (input: Configuration) => {
 
 				clearLog(error.message, { type: "error" });
 				console.error("\n", error);
+
+				return;
+			}
+			case "START": {
+				startDuration = Date.now();
+
+				clearLog("Build in progress…", {
+					type: "information",
+				});
 
 				return;
 			}

@@ -1,13 +1,13 @@
 import type { Termost } from "termost";
 
-import { createCommand } from "../helpers";
-import { watch } from "../bundler/watch";
 import { createConfiguration } from "../bundler/config";
+import { watch } from "../bundler/watch";
+import { createCommand } from "../helpers";
 
 export const createWatchCommand = (program: Termost) => {
 	return createCommand(program, {
-		name: "watch",
 		description: "Watch and rebuild on any code change (development mode)",
+		name: "watch",
 	}).task({
 		handler(context) {
 			watch(

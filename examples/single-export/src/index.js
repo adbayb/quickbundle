@@ -1,6 +1,5 @@
-import path from "node:path";
 import fs from "node:fs";
-
+import path from "node:path";
 import { Spinner } from "picospinner";
 
 const spinner = new Spinner("Loading…");

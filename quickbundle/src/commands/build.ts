@@ -1,32 +1,32 @@
-import { helpers } from "termost";
 import type { Termost } from "termost";
+
 import { gzipSize } from "gzip-size";
+import { helpers } from "termost";
 
-import { createCommand, readFile } from "../helpers";
-import type { CreateCommandContext } from "../helpers";
-import { createConfiguration } from "../bundler/config";
-import { build } from "../bundler/build";
 import type { BuildItemOutput } from "../bundler/build";
+import type { CreateCommandContext } from "../helpers";
 
-type LogInput = BuildItemOutput & {
-	compressedSize: number;
-	filePath: string;
-	rawSize: number;
-};
+import { build } from "../bundler/build";
+import { createConfiguration } from "../bundler/config";
+import { createCommand, readFile } from "../helpers";
 
 type BuildCommandContext = CreateCommandContext<{
 	buildOutput: BuildItemOutput[];
 	logInput: LogInput[];
 }>;
 
+type LogInput = {
+	compressedSize: number;
+	filePath: string;
+	rawSize: number;
+} & BuildItemOutput;
+
 export const createBuildCommand = (program: Termost) => {
 	return createCommand<BuildCommandContext>(program, {
-		name: "build",
 		description: "Build the source code (production mode)",
+		name: "build",
 	})
 		.task({
-			key: "buildOutput",
-			label: "Bundle assets 📦",
 			async handler(context) {
 				return build(
 					createConfiguration({
@@ -36,13 +36,15 @@ export const createBuildCommand = (program: Termost) => {
 					}),
 				);
 			},
+			key: "buildOutput",
+			label: "Bundle assets 📦",
 		})
 		.task({
-			key: "logInput",
-			label: "Generate report 📝",
 			async handler(context) {
 				return computeBundleSize(context.buildOutput);
 			},
+			key: "logInput",
+			label: "Generate report 📝",
 			skip(context) {
 				return context.buildOutput.length === 0;
 			},

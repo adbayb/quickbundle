@@ -1,0 +1,5 @@
+---
+"quickbundle": patch
+---
+
+Update dependencies.

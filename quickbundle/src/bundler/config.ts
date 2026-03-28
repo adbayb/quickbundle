@@ -1,14 +1,14 @@
-import { basename, dirname } from "node:path";
-import { createRequire } from "node:module";
-
-import { swc } from "rollup-plugin-swc3";
-import externals from "rollup-plugin-node-externals";
-import dts from "rollup-plugin-dts";
 import type { InputPluginOption, RollupOptions } from "rollup";
-import url from "@rollup/plugin-url";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
-import json from "@rollup/plugin-json";
+
 import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import url from "@rollup/plugin-url";
+import { createRequire } from "node:module";
+import { basename, dirname } from "node:path";
+import dts from "rollup-plugin-dts";
+import externals from "rollup-plugin-node-externals";
+import { swc } from "rollup-plugin-swc3";
 
 import { resolveFromExternalDirectory } from "../helpers";
 import { isRecord } from "./helpers";
@@ -19,14 +19,9 @@ const PKG = require(
 	resolveFromExternalDirectory("package.json"),
 ) as PackageJson;
 
-type PackageJson = {
-	name?: string;
-	bin?: Record<string, string> | string;
-	exports?: BuildableExport | Record<string, BuildableExport | string>;
-	main?: string;
-	module?: string;
-	source?: string;
-	types?: string;
+export type Configuration = {
+	data: ConfigurationItem[];
+	metadata: BuildableExport[];
 };
 
 type BuildableExport = {
@@ -38,17 +33,22 @@ type BuildableExport = {
 	types?: string;
 };
 
+type ConfigurationItem = RollupOptions;
+
 type Options = {
 	minification: boolean;
 	sourceMaps: boolean;
 	standalone: boolean;
 };
 
-type ConfigurationItem = RollupOptions;
-
-export type Configuration = {
-	data: ConfigurationItem[];
-	metadata: BuildableExport[];
+type PackageJson = {
+	bin?: Record<string, string> | string;
+	exports?: BuildableExport | Record<string, BuildableExport | string>;
+	main?: string;
+	module?: string;
+	name?: string;
+	source?: string;
+	types?: string;
 };
 
 const DEFAULT_OPTIONS: Options = {

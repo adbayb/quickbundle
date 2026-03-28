@@ -1,7 +1,8 @@
 import type { ReadableStream } from "node:stream/web";
-import { finished } from "node:stream/promises";
-import { Readable } from "node:stream";
-import { dirname, join, resolve } from "node:path";
+import type { Termost } from "termost";
+
+import decompress from "decompress";
+import { createWriteStream } from "node:fs";
 import {
 	copyFile as fsCopyFile,
 	readFile as fsReadFile,
@@ -10,10 +11,9 @@ import {
 	rename,
 	rm,
 } from "node:fs/promises";
-import { createWriteStream } from "node:fs";
-
-import type { Termost } from "termost";
-import decompress from "decompress";
+import { dirname, join, resolve } from "node:path";
+import { Readable } from "node:stream";
+import { finished } from "node:stream/promises";
 
 /**
  * TS assertion not working properly with arrow function.
@@ -132,11 +132,11 @@ export const unzip = async (
 	);
 };
 
-export type CreateCommandContext<CustomContext = unknown> = CustomContext & {
+export type CreateCommandContext<CustomContext = unknown> = {
 	minification: boolean;
 	sourceMaps: boolean;
 	standalone: boolean;
-};
+} & CustomContext;
 
 export const createCommand = <CommandContext extends CreateCommandContext>(
 	program: Termost,
@@ -145,15 +145,15 @@ export const createCommand = <CommandContext extends CreateCommandContext>(
 	return program
 		.command<CommandContext>(input)
 		.option({
+			defaultValue: false,
+			description: "Enable minification",
 			key: "minification",
 			name: "minification",
-			description: "Enable minification",
-			defaultValue: false,
 		})
 		.option({
+			defaultValue: false,
+			description: "Enable source maps generation",
 			key: "sourceMaps",
 			name: "source-maps",
-			description: "Enable source maps generation",
-			defaultValue: false,
 		});
 };
