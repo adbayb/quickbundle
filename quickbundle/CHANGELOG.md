@@ -1,5 +1,11 @@
 # quickbundle
 
+## 2.16.1
+
+### Patch Changes
+
+- [`e01ceeb`](https://github.com/adbayb/quickbundle/commit/e01ceebfe6a13e4296e8b2eeec77de59a5fb604a) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies.
+
 ## 2.16.0
 
 ### Minor Changes
