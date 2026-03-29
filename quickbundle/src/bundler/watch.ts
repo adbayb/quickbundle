@@ -1,20 +1,12 @@
-import { watch as rollupWatch } from "rollup";
+import { watch as rolldownWatch } from "rolldown";
 import { helpers } from "termost";
 
 import type { Configuration } from "./config";
 
-import { onLog } from "./helpers";
-
 export const watch = (input: Configuration) => {
 	process.env.NODE_ENV ??= "development";
 
-	const watcher = rollupWatch(
-		input.data.map((configItem) => ({
-			...configItem,
-			onLog,
-		})),
-	);
-
+	const watcher = rolldownWatch(input.data);
 	let startDuration: number;
 
 	console.clear();

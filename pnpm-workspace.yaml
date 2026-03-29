@@ -1,6 +1,8 @@
 packages:
     - examples/*
     - quickbundle
+allowBuilds:
+    unrs-resolver: true
 publicHoistPattern:
     - "*changesets*"
     - "*commitlint*"

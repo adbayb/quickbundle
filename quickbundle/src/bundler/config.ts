@@ -1,14 +1,10 @@
-import type { InputPluginOption, RollupOptions } from "rollup";
+import type { OutputOptions, Plugin, RolldownOptions } from "rolldown";
 
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
 import url from "@rollup/plugin-url";
 import { createRequire } from "node:module";
 import { basename, dirname } from "node:path";
-import dts from "rollup-plugin-dts";
+import { dts } from "rolldown-plugin-dts";
 import externals from "rollup-plugin-node-externals";
-import { swc } from "rollup-plugin-swc3";
 
 import { resolveFromExternalDirectory } from "../helpers";
 import { isRecord } from "./helpers";
@@ -33,7 +29,7 @@ type BuildableExport = {
 	types?: string;
 };
 
-type ConfigurationItem = RollupOptions;
+type ConfigurationItem = RolldownOptions;
 
 type Options = {
 	minification: boolean;
@@ -43,10 +39,12 @@ type Options = {
 
 type PackageJson = {
 	bin?: Record<string, string> | string;
+	dependencies?: Record<string, string>;
 	exports?: BuildableExport | Record<string, BuildableExport | string>;
 	main?: string;
 	module?: string;
 	name?: string;
+	peerDependencies?: Record<string, string>;
 	source?: string;
 	types?: string;
 };
@@ -193,16 +191,18 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 
 const getFileOutput = (
 	filePath: string,
-): { dir: string; entryFileNames: string } => {
+): Pick<OutputOptions, "dir" | "entryFileNames"> => {
 	return {
 		dir: dirname(filePath),
 		entryFileNames: basename(filePath),
 	};
 };
 
-const getPlugins = (customPlugins: InputPluginOption[], options: Options) => {
-	return [
-		!options.standalone &&
+const getPlugins = (options: Options) => {
+	const output = [url() as Plugin];
+
+	if (!options.standalone) {
+		output.push(
 			externals({
 				builtins: true,
 				deps: true,
@@ -213,12 +213,11 @@ const getPlugins = (customPlugins: InputPluginOption[], options: Options) => {
 				devDeps: false,
 				optDeps: true,
 				peerDeps: true,
-			}),
-		commonjs(),
-		url(),
-		json(),
-		...customPlugins,
-	].filter(Boolean);
+			}) as Plugin,
+		);
+	}
+
+	return output;
 };
 
 const createMainConfig = (
@@ -243,7 +242,7 @@ const createMainConfig = (
 	}
 
 	const commonOutputConfig = {
-		importAttributesKey: "with",
+		minify: minification,
 		sourcemap: sourceMaps,
 	};
 
@@ -251,8 +250,8 @@ const createMainConfig = (
 		cjsInput && {
 			...commonOutputConfig,
 			...getFileOutput(cjsInput),
+			codeSplitting: Boolean(options.standalone),
 			format: "cjs",
-			inlineDynamicImports: Boolean(options.standalone),
 		},
 		esmInput && {
 			...commonOutputConfig,
@@ -264,16 +263,7 @@ const createMainConfig = (
 	return {
 		input: entryPoints.source,
 		output,
-		plugins: getPlugins(
-			[
-				nodeResolve(),
-				swc({
-					minify: minification,
-					sourceMaps,
-				}),
-			],
-			options,
-		),
+		plugins: getPlugins(options),
 	};
 };
 
@@ -284,27 +274,6 @@ const createTypesConfig = (
 	return {
 		input: entryPoints.source,
 		output: [getFileOutput(entryPoints.types)],
-		plugins: getPlugins(
-			[
-				nodeResolve({
-					/**
-					 * The `exports` conditional fields definition order is important in the `package.json file`.
-					 * To be resolved first, `types` field must always come first in the package.json exports definition.
-					 * @see https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/#package-json-exports-imports-and-self-referencing.
-					 */
-					exportConditions: ["types"],
-				}),
-				dts({
-					compilerOptions: {
-						declaration: true,
-						emitDeclarationOnly: true,
-						incremental: false,
-						preserveSymlinks: false, // Enforce import resolution relative to the real path and not the symbolic link path to prevent issues such as https://github.com/Swatinem/rollup-plugin-dts/issues/143
-					},
-					respectExternal: true,
-				}),
-			],
-			options,
-		),
+		plugins: [...getPlugins(options), dts()],
 	};
 };

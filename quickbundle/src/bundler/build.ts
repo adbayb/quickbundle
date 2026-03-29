@@ -1,9 +1,7 @@
 import { join } from "node:path";
-import { rollup } from "rollup";
+import { rolldown } from "rolldown";
 
 import type { Configuration } from "./config";
-
-import { onLog } from "./helpers";
 
 export type BuildItemOutput = { elapsedTime: number; filePath: string };
 
@@ -16,11 +14,7 @@ export const build = async (input: Configuration) => {
 
 	for (const config of configurations) {
 		const initialTime = Date.now();
-
-		const bundle = await rollup({
-			...config,
-			onLog,
-		});
+		const bundle = await rolldown(config);
 
 		if (config.output) {
 			const outputEntries = Array.isArray(config.output)
@@ -54,7 +48,9 @@ export const build = async (input: Configuration) => {
 								});
 							})
 							.catch((error: unknown) => {
-								reject(error as Error);
+								if (error instanceof Error) {
+									reject(error);
+								}
 							});
 					}),
 				);
