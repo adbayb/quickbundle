@@ -41,7 +41,7 @@ jobs:
                       ```
             # Delete a previous comment when the issue has been resolved
             - if: ${{ steps.check_pr_rule.outputs.error_message == null }}
-              uses: marocchino/sticky-pull-request-comment@v2
+              uses: marocchino/sticky-pull-request-comment@v3
               with:
                   header: check_pr_comment
                   delete: true
