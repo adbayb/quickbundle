@@ -2,8 +2,8 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"moduleResolution": "Node",
-		"target": "ES2015",
+		"moduleResolution": "bundler",
+		"target": "es2015",
 		"types": ["node"]
 	},
 	"include": ["src"],

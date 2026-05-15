@@ -13,7 +13,7 @@
 		"picospinner": "^3.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "24.12.3",
+		"@types/node": "24.12.4",
 		"quickbundle": "workspace:*"
 	}
 }
