@@ -1,5 +1,17 @@
 # quickbundle
 
+## 3.0.0
+
+### Major Changes
+
+- [`465326c`](https://github.com/adbayb/quickbundle/commit/465326c2ca2c69a836871a48f682f1007b428b40) Thanks [@adbayb](https://github.com/adbayb)! - Migrate to rolldown.
+
+### Patch Changes
+
+- [`cd884da`](https://github.com/adbayb/quickbundle/commit/cd884da31d351242a1c173630a5d5d6f5cad803e) Thanks [@adbayb](https://github.com/adbayb)! - Update typescript optional peer dependency to allow ^6.0.0 and ^7.0.0.
+
+- [`e01ceeb`](https://github.com/adbayb/quickbundle/commit/e01ceebfe6a13e4296e8b2eeec77de59a5fb604a) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies.
+
 ## 2.16.0
 
 ### Minor Changes
