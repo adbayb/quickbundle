@@ -1,5 +1,5 @@
 ---
-"quickbundle": minor
+"quickbundle": major
 ---
 
 Migrate to rolldown.
