@@ -18,17 +18,7 @@
 		"source.removeUnusedImports": "never",
 		"source.sortImports": "never"
 	},
-	"workbench.editor.labelFormat": "short",
-	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"grammarly.selectors": [
-		{
-			"language": "mdx",
-			"scheme": "file"
-		},
-		{
-			"language": "md",
-			"scheme": "file"
-		}
-	]
+	"js/ts.tsdk.path": "node_modules/typescript/lib",
+	"js/ts.tsdk.promptToUseWorkspaceVersion": true,
+	"workbench.editor.labelFormat": "short"
 }
