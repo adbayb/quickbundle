@@ -1,4 +1,4 @@
-import type { OutputOptions, Plugin, RolldownOptions } from "rolldown";
+import type { Plugin, RolldownOptions } from "rolldown";
 
 import url from "@rollup/plugin-url";
 import { createRequire } from "node:module";
@@ -189,9 +189,7 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	return output;
 };
 
-const getFileOutput = (
-	filePath: string,
-): Pick<OutputOptions, "dir" | "entryFileNames"> => {
+const getFileOutput = (filePath: string) => {
 	return {
 		dir: dirname(filePath),
 		entryFileNames: basename(filePath),
@@ -271,9 +269,21 @@ const createTypesConfig = (
 	entryPoints: Required<Pick<BuildableExport, "source" | "types">>,
 	options: Options,
 ): ConfigurationItem => {
+	const { dir, entryFileNames } = getFileOutput(entryPoints.types);
+
 	return {
 		input: entryPoints.source,
-		output: [getFileOutput(entryPoints.types)],
-		plugins: [...getPlugins(options), dts()],
+		output: {
+			dir,
+			entryFileNames({ name }) {
+				return name.endsWith(".d") ? entryFileNames : "";
+			},
+		},
+		plugins: [
+			...getPlugins(options),
+			dts({
+				emitDtsOnly: true,
+			}),
+		],
 	};
 };

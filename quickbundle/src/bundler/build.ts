@@ -5,7 +5,6 @@ import type { Configuration } from "./config";
 
 export type BuildItemOutput = { elapsedTime: number; filePath: string };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export const build = async (input: Configuration) => {
 	process.env.NODE_ENV ??= "production";
 
@@ -24,27 +23,21 @@ export const build = async (input: Configuration) => {
 			const promises: Promise<BuildItemOutput>[] = [];
 
 			for (const outputEntry of outputEntries) {
-				const entryFileName = outputEntry.entryFileNames;
-
-				const outputFilePath = join(
-					outputEntry.dir ?? "",
-					typeof entryFileName === "string" ? entryFileName : "",
-				);
-
-				if (!outputFilePath) {
-					throw new Error(
-						"Misconfigured file entry point. Make sure to define an `import`, `require`, or `default` field.",
-					);
-				}
-
 				promises.push(
 					new Promise((resolve, reject) => {
 						bundle
 							.write(outputEntry)
-							.then(() => {
+							.then(({ output: rolldownOutput }) => {
 								resolve({
 									elapsedTime: Date.now() - initialTime,
-									filePath: outputFilePath,
+									filePath: join(
+										outputEntry.dir ?? "",
+										rolldownOutput.find(
+											(item) =>
+												item.type === "chunk" &&
+												item.isEntry,
+										)?.fileName ?? "",
+									),
 								});
 							})
 							.catch((error: unknown) => {
