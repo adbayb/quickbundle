@@ -3,6 +3,8 @@ packages:
     - quickbundle
 allowBuilds:
     unrs-resolver: true
+minimumReleaseAgeExclude:
+    - "@adbayb/stack"
 publicHoistPattern:
     - "*changesets*"
     - "*commitlint*"
