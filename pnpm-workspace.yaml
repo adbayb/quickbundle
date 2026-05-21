@@ -2,7 +2,7 @@ packages:
     - examples/*
     - quickbundle
 allowBuilds:
-    unrs-resolver: true
+    unrs-resolver: false
 minimumReleaseAgeExclude:
     - "@adbayb/stack"
 publicHoistPattern:
