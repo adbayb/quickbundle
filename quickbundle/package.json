@@ -49,10 +49,10 @@
 		"@rollup/plugin-url": "^8.0.2",
 		"decompress": "^4.2.1",
 		"gzip-size": "^7.0.0",
-		"rolldown": "^1.0.2",
-		"rolldown-plugin-dts": "^0.25.1",
+		"rolldown": "^1.2.0",
+		"rolldown-plugin-dts": "^0.27.11",
 		"rollup-plugin-node-externals": "^9.0.1",
-		"termost": "^1.9.0"
+		"termost": "^1.9.1"
 	},
 	"devDependencies": {
 		"@types/decompress": "4.2.7",
