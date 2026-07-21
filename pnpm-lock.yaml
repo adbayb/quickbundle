@@ -234,8 +234,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@types/node':
-        specifier: 24.12.4
-        version: 24.12.4
+        specifier: 24.13.3
+        version: 24.13.3
       quickbundle:
         specifier: workspace:*
         version: link:../../quickbundle
@@ -257,8 +257,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@types/node':
-        specifier: 24.12.4
-        version: 24.12.4
+        specifier: 24.13.3
+        version: 24.13.3
       quickbundle:
         specifier: workspace:*
         version: link:../../quickbundle
@@ -276,8 +276,8 @@ importers:
         version: 19.2.6(react@19.2.6)
     devDependencies:
       '@types/node':
-        specifier: 24.12.4
-        version: 24.12.4
+        specifier: 24.13.3
+        version: 24.13.3
       '@types/react':
         specifier: 19.2.15
         version: 19.2.15
@@ -295,8 +295,8 @@ importers:
         version: 3.0.0
     devDependencies:
       '@types/node':
-        specifier: 24.12.4
-        version: 24.12.4
+        specifier: 24.13.3
+        version: 24.13.3
       quickbundle:
         specifier: workspace:*
         version: link:../../quickbundle
@@ -332,8 +332,8 @@ importers:
         specifier: 4.2.7
         version: 4.2.7
       '@types/node':
-        specifier: 24.12.4
-        version: 24.12.4
+        specifier: 24.13.3
+        version: 24.13.3
 
 packages:
 
@@ -946,8 +946,8 @@ packages:
   '@types/node@22.19.17':
     resolution: {integrity: sha512-wGdMcf+vPYM6jikpS/qhg6WiqSV/OhG+jeeHT/KlVqxYfD40iYJf9/AE1uQxVWFvU7MipKRkRv8NSHiCGgPr8Q==}
 
-  '@types/node@24.12.4':
-    resolution: {integrity: sha512-GUUEShf+PBCGW2KaXwcIt3Yk+e3pkKwWKb9GSyM9WQVE+ep2jzmHdGsHzu4wgcZy5fN9FBdVzjpBQsYlpfpgLA==}
+  '@types/node@24.13.3':
+    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
 
   '@types/node@25.6.0':
     resolution: {integrity: sha512-+qIYRKdNYJwY3vRCZMdJbPLJAtGjQBudzZzdzwQYkEPQd+PJGixUL5QfvCLDaULoLv+RhT3LDkwEfKaAkgSmNQ==}
@@ -1956,6 +1956,7 @@ packages:
   git-raw-commits@5.0.1:
     resolution: {integrity: sha512-Y+csSm2GD/PCSh6Isd/WiMjNAydu0VBiG9J7EdQsNA5P9uXvLayqjmTsNlK5Gs9IhblFZqOU0yid5Il5JPoLiQ==}
     engines: {node: '>=18'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:
@@ -3034,8 +3035,8 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici-types@7.16.0:
-    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
   undici-types@7.19.2:
     resolution: {integrity: sha512-qYVnV5OEm2AW8cJMCpdV20CDyaN3g0AjDlOGf1OW4iaDEx8MwdtChUp4zu4H0VP3nDRF/8RKWH+IPp9uW0YGZg==}
@@ -3945,7 +3946,7 @@ snapshots:
 
   '@types/concat-stream@2.0.3':
     dependencies:
-      '@types/node': 24.12.4
+      '@types/node': 25.6.0
 
   '@types/debug@4.1.13':
     dependencies:
@@ -3953,7 +3954,7 @@ snapshots:
 
   '@types/decompress@4.2.7':
     dependencies:
-      '@types/node': 24.12.4
+      '@types/node': 25.6.0
 
   '@types/esrecurse@4.3.1': {}
 
@@ -3985,9 +3986,9 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@24.12.4':
+  '@types/node@24.13.3':
     dependencies:
-      undici-types: 7.16.0
+      undici-types: 7.18.2
 
   '@types/node@25.6.0':
     dependencies:
@@ -6255,7 +6256,7 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.16.0: {}
+  undici-types@7.18.2: {}
 
   undici-types@7.19.2: {}
 
