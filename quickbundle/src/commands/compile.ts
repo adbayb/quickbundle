@@ -4,10 +4,10 @@ import os from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { helpers } from "termost";
 
-import type { Configuration } from "../bundler/config";
+import type { Config } from "../bundler/config";
 
 import { build } from "../bundler/build";
-import { createConfiguration } from "../bundler/config";
+import { createConfig } from "../bundler/config";
 import {
 	copyFile,
 	createRegExpMatcher,
@@ -19,7 +19,7 @@ import {
 } from "../helpers";
 
 type CompileCommandContext = {
-	config: Configuration;
+	config: Config;
 	osType: OsType;
 	targetInput: string;
 };
@@ -46,7 +46,7 @@ export const createCompileCommand = (program: Termost) => {
 		})
 		.task({
 			handler() {
-				return createConfiguration({
+				return createConfig({
 					minification: true,
 					sourceMaps: false,
 					standalone: true,

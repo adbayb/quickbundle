@@ -7,8 +7,10 @@ const spinner = new Spinner("Loading…");
 spinner.start();
 
 setTimeout(() => {
+	const packageJsonPath = path.join(process.cwd(), "package.json");
+
 	console.log(
-		fs.readFileSync(path.join(process.cwd(), "package.json"), {
+		fs.readFileSync(packageJsonPath, {
 			encoding: "utf8",
 		}),
 	);

@@ -1,3 +1,3 @@
-import { createConfiguration } from "./src/bundler/config";
+import { createConfig } from "./src/bundler/config";
 
-export default createConfiguration().data;
+export default createConfig().data;

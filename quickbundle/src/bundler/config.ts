@@ -15,8 +15,8 @@ const PKG = require(
 	resolveFromExternalDirectory("package.json"),
 ) as PackageJson;
 
-export type Configuration = {
-	data: ConfigurationItem[];
+export type Config = {
+	data: ConfigItem[];
 	metadata: BuildableExport[];
 };
 
@@ -29,7 +29,7 @@ type BuildableExport = {
 	types?: string;
 };
 
-type ConfigurationItem = RolldownOptions;
+type ConfigItem = RolldownOptions;
 
 type Options = {
 	minification: boolean;
@@ -55,9 +55,7 @@ const DEFAULT_OPTIONS: Options = {
 	standalone: false,
 };
 
-export const createConfiguration = (
-	options: Options = DEFAULT_OPTIONS,
-): Configuration => {
+export const createConfig = (options: Options = DEFAULT_OPTIONS): Config => {
 	const buildableExports = getBuildableExports(options);
 
 	return {
@@ -80,7 +78,7 @@ export const createConfiguration = (
 						},
 						options,
 					),
-			].filter(Boolean) as Configuration["data"];
+			].filter(Boolean) as Config["data"];
 		}),
 		metadata: buildableExports,
 	};
@@ -224,11 +222,7 @@ const createMainConfig = (
 	> &
 		Required<Pick<BuildableExport, "source">>,
 	options: Options,
-): ConfigurationItem => {
-	const { minification, sourceMaps } = options;
-	const cjsInput = entryPoints.require;
-	const esmInput = entryPoints.import ?? entryPoints.default;
-
+): ConfigItem => {
 	if (
 		entryPoints.import &&
 		entryPoints.default &&
@@ -239,6 +233,10 @@ const createMainConfig = (
 		);
 	}
 
+	const { minification, sourceMaps } = options;
+	const cjsInput = entryPoints.require;
+	const esmInput = entryPoints.import ?? entryPoints.default;
+
 	const commonOutputConfig = {
 		minify: minification,
 		sourcemap: sourceMaps,
@@ -248,7 +246,7 @@ const createMainConfig = (
 		cjsInput && {
 			...commonOutputConfig,
 			...getFileOutput(cjsInput),
-			codeSplitting: Boolean(options.standalone),
+			codeSplitting: options.standalone,
 			format: "cjs",
 		},
 		esmInput && {
@@ -256,7 +254,7 @@ const createMainConfig = (
 			...getFileOutput(esmInput),
 			format: "es",
 		},
-	].filter(Boolean) as NonNullable<ConfigurationItem["output"]>;
+	].filter(Boolean) as NonNullable<ConfigItem["output"]>;
 
 	return {
 		input: entryPoints.source,
@@ -268,7 +266,7 @@ const createMainConfig = (
 const createTypesConfig = (
 	entryPoints: Required<Pick<BuildableExport, "source" | "types">>,
 	options: Options,
-): ConfigurationItem => {
+): ConfigItem => {
 	const { dir, entryFileNames } = getFileOutput(entryPoints.types);
 
 	return {

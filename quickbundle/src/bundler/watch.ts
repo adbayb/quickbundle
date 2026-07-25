@@ -1,9 +1,9 @@
 import { watch as rolldownWatch } from "rolldown";
 import { helpers } from "termost";
 
-import type { Configuration } from "./config";
+import type { Config } from "./config";
 
-export const watch = (input: Configuration) => {
+export const watch = (input: Config) => {
 	process.env.NODE_ENV ??= "development";
 
 	const watcher = rolldownWatch(input.data);

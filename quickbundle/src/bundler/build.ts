@@ -1,11 +1,11 @@
 import { join } from "node:path";
 import { rolldown } from "rolldown";
 
-import type { Configuration } from "./config";
+import type { Config } from "./config";
 
 export type BuildItemOutput = { elapsedTime: number; filePath: string };
 
-export const build = async (input: Configuration) => {
+export const build = async (input: Config) => {
 	process.env.NODE_ENV ??= "production";
 
 	const { data: configurations } = input;
@@ -20,34 +20,23 @@ export const build = async (input: Configuration) => {
 				? config.output
 				: [config.output];
 
-			const promises: Promise<BuildItemOutput>[] = [];
+			const promises: Promise<BuildItemOutput>[] = Array.from(
+				outputEntries,
+				async (outputEntry) => {
+					const { output: rolldownOutput } =
+						await bundle.write(outputEntry);
 
-			for (const outputEntry of outputEntries) {
-				promises.push(
-					new Promise((resolve, reject) => {
-						bundle
-							.write(outputEntry)
-							.then(({ output: rolldownOutput }) => {
-								resolve({
-									elapsedTime: Date.now() - initialTime,
-									filePath: join(
-										outputEntry.dir ?? "",
-										rolldownOutput.find(
-											(item) =>
-												item.type === "chunk" &&
-												item.isEntry,
-										)?.fileName ?? "",
-									),
-								});
-							})
-							.catch((error: unknown) => {
-								if (error instanceof Error) {
-									reject(error);
-								}
-							});
-					}),
-				);
-			}
+					return {
+						elapsedTime: Date.now() - initialTime,
+						filePath: join(
+							outputEntry.dir ?? "",
+							rolldownOutput.find(
+								(item) => item.type === "chunk" && item.isEntry,
+							)?.fileName ?? "",
+						),
+					};
+				},
+			);
 
 			output.push(...(await Promise.all(promises)));
 		}

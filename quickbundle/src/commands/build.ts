@@ -7,7 +7,7 @@ import type { BuildItemOutput } from "../bundler/build";
 import type { CreateCommandContext } from "../helpers";
 
 import { build } from "../bundler/build";
-import { createConfiguration } from "../bundler/config";
+import { createConfig } from "../bundler/config";
 import { createCommand, readFile } from "../helpers";
 
 type BuildCommandContext = CreateCommandContext<{
@@ -29,7 +29,7 @@ export const createBuildCommand = (program: Termost) => {
 		.task({
 			async handler(context) {
 				return build(
-					createConfiguration({
+					createConfig({
 						minification: context.minification,
 						sourceMaps: context.sourceMaps,
 						standalone: false,
