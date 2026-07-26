@@ -105,6 +105,7 @@ yarn add quickbundle
 > [!warning]
 > The `compile` command relies on the [Node.js SEA (Single Executable Applications feature)](https://nodejs.org/api/single-executable-applications.html). This feature comes with some limitations which Quickbundle attempts to address:
 >
+> - The minimum compatible Node.js version is v25.5.0 (to support `--build-sea` flag).
 > - The source code must not rely on [external dependencies](https://github.com/nodejs/single-executable/discussions/70) 🛑. To partially address this, Quickbundle bundles all dependencies (whatever their types, as long as they're used) and inline dynamic imports by default ✅.
 > - The bundled code must use the CommonJS module system 🛑. To address this, Quickbundle always outputs CJS modules in compile mode ✅.
 

@@ -5,10 +5,10 @@
 	"source": "./src/index.ts",
 	"bin": {
 		"standaloneA": "./dist/standaloneA.cjs",
-		"standaloneB": "./dist/standaloneB.js"
+		"standaloneB": "./dist/standaloneB.cjs"
 	},
 	"scripts": {
-		"build:cross": "quickbundle compile --target node-v21.7.3-linux-arm64",
+		"build:cross": "quickbundle compile --target node-v25.5.0-linux-arm64",
 		"build:local": "quickbundle compile",
 		"watch": "pnpm build"
 	},
@@ -16,7 +16,6 @@
 		"picospinner": "^3.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "24.13.3",
 		"quickbundle": "workspace:*"
 	}
 }
