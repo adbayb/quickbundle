@@ -1,5 +1,15 @@
 # quickbundle
 
+## 3.1.0
+
+### Minor Changes
+
+- [`c70f8cb`](https://github.com/adbayb/quickbundle/commit/c70f8cb1fcef766eeea14b8eaf8d8533c323f7f0) Thanks [@adbayb](https://github.com/adbayb)! - Use pnpm pack-app to compile binaries instead of custom logic (it allows removing vulnerable decompress dependency).
+
+### Patch Changes
+
+- [`9f62eb1`](https://github.com/adbayb/quickbundle/commit/9f62eb1f3c6546b4fcfd9ba33a134bf09ebdeff3) Thanks [@adbayb](https://github.com/adbayb)! - Update dependencies including rolldown-plugin-dts to support TypeScript v7.
+
 ## 3.0.0
 
 ### Major Changes
