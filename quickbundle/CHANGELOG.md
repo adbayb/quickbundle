@@ -1,5 +1,11 @@
 # quickbundle
 
+## 3.1.1
+
+### Patch Changes
+
+- [`0eb6318`](https://github.com/adbayb/quickbundle/commit/0eb6318302c980e014a7d5028528f5aac324c970) Thanks [@adbayb](https://github.com/adbayb)! - Replace `gzip-size` dependency with built-in alternative (node:zlib).
+
 ## 3.1.0
 
 ### Minor Changes
