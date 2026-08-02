@@ -1,15 +1,18 @@
 packages:
-    - examples/*
-    - quickbundle
-allowBuilds:
-    unrs-resolver: false
+    - "examples/*"
+    - "quickbundle"
+saveExact: true
+verifyDepsBeforeRun: "warn"
+update:
+    githubActions: true
 minimumReleaseAgeExclude:
-    - "@adbayb/stack"
+    - "@adbayb/*"
+    - termost
 publicHoistPattern:
     - "*changesets*"
     - "*commitlint*"
-    - "*eslint*"
-    - "*prettier*"
+    - "*oxfmt*"
+    - "*oxlint*"
     - "*turbo*"
     - "*typescript*"
     - "*types*"

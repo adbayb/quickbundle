@@ -3,34 +3,27 @@
 	"version": "3.1.0",
 	"description": "The zero-configuration transpiler and bundler for the web",
 	"keywords": [
-		"library",
-		"bundle",
 		"build",
+		"bundle",
 		"compiler",
-		"transpiler",
-		"module",
-		"fast",
 		"esbuild",
+		"fast",
+		"library",
+		"microbundle",
+		"module",
 		"swc",
-		"microbundle"
+		"transpiler"
 	],
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:adbayb/quickbundle.git",
-		"directory": "quickbundle"
-	},
 	"license": "MIT",
 	"author": {
 		"name": "Ayoub Adib",
 		"email": "adbayb@gmail.com",
 		"url": "https://twitter.com/adbayb"
 	},
-	"type": "module",
-	"exports": {
-		".": {
-			"source": "./src/index.ts",
-			"default": "./dist/index.js"
-		}
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:adbayb/quickbundle.git",
+		"directory": "quickbundle"
 	},
 	"bin": {
 		"quickbundle": "./bin/index.js"
@@ -39,6 +32,13 @@
 		"bin",
 		"dist"
 	],
+	"type": "module",
+	"exports": {
+		".": {
+			"source": "./src/index.ts",
+			"default": "./dist/index.js"
+		}
+	},
 	"scripts": {
 		"build": "rolldown --config ./bundler.config.ts",
 		"prepublishOnly": "pnpm build",
@@ -48,8 +48,8 @@
 	"dependencies": {
 		"@rollup/plugin-url": "^8.0.2",
 		"gzip-size": "^7.0.0",
-		"rolldown": "^1.2.0",
-		"rolldown-plugin-dts": "^0.27.14",
+		"rolldown": "^1.2.1",
+		"rolldown-plugin-dts": "^0.28.0",
 		"rollup-plugin-node-externals": "^9.0.1",
 		"termost": "^1.9.1"
 	},

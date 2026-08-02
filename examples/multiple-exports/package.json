@@ -21,7 +21,7 @@
 		"watch": "quickbundle watch"
 	},
 	"dependencies": {
-		"picospinner": "^3.0.0",
+		"picospinner": "^3.1.2",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8"
 	},

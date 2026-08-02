@@ -1,16 +1,16 @@
 {
 	"name": "@examples/single-standalone",
 	"private": true,
-	"type": "module",
-	"source": "./src/index.ts",
 	"bin": "./dist/index.cjs",
+	"source": "./src/index.ts",
+	"type": "module",
 	"scripts": {
 		"build:cross": "quickbundle compile --target node-v21.7.3-linux-arm64",
 		"build:local": "quickbundle compile",
 		"watch": "pnpm build"
 	},
 	"dependencies": {
-		"picospinner": "^3.0.0"
+		"picospinner": "^3.1.2"
 	},
 	"devDependencies": {
 		"quickbundle": "workspace:*"
