@@ -1,6 +1,5 @@
 import { watch as rolldownWatch } from "rolldown";
 import { helpers } from "termost";
-
 import type { Config } from "./config";
 
 export const watch = (input: Config) => {
@@ -21,10 +20,9 @@ export const watch = (input: Config) => {
 			case "END": {
 				const duration = Date.now() - startDuration;
 
-				clearLog(
-					`Build done in ${duration}ms (at ${new Date().toLocaleTimeString()})`,
-					{ type: "success" },
-				);
+				clearLog(`Build done in ${duration}ms (at ${new Date().toLocaleTimeString()})`, {
+					type: "success",
+				});
 
 				return;
 			}
@@ -55,6 +53,5 @@ export const watch = (input: Config) => {
 
 const clearLog = (...input: Parameters<typeof helpers.message>) => {
 	console.clear();
-
 	helpers.message(...input);
 };

@@ -8,7 +8,7 @@ console.debug(
 		{
 			embeddedNodeVersion: process.version,
 		},
-		null,
+		undefined,
 		2,
 	),
 );
@@ -18,10 +18,11 @@ const spinner = new Spinner("Fake processing");
 spinner.start();
 
 const sleep = async (duration = 3000) => {
-	return new Promise((resolve) => setTimeout(resolve, duration));
+	return new Promise((resolve) => {
+		setTimeout(resolve, duration);
+	});
 };
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
-void sleep().then(() => {
-	spinner.succeed("Finished.");
-});
+// oxlint-disable-next-line node/no-top-level-await
+await sleep();
+spinner.succeed("Finished.");

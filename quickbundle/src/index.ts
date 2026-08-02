@@ -1,22 +1,19 @@
-import type { Termost } from "termost";
-
 import { termost } from "termost";
-
 import { name, version } from "../package.json" with { type: "json" };
 import { createBuildCommand } from "./commands/build";
 import { createCompileCommand } from "./commands/compile";
 import { createWatchCommand } from "./commands/watch";
+import type { CommandFactory } from "./types";
 
-const createProgram = (...commandBuilders: ((program: Termost) => void)[]) => {
+const createProgram = (...commandFactories: CommandFactory[]) => {
 	const program = termost({
-		description:
-			"The zero-configuration transpiler and bundler for the web",
 		name,
+		description: "The zero-configuration transpiler and bundler for the web",
 		version,
 	});
 
-	for (const commandBuilder of commandBuilders) {
-		commandBuilder(program);
+	for (const createCommand of commandFactories) {
+		createCommand(program);
 	}
 };
 

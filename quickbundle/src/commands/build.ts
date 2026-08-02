@@ -1,32 +1,31 @@
-import type { Termost } from "termost";
-
-import { gzipSize } from "gzip-size";
+import { gzipSync } from "node:zlib";
 import { helpers } from "termost";
-
 import type { BuildItemOutput } from "../bundler/build";
-import type { CreateCommandContext } from "../helpers";
-
 import { build } from "../bundler/build";
 import { createConfig } from "../bundler/config";
-import { createCommand, readFile } from "../helpers";
+import type { CreateCommandContext } from "../helpers";
+import { createBuildLikeCommand, readFile } from "../helpers";
+import type { CommandFactory } from "../types";
 
 type BuildCommandContext = CreateCommandContext<{
 	buildOutput: BuildItemOutput[];
 	logInput: LogInput[];
 }>;
 
-type LogInput = {
+type LogInput = BuildItemOutput & {
 	compressedSize: number;
 	filePath: string;
 	rawSize: number;
-} & BuildItemOutput;
+};
 
-export const createBuildCommand = (program: Termost) => {
-	return createCommand<BuildCommandContext>(program, {
-		description: "Build the source code (production mode)",
+export const createBuildCommand: CommandFactory = (program) => {
+	createBuildLikeCommand<BuildCommandContext>(program, {
 		name: "build",
+		description: "Build the source code (production mode)",
 	})
 		.task({
+			key: "buildOutput",
+			label: "Bundle assets 📦",
 			async handler(context) {
 				return build(
 					createConfig({
@@ -36,15 +35,13 @@ export const createBuildCommand = (program: Termost) => {
 					}),
 				);
 			},
-			key: "buildOutput",
-			label: "Bundle assets 📦",
 		})
 		.task({
-			async handler(context) {
-				return computeBundleSize(context.buildOutput);
-			},
 			key: "logInput",
 			label: "Generate report 📝",
+			async handler(context) {
+				return getBundleSize(context.buildOutput);
+			},
 			skip(context) {
 				return context.buildOutput.length === 0;
 			},
@@ -75,21 +72,23 @@ export const createBuildCommand = (program: Termost) => {
 		});
 };
 
-const computeBundleSize = async (buildOutput: BuildItemOutput[]) => {
-	const computeFileSize = async (
-		buildItemOutput: BuildItemOutput,
-	): Promise<LogInput> => {
-		const content = await readFile(buildItemOutput.filePath);
-		const gzSize = await gzipSize(content);
+const getBundleSize = async (buildOutput: BuildItemOutput[]) => {
+	return Promise.all(
+		buildOutput.map(async (item) => {
+			return getFileSize(item);
+		}),
+	);
+};
 
-		return {
-			...buildItemOutput,
-			compressedSize: gzSize,
-			rawSize: content.byteLength,
-		};
+const getFileSize = async (buildItemOutput: BuildItemOutput): Promise<LogInput> => {
+	const content = await readFile(buildItemOutput.filePath);
+	const gzSize = gzipSync(content).length;
+
+	return {
+		...buildItemOutput,
+		compressedSize: gzSize,
+		rawSize: content.byteLength,
 	};
-
-	return Promise.all(buildOutput.map(async (item) => computeFileSize(item)));
 };
 
 const formatSize = (bytes: number) => {

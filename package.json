@@ -17,7 +17,7 @@
 		"watch": "stack watch"
 	},
 	"devDependencies": {
-		"@adbayb/stack": "2.40.0-next-e8925e5",
+		"@adbayb/stack": "3.0.0",
 		"@types/node": "24.13.3"
 	},
 	"devEngines": {

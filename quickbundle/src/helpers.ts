@@ -1,29 +1,15 @@
-import type { Termost } from "termost";
-
 import { readFile as fsReadFile, rm } from "node:fs/promises";
 import { resolve } from "node:path";
-
-/**
- * TS assertion not working properly with arrow function.
- * @param condition - The passing condition.
- * @param message - The message to display if error is thrown.
- * @throws
- * @see https://github.com/microsoft/TypeScript/issues/34523
- * @example
- * 	assert(isValidTitle, "The title is not valid. Make sure to...");
- */
-export function assert(condition: unknown, message: string): asserts condition {
-	if (!condition) {
-		throw new Error(message);
-	}
-}
+import type { Termost } from "termost";
 
 /**
  * Resolve a relative path from the Quickbundle node modules directory.
+ *
+ * @example
+ * 	resolveFromInternalDirectory("dist", "node");
+ *
  * @param paths - Relative paths.
  * @returns The resolved absolute path.
- * @example
- * resolveFromInternalDirectory("dist", "node");
  */
 export const resolveFromInternalDirectory = (...paths: string[]) => {
 	return resolve(import.meta.dirname, "../", ...paths);
@@ -31,10 +17,12 @@ export const resolveFromInternalDirectory = (...paths: string[]) => {
 
 /**
  * Resolve a relative path from the current working project directory.
+ *
+ * @example
+ * 	resolveFromExternalDirectory("package.json");
+ *
  * @param paths - Relative paths.
  * @returns The resolved absolute path.
- * @example
- * resolveFromExternalDirectory("package.json");
  */
 export const resolveFromExternalDirectory = (...paths: string[]) => {
 	return resolve(process.cwd(), ...paths);
@@ -57,28 +45,28 @@ export const removePath = async (path: string) => {
 	});
 };
 
-export type CreateCommandContext<CustomContext = unknown> = {
+export type CreateCommandContext<CustomContext = unknown> = CustomContext & {
 	minification: boolean;
 	sourceMaps: boolean;
 	standalone: boolean;
-} & CustomContext;
+};
 
-export const createCommand = <CommandContext extends CreateCommandContext>(
+export const createBuildLikeCommand = <CommandContext extends CreateCommandContext>(
 	program: Termost,
 	input: Parameters<Termost["command"]>[0],
 ) => {
 	return program
 		.command<CommandContext>(input)
 		.option({
-			defaultValue: false,
-			description: "Enable minification",
 			key: "minification",
 			name: "minification",
+			description: "Enable minification",
+			defaultValue: false,
 		})
 		.option({
-			defaultValue: false,
-			description: "Enable source maps generation",
 			key: "sourceMaps",
 			name: "source-maps",
+			description: "Enable source maps generation",
+			defaultValue: false,
 		});
 };

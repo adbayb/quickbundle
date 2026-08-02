@@ -1,8 +1,6 @@
-import type { ReactNode } from "react";
-
 import { join } from "node:path";
+import type { ReactNode } from "react";
 import { useCallback, useState } from "react";
-
 import imageGif from "./assets/image.gif";
 import imageJpeg from "./assets/image.jpeg";
 import imageJpg from "./assets/image.jpg";
@@ -14,14 +12,15 @@ type AppProps = {
 	readonly children?: ReactNode;
 };
 
-// eslint-disable-next-line n/no-process-env
 console.log(process.env.TZ, join("./", "test"));
 
 export const App = (props: AppProps) => {
 	const [counter, setCounter] = useState(0);
 
 	const handleClick = useCallback(() => {
-		setCounter((state) => state + 1);
+		setCounter((state) => {
+			return state + 1;
+		});
 	}, []);
 
 	return (

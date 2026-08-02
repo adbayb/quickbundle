@@ -1,23 +1,18 @@
-import type { Plugin, RolldownOptions } from "rolldown";
-
-import url from "@rollup/plugin-url";
 import { createRequire } from "node:module";
 import { basename, dirname } from "node:path";
+import url from "@rollup/plugin-url";
+import type { Plugin, RolldownOptions } from "rolldown";
 import { dts } from "rolldown-plugin-dts";
 import externals from "rollup-plugin-node-externals";
-
 import { resolveFromExternalDirectory } from "../helpers";
 import { isRecord } from "./helpers";
 
 const require = createRequire(import.meta.url);
-
-const PKG = require(
-	resolveFromExternalDirectory("package.json"),
-) as PackageJson;
+const PKG = require(resolveFromExternalDirectory("package.json")) as PackageJson;
 
 export type Config = {
-	data: ConfigItem[];
 	metadata: BuildableExport[];
+	data: ConfigItem[];
 };
 
 type BuildableExport = {
@@ -38,12 +33,12 @@ type Options = {
 };
 
 type PackageJson = {
+	name?: string;
 	bin?: Record<string, string> | string;
 	dependencies?: Record<string, string>;
 	exports?: BuildableExport | Record<string, BuildableExport | string>;
 	main?: string;
 	module?: string;
-	name?: string;
 	peerDependencies?: Record<string, string>;
 	source?: string;
 	types?: string;
@@ -59,6 +54,7 @@ export const createConfig = (options: Options = DEFAULT_OPTIONS): Config => {
 	const buildableExports = getBuildableExports(options);
 
 	return {
+		metadata: buildableExports,
 		data: buildableExports.flatMap((buildableExport) => {
 			return [
 				buildableExport.source &&
@@ -80,38 +76,36 @@ export const createConfig = (options: Options = DEFAULT_OPTIONS): Config => {
 					),
 			].filter(Boolean) as Config["data"];
 		}),
-		metadata: buildableExports,
 	};
 };
 
-// eslint-disable-next-line sonarjs/cyclomatic-complexity
 const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	if (standalone) {
-		/**
-		 * Entry-point resolution invariants for standalone target (mostly binaries).
-		 */
+		/** Entry-point resolution invariants for standalone target (mostly binaries). */
 		if (!PKG.source || !PKG.bin || !PKG.name) {
 			throw new Error(
 				"Invalid package entry points contract. Standalone compilation is enabled but required fields are missing. Make sure to set `name`, `source`, and `bin` fields.",
 			);
 		}
 
-		const bin = PKG.bin;
-		const name = PKG.name;
-		const source = PKG.source;
+		const { bin } = PKG;
+		const { name } = PKG;
+		const { source } = PKG;
 
 		if (isRecord(bin)) {
-			return Object.entries(bin).map((data) => ({
-				bin: data[0],
-				require: data[1],
-				source,
-			}));
+			return Object.entries(bin).map((data) => {
+				return {
+					bin: data[0],
+					require: data[1],
+					source,
+				};
+			});
 		}
 
 		return [
 			{
 				// For scoped packages and if the `bin` is defined with a string value, the [scope name is discarded](the scope name is discarded when creating a binary) when creating a binary.
-				bin: name.replace(/^(@.*?\/)/, ""),
+				bin: name.replace(/^(@.*?\/)/u, ""),
 				require: bin,
 				source,
 			},
@@ -119,10 +113,11 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 	}
 
 	/**
-	 * Entry-point resolution invariants for non-standalone target (mostly libraries):
-	 * Following the [package entry-point specification](https://nodejs.org/api/packages.html#package-entry-points),
-	 * whenever an export object is defined, it take precedence over other classical entry-point fields
-	 * (such as main, module, and types defined at the root package.json level).
+	 * Entry-point resolution invariants for non-standalone target (mostly libraries): Following the
+	 * [package entry-point
+	 * specification](https://nodejs.org/api/packages.html#package-entry-points), whenever an export
+	 * object is defined, it take precedence over other classical entry-point fields (such as main,
+	 * module, and types defined at the root package.json level).
 	 */
 	if (PKG.main || PKG.module || PKG.types || !PKG.exports) {
 		throw new Error(
@@ -152,18 +147,20 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 			return undefined;
 		})
 		.reduce<BuildableExport[]>((buildableExports, currentExport) => {
-			if (!currentExport) return buildableExports;
+			if (!currentExport) {
+				return buildableExports;
+			}
 
 			const [exportField, exportValue] = currentExport;
 			const conditionalExportFields = Object.keys(exportValue);
 
-			if (!conditionalExportFields.includes("source"))
+			if (!conditionalExportFields.includes("source")) {
 				return buildableExports;
+			}
 
-			const hasAtLeastOneRequiredField = buildableExportFields.some(
-				(entryPointField) =>
-					conditionalExportFields.includes(entryPointField),
-			);
+			const hasAtLeastOneRequiredField = buildableExportFields.some((entryPointField) => {
+				return conditionalExportFields.includes(entryPointField);
+			});
 
 			if (hasAtLeastOneRequiredField) {
 				buildableExports.push(exportValue);
@@ -173,7 +170,9 @@ const getBuildableExports = ({ standalone }: Options): BuildableExport[] => {
 
 			throw new Error(
 				`A \`source\` field is defined without an output defined for the \`${exportField}\` export. Make sure to define at least one conditional entry point (including ${buildableExportFields
-					.map((field) => `\`${field}\``)
+					.map((field) => {
+						return `\`${field}\``;
+					})
 					.join(", ")})`,
 			);
 		}, []);
@@ -203,8 +202,10 @@ const getPlugins = (options: Options) => {
 				builtins: true,
 				deps: true,
 				/**
-				 * As they're not installed consumer side, `devDependencies` are declared as internal dependencies (via the `false` value)
-				 * and bundled into the dist if and only if imported and not listed as `peerDependencies` (otherwise, they're considered external).
+				 * As they're not installed consumer side, `devDependencies` are declared as
+				 * internal dependencies (via the `false` value) and bundled into the dist if and
+				 * only if imported and not listed as `peerDependencies` (otherwise, they're
+				 * considered external).
 				 */
 				devDeps: false,
 				optDeps: true,
@@ -217,17 +218,11 @@ const getPlugins = (options: Options) => {
 };
 
 const createMainConfig = (
-	entryPoints: Partial<
-		Pick<BuildableExport, "default" | "import" | "require">
-	> &
+	entryPoints: Partial<Pick<BuildableExport, "default" | "import" | "require">> &
 		Required<Pick<BuildableExport, "source">>,
 	options: Options,
 ): ConfigItem => {
-	if (
-		entryPoints.import &&
-		entryPoints.default &&
-		entryPoints.import !== entryPoints.default
-	) {
+	if (entryPoints.import && entryPoints.default && entryPoints.import !== entryPoints.default) {
 		throw new Error(
 			"Both `import` and `default` export fields have been defined but with different values. To preserve proper `default` field resolution on the consumer side (i.e. to target ESM format), make sure to provide the same file path for both fields.",
 		);

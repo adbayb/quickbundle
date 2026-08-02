@@ -1,6 +1,5 @@
 import { join } from "node:path";
 import { useCallback, useState } from "react";
-
 import imageGif from "./assets/image.gif";
 import imageJpeg from "./assets/image.jpeg";
 import imageJpg from "./assets/image.jpg";
@@ -8,14 +7,15 @@ import imagePng from "./assets/image.png";
 import imageSvg from "./assets/image.svg";
 import imageWebp from "./assets/image.webp";
 
-// eslint-disable-next-line n/no-process-env
 console.log(process.env.TZ, join("./", "test"));
 
 export const App = (props) => {
 	const [counter, setCounter] = useState(0);
 
 	const handleClick = useCallback(() => {
-		setCounter((state) => state + 1);
+		setCounter((state) => {
+			return state + 1;
+		});
 	}, []);
 
 	return (

@@ -1,37 +1,35 @@
-import type { Termost } from "termost";
-
 import { rename } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { helpers } from "termost";
-
-import type { Config } from "../bundler/config";
-
 import { build } from "../bundler/build";
+import type { Config } from "../bundler/config";
 import { createConfig } from "../bundler/config";
 import { createRegExpMatcher, removePath } from "../helpers";
+import type { CommandFactory } from "../types";
 
 type CompileCommandContext = {
 	config: Config;
 	targetInput: string;
 };
 
-export const createCompileCommand = (program: Termost) => {
-	return program
+export const createCompileCommand: CommandFactory = (program) => {
+	program
 		.command<CompileCommandContext>({
-			description:
-				"Compiles the source code into a self-contained executable",
 			name: "compile",
+			description: "Compiles the source code into a self-contained executable",
 		})
 		.option({
-			defaultValue: "local",
-			description: "Set a different cross-compilation target",
 			key: "targetInput",
 			name: {
 				long: "target",
 				short: "t",
 			},
+			description: "Set a different cross-compilation target",
+			defaultValue: "local",
 		})
 		.task({
+			key: "config",
+			label: "Create configuration",
 			handler() {
 				return createConfig({
 					minification: true,
@@ -39,23 +37,35 @@ export const createCompileCommand = (program: Termost) => {
 					standalone: true,
 				});
 			},
-			key: "config",
-			label: "Create configuration",
 		})
 		.task({
+			label: "Build",
 			async handler({ config }) {
 				await build(config);
 			},
-			label: "Build",
 		})
 		.task({
+			label({ config }) {
+				const binaries = config.metadata
+					.map(({ bin }) => {
+						if (!bin) {
+							return undefined;
+						}
+
+						return `\`${bin}\``;
+					})
+					.filter(Boolean)
+					.join(", ");
+
+				return `Compile ${binaries}`;
+			},
 			async handler({ config, targetInput }) {
 				for (const { bin, require } of config.metadata) {
-					if (!require || !bin) return;
+					if (!require || !bin) {
+						return;
+					}
 
-					let os =
-						process.platform === "win32" ? "win" : process.platform;
-
+					let os = process.platform === "win32" ? "win" : process.platform;
 					let architecture: string = process.arch;
 					let version: string | undefined = undefined;
 
@@ -68,9 +78,15 @@ export const createCompileCommand = (program: Termost) => {
 							);
 						}
 
-						architecture = nodeProperties.architecture;
-						os = nodeProperties.os;
-						version = nodeProperties.version;
+						const {
+							architecture: nodeArchitecture,
+							os: nodeOs,
+							version: nodeVersion,
+						} = nodeProperties;
+
+						architecture = nodeArchitecture;
+						os = nodeOs;
+						version = nodeVersion;
 					}
 
 					const distributionPath = dirname(require);
@@ -85,46 +101,28 @@ export const createCompileCommand = (program: Termost) => {
 						target,
 					})
 						.map(([flagName, flagValue]) => {
-							if (!flagValue) return undefined;
+							if (!flagValue) {
+								return undefined;
+							}
 
 							return `--${flagName} ${flagValue}`;
 						})
 						.filter(Boolean)
 						.join(" ");
 
-					await helpers.exec(
-						`npx --yes pnpm pack-app ${packAppFlags}`,
-					);
-
-					await rename(
-						join(targetPath, bin),
-						join(distributionPath, bin),
-					);
+					await helpers.exec(`npx --yes pnpm pack-app ${packAppFlags}`);
+					await rename(join(targetPath, bin), join(distributionPath, bin));
 
 					await Promise.all(
-						[require, targetPath].map(async (path) =>
-							removePath(path),
-						),
+						[require, targetPath].map(async (path) => {
+							return removePath(path);
+						}),
 					);
 				}
-			},
-			label({ config }) {
-				const binaries = config.metadata
-					.map(({ bin }) => {
-						if (!bin) return undefined;
-
-						return `\`${bin}\``;
-					})
-					.filter(Boolean)
-					.join(", ");
-
-				return `Compile ${binaries}`;
 			},
 		});
 };
 
-const getNodeProperties = createRegExpMatcher<
-	"architecture" | "os" | "version"
->(
-	/^node-(?<version>v\d+\.\d+\.\d+)-(?<os>darwin|linux|win)-(?<architecture>arm64|x64|x86)$/,
+const getNodeProperties = createRegExpMatcher<"architecture" | "os" | "version">(
+	/^node-(?<version>v\d+\.\d+\.\d+)-(?<os>darwin|linux|win)-(?<architecture>arm64|x64|x86)$/u,
 );
