@@ -1,5 +1,11 @@
 # quickbundle
 
+## 3.2.0
+
+### Minor Changes
+
+- [`13c65b1`](https://github.com/adbayb/quickbundle/commit/13c65b1bb8029eab099e2a1fec03f258cc51bb80) Thanks [@adbayb](https://github.com/adbayb)! - Refresh the UI and update rolldown dependencies.
+
 ## 3.1.1
 
 ### Patch Changes
