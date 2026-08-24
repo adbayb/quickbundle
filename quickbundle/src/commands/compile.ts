@@ -1,6 +1,6 @@
 import { rename } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { helpers } from "termost";
+import { exec } from "termost";
 import { build } from "../bundler/build";
 import type { Config } from "../bundler/config";
 import { createConfig } from "../bundler/config";
@@ -110,7 +110,7 @@ export const createCompileCommand: CommandFactory = (program) => {
 						.filter(Boolean)
 						.join(" ");
 
-					await helpers.exec(`npx --yes pnpm pack-app ${packAppFlags}`);
+					await exec(`npx --yes pnpm pack-app ${packAppFlags}`);
 					await rename(join(targetPath, bin), join(distributionPath, bin));
 
 					await Promise.all(

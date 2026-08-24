@@ -1,5 +1,5 @@
 import { gzipSync } from "node:zlib";
-import { helpers } from "termost";
+import { createLogger } from "termost";
 import type { BuildItemOutput } from "../bundler/build";
 import { build } from "../bundler/build";
 import { createConfig } from "../bundler/config";
@@ -49,20 +49,14 @@ export const createBuildCommand: CommandFactory = (program) => {
 		.task({
 			handler(context) {
 				context.logInput.forEach((item) => {
-					helpers.message(
+					const logger = createLogger({ name: item.filePath });
+
+					logger.info(
 						[
-							`${formatSize(item.rawSize)} raw`,
-							`${formatSize(item.compressedSize)} gzip`,
-						]
-							.map((message, index) => {
-								return index === 0 ? message : `   ${message}`;
-							})
-							.join("\n"),
-						{
-							label: `${item.filePath} (took ${item.elapsedTime}ms)`,
-							lineBreak: { end: false, start: true },
-							type: "information",
-						},
+							formatSize(item.rawSize),
+							`gzip: ${formatSize(item.compressedSize)}`,
+							`${item.elapsedTime}ms`,
+						].join(" | "),
 					);
 				});
 			},
