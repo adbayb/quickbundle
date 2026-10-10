@@ -1,5 +1,11 @@
 # quickbundle
 
+## 3.2.1
+
+### Patch Changes
+
+- [`2c07a7a`](https://github.com/adbayb/quickbundle/commit/2c07a7ae3c43f4bc6d2e0d97d7df02078e6e9962) Thanks [@adbayb](https://github.com/adbayb)! - Update rolldown and rolldown-plugin-dts dependencies.
+
 ## 3.2.0
 
 ### Minor Changes
