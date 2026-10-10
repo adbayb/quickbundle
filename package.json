@@ -18,13 +18,13 @@
 		"watch": "stack watch"
 	},
 	"devDependencies": {
-		"@adbayb/stack": "3.2.1",
-		"@types/node": "24.13.3"
+		"@adbayb/stack": "3.3.0",
+		"@types/node": "24.19.2"
 	},
 	"devEngines": {
 		"packageManager": {
 			"name": "pnpm",
-			"version": "^11.0.0",
+			"version": "^12.0.0",
 			"onFail": "download"
 		},
 		"runtime": {
