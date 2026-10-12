@@ -1,5 +1,13 @@
 # quickbundle
 
+## 3.2.2
+
+### Patch Changes
+
+- [`9caaa91`](https://github.com/adbayb/quickbundle/commit/9caaa91645d1d7a7f0984a2eabd3c6b14fefd216) Thanks [@adbayb](https://github.com/adbayb)! - Update rolldown-plugin-dts to remove yuka deprecation warnings.
+
+- [`2be1396`](https://github.com/adbayb/quickbundle/commit/2be13960e5615b1060af3805a7170fe5699174ed) Thanks [@adbayb](https://github.com/adbayb)! - Filter out the `rolldown-plugin-dts` TypeScript 7 experimental warning and `Emit types with ...` logs during build. The compiler version is now shown in the `Bundle assets (with typescript@x.y.z)` task label instead. Other plugin logs still reach the console.
+
 ## 3.2.1
 
 ### Patch Changes
