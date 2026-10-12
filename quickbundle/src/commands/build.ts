@@ -4,7 +4,7 @@ import type { BuildItemOutput } from "../bundler/build";
 import { build } from "../bundler/build";
 import { createConfig } from "../bundler/config";
 import type { CreateCommandContext } from "../helpers";
-import { createBuildLikeCommand, readFile } from "../helpers";
+import { createBuildLikeCommand, getTypeScriptVersion, readFile } from "../helpers";
 import type { CommandFactory } from "../types";
 
 type BuildCommandContext = CreateCommandContext<{
@@ -19,13 +19,15 @@ type LogInput = BuildItemOutput & {
 };
 
 export const createBuildCommand: CommandFactory = (program) => {
+	const typescriptVersion = getTypeScriptVersion();
+
 	createBuildLikeCommand<BuildCommandContext>(program, {
 		name: "build",
 		description: "Build the source code (production mode)",
 	})
 		.task({
 			key: "buildOutput",
-			label: "Bundle assets 📦",
+			label: `Bundle assets ${typescriptVersion ? `(with typescript@${typescriptVersion}) ` : ""}📦`,
 			async handler(context) {
 				return build(
 					createConfig({

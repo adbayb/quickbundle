@@ -193,6 +193,22 @@ const getFileOutput = (filePath: string) => {
 	};
 };
 
+const TS_UNSTABLE_API_MESSAGE = "does not yet have a stable API";
+const DTS_EMIT_TYPES_MESSAGE = "Emit types with";
+
+/**
+ * Check whether a plugin log carries the given message.
+ *
+ * @param args - The logged arguments.
+ * @param message - The message to look for in the first argument.
+ * @returns Whether the first argument contains the message.
+ */
+const hasMessage = (args: unknown[], message: string): boolean => {
+	const [firstArg] = args;
+
+	return typeof firstArg === "string" && firstArg.includes(message);
+};
+
 const getPlugins = (options: Options) => {
 	const output = [url() as Plugin];
 
@@ -276,6 +292,29 @@ const createTypesConfig = (
 			...getPlugins(options),
 			dts({
 				emitDtsOnly: true,
+				/**
+				 * Forward `rolldown-plugin-dts` logs to the console, except the TypeScript 7
+				 * experimental warning and the `Emit types with ...` message. The former is noise
+				 * on every build, and the latter is redundant with the `Bundle assets` task label,
+				 * which already surfaces the compiler version.
+				 */
+				logger: {
+					error: console.error,
+					info(...args: unknown[]) {
+						if (hasMessage(args, DTS_EMIT_TYPES_MESSAGE)) {
+							return;
+						}
+
+						console.info(...args);
+					},
+					warn(...args: unknown[]) {
+						if (hasMessage(args, TS_UNSTABLE_API_MESSAGE)) {
+							return;
+						}
+
+						console.warn(...args);
+					},
+				},
 			}),
 		],
 	};

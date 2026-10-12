@@ -1,4 +1,5 @@
 import { readFile as fsReadFile, rm } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import type { Termost } from "termost";
 
@@ -36,6 +37,22 @@ export const createRegExpMatcher = <Keys extends string>(regex: RegExp) => {
 
 export const readFile = async (filePath: string) => {
 	return fsReadFile(filePath);
+};
+
+/**
+ * Resolve the TypeScript compiler version installed in the external project.
+ *
+ * @returns The version (for example `7.0.2`), or nothing when TypeScript is not installed.
+ */
+export const getTypeScriptVersion = (): string | undefined => {
+	try {
+		const externalRequire = createRequire(resolveFromExternalDirectory("package.json"));
+		const { version } = externalRequire("typescript/package.json") as { version: string };
+
+		return version;
+	} catch {
+		return undefined;
+	}
 };
 
 export const removePath = async (path: string) => {
