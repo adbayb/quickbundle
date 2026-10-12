@@ -44,7 +44,7 @@ export const readFile = async (filePath: string) => {
  *
  * @returns The version (for example `7.0.2`), or nothing when TypeScript is not installed.
  */
-export const getTypeScriptVersion = (): string | undefined => {
+export const getTypeScriptVersion = () => {
 	try {
 		const externalRequire = createRequire(resolveFromExternalDirectory("package.json"));
 		const { version } = externalRequire("typescript/package.json") as { version: string };
