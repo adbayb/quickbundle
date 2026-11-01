@@ -19,7 +19,7 @@
 	},
 	"devDependencies": {
 		"@adbayb/stack": "3.4.0",
-		"@types/node": "24.19.2"
+		"@types/node": "26.6.6"
 	},
 	"devEngines": {
 		"packageManager": {
@@ -29,7 +29,7 @@
 		},
 		"runtime": {
 			"name": "node",
-			"version": "^24.0.0",
+			"version": "^26.0.0",
 			"onFail": "error"
 		}
 	}
